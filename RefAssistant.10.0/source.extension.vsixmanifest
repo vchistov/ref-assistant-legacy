@@ -4,7 +4,7 @@
     <Name>Reference Assistant</Name>
     <Author>Lardite Group</Author>
     <Version>1.0</Version>
-    <Description xml:space="preserve">Removes unused references from a project</Description>
+    <Description xml:space="preserve">Removes unused references from C#, VB.NET or VC++/CLI projects in the Visual Studio 2010</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://refassistant.codeplex.com</MoreInfoUrl>
     <License>Microsoft Public License.rtf</License>

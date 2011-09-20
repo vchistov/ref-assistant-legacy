@@ -151,7 +151,7 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove unused Usings after removing.
+        ///   Looks up a localized string similar to Remove related &apos;Using&apos; directives after removing unused references.
         /// </summary>
         public static string UI_GeneralOptionsControl_CheckBoxRemoveUsings_Content {
             get {
@@ -178,7 +178,7 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show the window containing list of removable references. Each of these references can be excluded from removable references..
+        ///   Looks up a localized string similar to Show the confirmation window containing a list of the references to be removed. The window allows to edit the suggested list of the unused references..
         /// </summary>
         public static string UI_GeneralOptionsControl_CheckBoxShowWindow_Help {
             get {
@@ -205,7 +205,7 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Don&apos;t show this dialog again in next time.
+        ///   Looks up a localized string similar to Don&apos;t show this dialog next time.
         /// </summary>
         public static string UI_UnusedReferencesWindow_DontShowDialogAgain_Content {
             get {

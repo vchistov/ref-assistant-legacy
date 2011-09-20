@@ -148,7 +148,7 @@
     <value>Need to specify the unused references list before show the window.</value>
   </data>
   <data name="UI_GeneralOptionsControl_CheckBoxRemoveUsings_Content" xml:space="preserve">
-    <value>Remove unused Usings after removing</value>
+    <value>Remove related 'Using' directives after removing unused references</value>
   </data>
   <data name="UI_GeneralOptionsControl_CheckBoxRemoveUsings_Help" xml:space="preserve">
     <value>Apply the Remove Unused Using operation to all project files.</value>
@@ -157,7 +157,7 @@
     <value>Show Unused References Window before removing</value>
   </data>
   <data name="UI_GeneralOptionsControl_CheckBoxShowWindow_Help" xml:space="preserve">
-    <value>Show the window containing list of removable references. Each of these references can be excluded from removable references.</value>
+    <value>Show the confirmation window containing a list of the references to be removed. The window allows to edit the suggested list of the unused references.</value>
   </data>
   <data name="UI_UnusedReferencesWindow_Cancel_Content" xml:space="preserve">
     <value>Cancel</value>
@@ -166,7 +166,7 @@
     <value>Check or uncheck assembly to include or exclude it from unused references list</value>
   </data>
   <data name="UI_UnusedReferencesWindow_DontShowDialogAgain_Content" xml:space="preserve">
-    <value>Don't show this dialog again in next time</value>
+    <value>Don't show this dialog next time</value>
   </data>
   <data name="UI_UnusedReferencesWindow_Ok_Content" xml:space="preserve">
     <value>OK</value>
