@@ -24,5 +24,5 @@ using System.Runtime.InteropServices;
 [assembly: SuppressMessage("Microsoft.Design", "CA1017:MarkAssembliesWithComVisible")]
 
 [assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("10.0.11264.0")]
-[assembly: AssemblyInformationalVersion("10.0.11264.0")]
+[assembly: AssemblyFileVersion("10.0.11269.0")]
+[assembly: AssemblyInformationalVersion("10.0.11269.0")]

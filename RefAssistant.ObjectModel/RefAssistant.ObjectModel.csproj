@@ -61,10 +61,12 @@
     <Compile Include="LogManager.cs" />
     <Compile Include="NullLog.cs" />
     <Compile Include="ObjectModel\Checkers\AssemblyManifestTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\BamlTypesChecker.cs" />
     <Compile Include="ObjectModel\Checkers\CheckerSharedData.cs" />
     <Compile Include="ObjectModel\Checkers\AttributesTypesChecker.cs" />
     <Compile Include="ObjectModel\Checkers\DependentAssembliesTypesChecker.cs" />
     <Compile Include="ObjectModel\Checkers\Helpers\AttributeTypeCheckHelper.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\BamlTranslator.cs" />
     <Compile Include="ObjectModel\Checkers\Helpers\MemberParametersCheckHelper.cs" />
     <Compile Include="ObjectModel\Checkers\Helpers\MemberReferencesCheckHelper.cs" />
     <Compile Include="ObjectModel\CheckTypeException.cs" />

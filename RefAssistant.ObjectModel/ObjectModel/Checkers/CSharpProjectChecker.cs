@@ -50,7 +50,8 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
                     new InterfacesTypesChecker() { OrderNumber = 20 },
                     new AttributesTypesChecker() { OrderNumber = 40 },
                     new DependentAssembliesTypesChecker() { OrderNumber = 50 },
-                    new ImportedTypesChecker() { OrderNumber = 60 }
+                    new ImportedTypesChecker() { OrderNumber = 60 },
+                    new BamlTypesChecker() { OrderNumber = 70 }
                 };
         }
 
