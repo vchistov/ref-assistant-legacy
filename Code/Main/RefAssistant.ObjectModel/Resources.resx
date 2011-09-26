@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BamlTypesChecker_CheckTypeException" xml:space="preserve">
+    <value>The exception occurs during checking of BAML types.</value>
+  </data>
   <data name="CheckTypeException_Message" xml:space="preserve">
     <value>The exception occurs during analysing of type '{0}'. See Inner exception for more details.</value>
   </data>
