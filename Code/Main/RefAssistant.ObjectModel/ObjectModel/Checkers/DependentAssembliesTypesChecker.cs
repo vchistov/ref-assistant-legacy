@@ -75,7 +75,6 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
                     moduleType => moduleType.FullName.ToLower(),
                     (projectTypeRef, moduleType) => projectTypeRef);
 
-            IMetadataScope forwardedFrom;
             foreach (TypeDefinition referencedType in referencedAssemblyTypes)
             {
                 if (checkerData.UsedTypes.Contains(referencedType.AssemblyQualifiedName()))
@@ -86,23 +85,17 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
                 }
                 else
                 {
-                    var referencedBaseType = referencedType.BaseType.Resolve(out forwardedFrom);
-                    checkerData.RemoveFromCandidates(forwardedFrom);
+                    checkerData.RemoveFromCandidates(referencedType.Scope);
+                    if (!checkerData.HasCandidateReferences)
+                        break;
 
-                    if (referencedBaseType != null)
-                    {
-                        checkerData.RemoveFromCandidates(referencedBaseType.Scope);
-                        if (!checkerData.HasCandidateReferences)
-                            break;
+                    _classCheckHeper.Check(referencedType, checkerData);
+                    if (!checkerData.HasCandidateReferences)
+                        break;
 
-                        _classCheckHeper.Check(referencedBaseType, checkerData);
-                        if (!checkerData.HasCandidateReferences)
-                            break;
-
-                        _interfaceCheckHelper.Check(referencedBaseType, checkerData);
-                        if (!checkerData.HasCandidateReferences)
-                            break;
-                    }
+                    _interfaceCheckHelper.Check(referencedType, checkerData);
+                    if (!checkerData.HasCandidateReferences)
+                        break;
 
                     _memberRefsCheckHelper.Check(referencedType, checkerData, evaluator);
                     if (!checkerData.HasCandidateReferences)
