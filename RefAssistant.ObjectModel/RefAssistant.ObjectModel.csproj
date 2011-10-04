@@ -65,6 +65,7 @@
     <Compile Include="ObjectModel\Checkers\CheckerSharedData.cs" />
     <Compile Include="ObjectModel\Checkers\AttributesTypesChecker.cs" />
     <Compile Include="ObjectModel\Checkers\DependentAssembliesTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\FSharpProjectChecker.cs" />
     <Compile Include="ObjectModel\Checkers\Helpers\AttributeTypeCheckHelper.cs" />
     <Compile Include="ObjectModel\Checkers\Helpers\BamlTranslator.cs" />
     <Compile Include="ObjectModel\Checkers\Helpers\MemberParametersCheckHelper.cs" />

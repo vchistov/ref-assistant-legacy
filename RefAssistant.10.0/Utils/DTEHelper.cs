@@ -24,6 +24,7 @@ namespace Lardite.RefAssistant.Utils
         private const string LocalPath = "LocalPath";
         private const string OutputFileName = "OutputFileName";
         private const string PrimaryOutput = "Primary Output";
+        private const string FullPath = "FullPath";
 
         #endregion // Constants
 
@@ -143,6 +144,13 @@ namespace Lardite.RefAssistant.Utils
                     var url = ((object[])primaryOutput.FileURLs)[0].ToString();
                     return new Uri(url).LocalPath;
                 }
+            }
+            else if (Guid.Parse(project.Kind) == ProjectKinds.FSharp)
+            {
+                string outputPath = project.ConfigurationManager.ActiveConfiguration.Properties.Item(OutputPath).Value.ToString();
+                string fullPath = project.Properties.Item(FullPath).Value.ToString();
+                string targetName = project.Properties.Item(OutputFileName).Value.ToString();
+                return Path.Combine(fullPath, Path.Combine(outputPath, targetName));
             }
             else
             {

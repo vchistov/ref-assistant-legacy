@@ -12,13 +12,13 @@ using System.Linq;
 using System.Text;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio.FSharp.ProjectSystem.Automation;
 using VSLangProj;
 using VSLangProj80;
 
 using Lardite.RefAssistant.ObjectModel;
 using Lardite.RefAssistant.UI;
 using Lardite.RefAssistant.Utils;
-using System.IO;
 
 namespace Lardite.RefAssistant
 {
@@ -150,19 +150,37 @@ namespace Lardite.RefAssistant
             if (project == null)
                 return 0;
 
-            var projectReferences = ((VSProject2)project.Object).References.Cast<Reference3>();
-
-            var unusedReferences = from p in projectReferences
-                                   join up in unusedProjectReferences on p.Name equals up.Name
-                                   select new { Reference = p, FullName = up.FullName };
-
-            int amount = unusedReferences.Count();
+            int amount = 0;
             StringBuilder builder = new StringBuilder();
-            foreach (var unusedReference in unusedReferences)
+            if (Guid.Parse(project.Kind) == ProjectKinds.FSharp)
             {
-                unusedReference.Reference.Remove();
-                builder.AppendLine("  " + unusedReference.FullName);
+                var projectReferences = ((OAVSProject)project.Object).References.Cast<OAAssemblyReference>();
+                var unusedReferences = from p in projectReferences
+                                       join up in unusedProjectReferences on p.Name equals up.Name
+                                       select new { Reference = p, FullName = up.FullName };
+                amount = unusedReferences.Count();
+
+                foreach (var unusedReference in unusedReferences)
+                {
+                    unusedReference.Reference.Remove();
+                    builder.AppendLine("  " + unusedReference.FullName);
+                }
             }
+            else
+            {
+                var projectReferences = ((VSProject2)project.Object).References.Cast<Reference3>();
+                var unusedReferences = from p in projectReferences
+                                       join up in unusedProjectReferences on p.Name equals up.Name
+                                       select new { Reference = p, FullName = up.FullName };
+                amount = unusedReferences.Count();
+
+                foreach (var unusedReference in unusedReferences)
+                {
+                    unusedReference.Reference.Remove();
+                    builder.AppendLine("  " + unusedReference.FullName);
+                }
+            }
+
             LogManager.OutputLog.Information(builder.ToString());
             return amount;
         }
@@ -210,19 +228,25 @@ namespace Lardite.RefAssistant
         private ProjectInfo CreateProjectInfo(Project project, string assemblyPath)
         {
             var references = new List<ProjectReference>();
-            References projectReferences = ((VSProject2)project.Object).References;
-            foreach (Reference3 projectReference in projectReferences)
+
+            References projectReferences = null;
+            if (Guid.Parse(project.Kind) == ProjectKinds.FSharp)
             {
-                ProjectReference reference = new ProjectReference()
+                projectReferences = ((OAVSProject)project.Object).References;
+                foreach (OAAssemblyReference projectReference in projectReferences)
                 {
-                    Name = projectReference.Name,
-                    Identity = projectReference.Identity,
-                    Location = projectReference.Path,
-                    Version = projectReference.Version,
-                    Culture = string.Compare(projectReference.Culture, "0", false, CultureInfo.InvariantCulture) == 0 ? string.Empty : projectReference.Culture,
-                    PublicKeyToken = projectReference.PublicKeyToken
-                };
-                references.Add(reference);
+                    references.Add(CreateProjectReference(projectReference.Name, projectReference.Identity, projectReference.Path,
+                        projectReference.Version, projectReference.Culture, projectReference.PublicKeyToken));
+                }
+            }
+            else
+            {
+                projectReferences = ((VSProject2)project.Object).References;
+                foreach (Reference3 projectReference in projectReferences)
+                {
+                    references.Add(CreateProjectReference(projectReference.Name, projectReference.Identity, projectReference.Path,
+                        projectReference.Version, projectReference.Culture, projectReference.PublicKeyToken));
+                }
             }
 
             var projectInfo = new ProjectInfo
@@ -236,6 +260,23 @@ namespace Lardite.RefAssistant
             };
 
             return projectInfo;
+        }
+        
+        /// <summary>
+        /// Creates project reference.
+        /// </summary>
+        private ProjectReference CreateProjectReference(string name, string identity, string location, string version,
+            string culture, string publicKeyToken)
+        {
+            return new ProjectReference()
+            {
+                Name = name,
+                Identity = identity,
+                Location = location,
+                Version = version,
+                Culture = string.Compare(culture, "0", false, CultureInfo.InvariantCulture) == 0 ? string.Empty : culture,
+                PublicKeyToken = publicKeyToken
+            };
         }
         
         #endregion // Private methods
