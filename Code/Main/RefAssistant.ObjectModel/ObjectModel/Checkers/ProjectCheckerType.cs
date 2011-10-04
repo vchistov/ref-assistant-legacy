@@ -31,6 +31,9 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
                 case VisualCppCliProjectChecker.ProjectTypeString:
                     return new VisualCppCliProjectChecker(evaluator);
 
+                case FSharpProjectChecker.ProjectTypeString:
+                    return new FSharpProjectChecker(evaluator);
+
                 default:
                     return new DefaultProjectChecker(evaluator);
             }
