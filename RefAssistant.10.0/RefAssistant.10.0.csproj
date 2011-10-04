@@ -37,7 +37,7 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.ProjectSystem.Base, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"/>
+    <Reference Include="FSharp.ProjectSystem.Base, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
@@ -110,8 +110,12 @@
     </Compile>
     <Compile Include="RefAssistantPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\BaseProjectWrapper.cs" />
+    <Compile Include="Utils\CSharpProjectWrapper.cs" />
     <Compile Include="Utils\DTEHelper.cs" />
+    <Compile Include="Utils\FSharpProjectWrapper.cs" />
     <Compile Include="Utils\ProjectItemIterator.cs" />
+    <Compile Include="Utils\VisualCppCliProjectWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

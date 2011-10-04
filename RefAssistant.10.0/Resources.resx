@@ -147,6 +147,15 @@
   <data name="RefAssistantPackage_UnusedReferencesAreNotDefined" xml:space="preserve">
     <value>Need to specify the unused references list before show the window.</value>
   </data>
+  <data name="ShellGateway_CannotGetActiveProject" xml:space="preserve">
+    <value>Cannot get an active project.</value>
+  </data>
+  <data name="ShellGateway_ProjectNameIsNull" xml:space="preserve">
+    <value>The project name is not specified.</value>
+  </data>
+  <data name="ShellGateway_ProjectNotFound" xml:space="preserve">
+    <value>Cannot get the project with name '{0}'.</value>
+  </data>
   <data name="UI_GeneralOptionsControl_CheckBoxRemoveUsings_Content" xml:space="preserve">
     <value>Remove related 'Using' directives after removing unused references</value>
   </data>

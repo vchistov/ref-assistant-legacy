@@ -34,6 +34,16 @@ namespace Lardite.RefAssistant
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="System.ArgumentNullException"/> class.
+        /// </summary>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">The error message.</param>
+        public static Exception ArgumentNull(string paramName, string message)
+        {
+            return new ArgumentNullException(paramName, message);
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="System.ArgumentOutOfRangeException"/> class.
         /// </summary>
         /// <param name="paramName">The name of the parameter that caused the exception.</param>

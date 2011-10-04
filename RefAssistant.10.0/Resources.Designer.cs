@@ -151,6 +151,33 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot get an active project..
+        /// </summary>
+        public static string ShellGateway_CannotGetActiveProject {
+            get {
+                return ResourceManager.GetString("ShellGateway_CannotGetActiveProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project name is not specified..
+        /// </summary>
+        public static string ShellGateway_ProjectNameIsNull {
+            get {
+                return ResourceManager.GetString("ShellGateway_ProjectNameIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot get the project with name &apos;{0}&apos;..
+        /// </summary>
+        public static string ShellGateway_ProjectNotFound {
+            get {
+                return ResourceManager.GetString("ShellGateway_ProjectNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove related &apos;Using&apos; directives after removing unused references.
         /// </summary>
         public static string UI_GeneralOptionsControl_CheckBoxRemoveUsings_Content {

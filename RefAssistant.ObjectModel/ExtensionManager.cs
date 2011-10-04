@@ -131,13 +131,14 @@ namespace Lardite.RefAssistant
         {
             if (_shellGateway == null && _eventList == null)
                 throw Error.ObjectDisposed(this);
-
-            var projectInfo = _shellGateway.GetActiveProjectInfo();
+                        
+            var projectInfo = GetActiveProjectInfo();
             if (projectInfo == null)
             {
-                LogManager.ActivityLog.Warning(Resources.ExtensionManager_CannotGetActiveProject);
                 return;
             }
+                        
+            _shellGateway.BuildProject(projectInfo);
 
             LogManager.OutputLog.Information(Environment.NewLine + string.Format(Resources.RefAssistantPackage_StartProcess, projectInfo.Name,
                 projectInfo.ConfigurationName, projectInfo.PlatformName));
@@ -147,7 +148,7 @@ namespace Lardite.RefAssistant
             if (!HasUnusedReferences(unusedProjectReferences))
                 return;
 
-            if (_shellGateway.CanShowUnusedReferencesWindow)
+            if (_shellGateway.CanShowUnusedReferencesWindow())
             {
                 if (!ShowUnusedReferencesWindow(ref unusedProjectReferences))
                     return;
@@ -158,12 +159,12 @@ namespace Lardite.RefAssistant
 
             OnProgressChanged(new ProgressEventArgs(60, Resources.ExtensionManager_RemovingUnusedReferences));
 
-            int removedReferencesAmount = _shellGateway.RemoveUnusedReferences(unusedProjectReferences);
+            int removedReferencesAmount = _shellGateway.RemoveUnusedReferences(projectInfo, unusedProjectReferences);
 
-            if (_shellGateway.CanRemoveUnusedUsings)
+            if (_shellGateway.CanRemoveUnusedUsings(projectInfo))
             {
                 OnProgressChanged(new ProgressEventArgs(90, Resources.ExtensionManager_RemovingUnusedUsings));
-                _shellGateway.RemoveUnusedUsings();
+                _shellGateway.RemoveUnusedUsings(projectInfo);
             }
 
             LogManager.OutputLog.Information(string.Format(Resources.RefAssistantPackage_EndProcess, removedReferencesAmount));
@@ -215,6 +216,23 @@ namespace Lardite.RefAssistant
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Get an active solution's  project.
+        /// </summary>
+        /// <returns>Returns active project information.</returns>
+        private ProjectInfo GetActiveProjectInfo()
+        {
+            try
+            {
+                return _shellGateway.GetActiveProjectInfo();
+            }
+            catch (Exception ex)
+            {
+                LogManager.ActivityLog.Error(Resources.ExtensionManager_CannotGetActiveProject, ex);
+            }
+            return null;
         }
 
         #endregion // Private methods

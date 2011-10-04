@@ -7,8 +7,6 @@
 using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
-using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -48,8 +46,7 @@ namespace Lardite.RefAssistant
         /// Default constructor of the package.
         /// </summary>
         public RefAssistantPackage()
-        {
-            
+        {            
         }
 
         #endregion // .ctor
@@ -95,7 +92,7 @@ namespace Lardite.RefAssistant
             var oleMenuCmd = sender as OleMenuCommand;
             if (oleMenuCmd != null)
             {
-                oleMenuCmd.Visible = ShellGateway.CanRemoveUnusedReferences;
+                oleMenuCmd.Visible = ShellGateway.CanRemoveUnusedReferences(null);
             }
         }        
 
@@ -109,7 +106,7 @@ namespace Lardite.RefAssistant
             var oleMenuCmd = sender as OleMenuCommand;
             if (oleMenuCmd != null && 
                 oleMenuCmd.CommandID.ID == (int)PkgCmdIDList.cmdidRemoveUnusedReferencesCommand && 
-                ShellGateway.CanRemoveUnusedReferences)
+                ShellGateway.CanRemoveUnusedReferences(null))
             {
                 try
                 {
@@ -155,11 +152,6 @@ namespace Lardite.RefAssistant
         #endregion // Events handlers
 
         #region Private methods/properties
-
-        private DTE2 DTE2
-        {
-            get { return (DTE2)this.GetService(typeof(DTE)); }
-        }
 
         /// <summary>
         /// Status bar.
