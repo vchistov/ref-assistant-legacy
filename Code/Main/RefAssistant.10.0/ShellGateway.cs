@@ -7,14 +7,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.FSharp.ProjectSystem.Automation;
-using VSLangProj;
-using VSLangProj80;
 
 using Lardite.RefAssistant.ObjectModel;
 using Lardite.RefAssistant.UI;
@@ -31,6 +25,7 @@ namespace Lardite.RefAssistant
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IExtensionOptions _options;
+        private readonly ProjectsCache _projectsCache;
 
         #endregion // Fields
 
@@ -45,31 +40,32 @@ namespace Lardite.RefAssistant
         {
             _serviceProvider = serviceProvider;
             _options = options;
+            _projectsCache = new ProjectsCache(_serviceProvider);
         }
 
         #endregion // .ctor
 
-        #region Properties
-
-        /// <summary>
-        /// Get DTE object.
-        /// </summary>
-        private DTE DTE
-        {
-            get { return (DTE)_serviceProvider.GetService(typeof(DTE)); }
-        }
-
-        /// <summary>
-        /// Get DTE2 object.
-        /// </summary>
-        private DTE2 DTE2
-        {
-            get { return (DTE2)_serviceProvider.GetService(typeof(DTE)); }
-        }
-
-        #endregion // Properties
-
         #region Public methods
+
+        /// <summary>
+        /// Builds project.
+        /// </summary>
+        /// <param name="projectInfo">The project information. If null then builds active project.</param>
+        /// <returns>Returns true if success; otherwise false.</returns>
+        public bool BuildProject(ProjectInfo projectInfo)
+        {
+            var project = GetProjectWrapper(projectInfo);
+            return project.Build() == 0;
+        }
+
+        /// <summary>
+        /// Builds current solution.
+        /// </summary>        
+        /// <returns>Returns true if success; otherwise false.</returns>
+        public bool BuildSolution()
+        {
+            return DTEHelper.BuildSolution(_serviceProvider) == 0;
+        }
 
         /// <summary>
         /// Gets active project info.
@@ -77,31 +73,26 @@ namespace Lardite.RefAssistant
         /// <returns>Active project info.</returns>
         public ProjectInfo GetActiveProjectInfo()
         {
-            Project project = DTEHelper.GetActiveProject(_serviceProvider);
-            if (project == null)
-                return null;
+            return GetProjectWrapper(null).ProjectInfo;
+        }
 
-            string projectAssemblyPath;
-            if (DTEHelper.BuildProject(project, out projectAssemblyPath) != 0)
-            {
-                DTEHelper.ShowErrorList(_serviceProvider);
-                return null;
-            }
-
-            return CreateProjectInfo(project, projectAssemblyPath);
+        /// <summary>
+        /// Gets solution's projects.
+        /// </summary>
+        /// <returns>The projects list.</returns>
+        public IEnumerable<ProjectInfo> GetSolutionProjectsInfo()
+        {
+            throw Error.NotImplemented();
         }
 
         /// <summary>
         /// Can show unused references window.
         /// </summary>
         /// <returns>If true, then can.</returns>
-        public bool CanShowUnusedReferencesWindow
+        public bool CanShowUnusedReferencesWindow()
         {
-            get
-            {
-                return _options.IsShowUnusedReferencesWindow.HasValue
-                    && _options.IsShowUnusedReferencesWindow.Value;
-            }
+            return _options.IsShowUnusedReferencesWindow.HasValue
+                && _options.IsShowUnusedReferencesWindow.Value;
         }
 
         /// <summary>
@@ -127,92 +118,74 @@ namespace Lardite.RefAssistant
         /// <summary>
         /// Can remove unused references.
         /// </summary>
-        public bool CanRemoveUnusedReferences
+        /// <param name="projectInfo">The project information. If null then gets active project.</param>
+        public bool CanRemoveUnusedReferences(ProjectInfo projectInfo)
         {
-            get
+            try
             {
-                var project = DTEHelper.GetActiveProject(_serviceProvider);
-                return (project != null &&
-                    Guid.Parse(project.Kind) != ProjectKinds.Modeling &&
-                    Guid.Parse(project.Kind) != ProjectKinds.Database &&
-                    !DTEHelper.IsBuildInProgress(project));
+                var project = GetProjectWrapper(projectInfo);
+                return (project.Kind != ProjectKinds.Modeling
+                    && project.Kind != ProjectKinds.Database
+                    && !project.IsBuildInProgress);
+            }
+            catch
+            {
+                return false;
             }
         }
 
         /// <summary>
         /// Removes unused references.
         /// </summary>
+        /// <param name="projectInfo">The project information. If null then gets active project.</param>
         /// <param name="unusedProjectReferences">Unused project references.</param>
         /// <returns>Removed references count.</returns>
-        public int RemoveUnusedReferences(IEnumerable<ProjectReference> unusedProjectReferences)
+        public int RemoveUnusedReferences(ProjectInfo projectInfo, IEnumerable<ProjectReference> unusedProjectReferences)
         {
-            var project = DTEHelper.GetActiveProject(_serviceProvider);
-            if (project == null)
-                return 0;
+            var project = GetProjectWrapper(projectInfo);
 
-            int amount = 0;
             StringBuilder builder = new StringBuilder();
-            if (Guid.Parse(project.Kind) == ProjectKinds.FSharp)
-            {
-                var projectReferences = ((OAVSProject)project.Object).References.Cast<OAAssemblyReference>();
-                var unusedReferences = from p in projectReferences
-                                       join up in unusedProjectReferences on p.Name equals up.Name
-                                       select new { Reference = p, FullName = up.FullName };
-                amount = unusedReferences.Count();
+            IEnumerable<ProjectReference> unusedReferences = project.RemoveUnusedReferences(unusedProjectReferences);
 
-                foreach (var unusedReference in unusedReferences)
-                {
-                    unusedReference.Reference.Remove();
-                    builder.AppendLine("  " + unusedReference.FullName);
-                }
-            }
-            else
+            foreach (var unusedReference in unusedReferences)
             {
-                var projectReferences = ((VSProject2)project.Object).References.Cast<Reference3>();
-                var unusedReferences = from p in projectReferences
-                                       join up in unusedProjectReferences on p.Name equals up.Name
-                                       select new { Reference = p, FullName = up.FullName };
-                amount = unusedReferences.Count();
-
-                foreach (var unusedReference in unusedReferences)
-                {
-                    unusedReference.Reference.Remove();
-                    builder.AppendLine("  " + unusedReference.FullName);
-                }
+                builder.Append("  ").AppendLine(unusedReference.FullName);
             }
 
             LogManager.OutputLog.Information(builder.ToString());
-            return amount;
+            return unusedReferences.Count();
         }
 
         /// <summary>
         /// Can remove unused references.
         /// </summary>
+        /// <param name="projectInfo">The project information. If null then gets active project.</param>
         /// <returns>If true, then can.</returns>
-        public bool CanRemoveUnusedUsings
+        public bool CanRemoveUnusedUsings(ProjectInfo projectInfo)
         {
-            get
+            try
             {
-                var project = DTEHelper.GetActiveProject(_serviceProvider);
-                return (project != null
-                    && Guid.Parse(project.Kind) == ProjectKinds.CSharp
-                    && !DTEHelper.IsBuildInProgress(project)
+                var project = GetProjectWrapper(projectInfo);
+                return (project.Kind == ProjectKinds.CSharp
+                    && !project.IsBuildInProgress
                     && _options.IsRemoveUsingsAfterRemoving.HasValue
                     && _options.IsRemoveUsingsAfterRemoving.Value);
+            }
+            catch
+            {
+                return false;
             }
         }
 
         /// <summary>
         /// Removes unused usings.
         /// </summary>
-        public void RemoveUnusedUsings()
+        /// <param name="projectInfo">The project information. If null then gets active project.</param>
+        public void RemoveUnusedUsings(ProjectInfo projectInfo)
         {
-            var project = DTEHelper.GetActiveProject(_serviceProvider);
-            if (project != null)
-            {
-                LogManager.OutputLog.Information("  " + Resources.RefAssistantPackage_RemoveUnusedUsings);
-                DTEHelper.RemoveUnusedUsings(project, _serviceProvider);
-            }
+            var project = GetProjectWrapper(projectInfo);
+            LogManager.OutputLog.Information("  " + Resources.RefAssistantPackage_RemoveUnusedUsings);
+            project.RemoveUnusedUsings(_serviceProvider);
         }
 
         #endregion // Public methods
@@ -220,65 +193,81 @@ namespace Lardite.RefAssistant
         #region Private methods
 
         /// <summary>
-        /// Creates project info.
+        /// Gets cached project wrapper.
         /// </summary>
-        /// <param name="project">Project.</param>
-        /// <param name="assemblyPath">Assembly path.</param>
-        /// <returns>Project info.</returns>
-        private ProjectInfo CreateProjectInfo(Project project, string assemblyPath)
+        /// <param name="projectInfo">The project information. If null then gets active project.</param>
+        /// <returns>Returns the project wrapper.</returns>
+        /// <exception cref="System.InvalidOperationException"/>        
+        private BaseProjectWrapper GetProjectWrapper(ProjectInfo projectInfo)
         {
-            var references = new List<ProjectReference>();
+            if (projectInfo == null)
+            {
+                // gets active project
+                var project = DTEHelper.GetActiveProject(_serviceProvider);
+                if (project == null)
+                {
+                    throw Error.InvalidOperation(Resources.ShellGateway_CannotGetActiveProject);
+                }
 
-            References projectReferences = null;
-            if (Guid.Parse(project.Kind) == ProjectKinds.FSharp)
-            {
-                projectReferences = ((OAVSProject)project.Object).References;
-                foreach (OAAssemblyReference projectReference in projectReferences)
-                {
-                    references.Add(CreateProjectReference(projectReference.Name, projectReference.Identity, projectReference.Path,
-                        projectReference.Version, projectReference.Culture, projectReference.PublicKeyToken));
-                }
-            }
-            else
-            {
-                projectReferences = ((VSProject2)project.Object).References;
-                foreach (Reference3 projectReference in projectReferences)
-                {
-                    references.Add(CreateProjectReference(projectReference.Name, projectReference.Identity, projectReference.Path,
-                        projectReference.Version, projectReference.Culture, projectReference.PublicKeyToken));
-                }
+                return GetProjectWrapperByName(project.Name);
             }
 
-            var projectInfo = new ProjectInfo
-            {
-                Name = project.Name,
-                Type = Guid.Parse(project.Kind),
-                AssemblyPath = assemblyPath,
-                ConfigurationName = project.ConfigurationManager.ActiveConfiguration.ConfigurationName,
-                PlatformName = project.ConfigurationManager.ActiveConfiguration.PlatformName,
-                References = references
-            };
-
-            return projectInfo;
+            // gets project by name
+            return GetProjectWrapperByName(projectInfo.Name);
         }
-        
+
         /// <summary>
-        /// Creates project reference.
+        /// Gets cached project wrapper by project name.
         /// </summary>
-        private ProjectReference CreateProjectReference(string name, string identity, string location, string version,
-            string culture, string publicKeyToken)
+        /// <param name="projectName">The project name.</param>
+        /// <returns>Returns the project wrapper.</returns>
+        /// <exception cref="System.ArgumentNullException"/>
+        /// <exception cref="System.InvalidOperationException"/> 
+        private BaseProjectWrapper GetProjectWrapperByName(string projectName)
         {
-            return new ProjectReference()
+            if (string.IsNullOrWhiteSpace(projectName))
             {
-                Name = name,
-                Identity = identity,
-                Location = location,
-                Version = version,
-                Culture = string.Compare(culture, "0", false, CultureInfo.InvariantCulture) == 0 ? string.Empty : culture,
-                PublicKeyToken = publicKeyToken
-            };
+                throw Error.ArgumentNull("projectName", Resources.ShellGateway_ProjectNameIsNull);
+            }
+
+            var wrapper = _projectsCache[projectName];
+            if (wrapper == null)
+            {
+                throw Error.InvalidOperation(string.Format(Resources.ShellGateway_ProjectNotFound, projectName));
+            }
+
+            return wrapper;
         }
-        
+
         #endregion // Private methods
+
+        #region Nested class
+
+        /// <summary>
+        /// Cache for solution's projects.
+        /// </summary>
+        private class ProjectsCache : SimpleCache<string, BaseProjectWrapper>
+        {
+            #region .ctor
+
+            private readonly IServiceProvider _serviceProvider;
+            public ProjectsCache(IServiceProvider serviceProvider)
+            {
+                _serviceProvider = serviceProvider;
+            }
+
+            #endregion // .ctor
+
+            #region Overriding
+
+            protected override BaseProjectWrapper GetValue(string key)
+            {
+                return DTEHelper.CreateProjectWrapper(DTEHelper.GetProjectByName(_serviceProvider, key));
+            }
+
+            #endregion // Overriding
+        }
+
+        #endregion // Nested class
     }
 }
