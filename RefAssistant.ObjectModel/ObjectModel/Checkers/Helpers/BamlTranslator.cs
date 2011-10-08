@@ -7,10 +7,12 @@
 //
 
 using System;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -92,16 +94,16 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
             return _typeTable.Select(t => t.Value);
         }
 
+        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public override string ToString()
         {
             using (StringWriter stringWriter = new StringWriter())
             {
-                using (IndentationTextWriter indentationTextWriter = new IndentationTextWriter(stringWriter))
+                using (var indentationTextWriter = new IndentedTextWriter(stringWriter))
                 {
                     WriteElement(this.rootElement, indentationTextWriter);
+                    return stringWriter.ToString();
                 }
-
-                return stringWriter.ToString();
             }
         }
 
@@ -348,7 +350,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
             }
         }
 
-        private static void WriteElement(Element element, IndentationTextWriter writer)
+        private static void WriteElement(Element element, IndentedTextWriter writer)
         {
             writer.Write("<");
             WriteTypeDeclaration(element.TypeDeclaration, writer);
@@ -424,7 +426,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                     writer.WriteLine();
                 }
 
-                writer.Indentation++;
+                writer.Indent++;
 
                 foreach (Property property in properties)
                 {
@@ -434,9 +436,9 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                     WritePropertyDeclaration(property.PropertyDeclaration, element.TypeDeclaration, writer);
                     writer.Write(">");
                     writer.WriteLine();
-                    writer.Indentation++;
+                    writer.Indent++;
                     WritePropertyValue(property, writer);
-                    writer.Indentation--;
+                    writer.Indent--;
                     writer.Write("</");
                     WriteTypeDeclaration(element.TypeDeclaration, writer);
                     writer.Write(".");
@@ -450,7 +452,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                     WritePropertyValue(contentProperty, writer);
                 }
 
-                writer.Indentation--;
+                writer.Indent--;
 
                 writer.Write("</");
                 WriteTypeDeclaration(element.TypeDeclaration, writer);
@@ -474,7 +476,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
             writer.Write(value.ToString());
         }
 
-        private static void WritePropertyValue(Property property, IndentationTextWriter writer)
+        private static void WritePropertyValue(Property property, IndentedTextWriter writer)
         {
             object value = property.Value;
 
@@ -3129,229 +3131,6 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
             public int ReadCompressedInt32()
             {
                 return base.Read7BitEncodedInt();
-            }
-        }
-
-        private class IndentationTextWriter : TextWriter
-        {
-            private bool indentationPending = false;
-            private int indentation = 0;
-            private string indentText = "    ";
-            private TextWriter writer = null;
-
-            public IndentationTextWriter(TextWriter writer)
-            {
-                this.writer = writer;
-            }
-
-            private void WriteIndentation()
-            {
-                if (this.indentationPending)
-                {
-                    for (int i = 0; i < this.indentation; i++)
-                    {
-                        this.writer.Write(this.indentText);
-                    }
-
-                    this.indentationPending = false;
-                }
-            }
-
-            public override void Write(bool value)
-            {
-                this.WriteIndentation();
-                this.writer.Write(value);
-            }
-
-            public override void Write(char value)
-            {
-                this.WriteIndentation();
-                this.writer.Write(value);
-            }
-
-            public override void Write(string s)
-            {
-                this.WriteIndentation();
-                this.writer.Write(s);
-            }
-
-            public override void Write(char[] buffer)
-            {
-                this.WriteIndentation();
-                this.writer.Write(buffer);
-            }
-
-            public override void Write(double value)
-            {
-                this.WriteIndentation();
-                this.writer.Write(value);
-            }
-
-            public override void Write(int value)
-            {
-                this.WriteIndentation();
-                this.writer.Write(value);
-            }
-
-            public override void Write(long value)
-            {
-                this.WriteIndentation();
-                this.writer.Write(value);
-            }
-
-            public override void Write(object value)
-            {
-                this.WriteIndentation();
-                this.writer.Write(value);
-            }
-
-            public override void Write(float value)
-            {
-                this.WriteIndentation();
-                this.writer.Write(value);
-            }
-
-            public override void Write(string format, object arg0)
-            {
-                this.WriteIndentation();
-                this.writer.Write(format, arg0);
-            }
-
-            public override void Write(string format, params object[] arg)
-            {
-                this.WriteIndentation();
-                this.writer.Write(format, arg);
-            }
-
-            public override void Write(string format, object arg0, object arg1)
-            {
-                this.WriteIndentation();
-                this.writer.Write(format, arg0, arg1);
-            }
-
-            public override void Write(char[] buffer, int index, int count)
-            {
-                this.WriteIndentation();
-                this.writer.Write(buffer, index, count);
-            }
-
-            public override void WriteLine()
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine();
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(bool value)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(value);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(char value)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(value);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(double value)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(value);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(char[] buffer)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(buffer);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(int value)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(value);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(long value)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(value);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(object value)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(value);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(float value)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(value);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(string s)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(s);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(string format, object arg0)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(format, arg0);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(string format, params object[] arg)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(format, arg);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(string format, object arg0, object arg1)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(format, arg0, arg1);
-                this.indentationPending = true;
-            }
-
-            public override void WriteLine(char[] buffer, int index, int count)
-            {
-                this.WriteIndentation();
-                this.writer.WriteLine(buffer, index, count);
-                this.indentationPending = true;
-            }
-
-            public int Indentation
-            {
-                get
-                {
-                    return this.indentation;
-                }
-
-                set
-                {
-                    this.indentation = value;
-                }
-            }
-
-            public override Encoding Encoding
-            {
-                get
-                {
-                    return this.writer.Encoding;
-                }
             }
         }
 
