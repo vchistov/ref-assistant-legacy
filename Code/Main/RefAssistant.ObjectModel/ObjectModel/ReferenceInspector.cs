@@ -86,8 +86,7 @@ namespace Lardite.RefAssistant.ObjectModel
                     BindingFlags.CreateInstance,
                     null,
                     null,
-                    null,
-                    null,
+                    null,                       
                     null);
                 return checkExecutor.Execute(evaluator);
             }
