@@ -116,7 +116,8 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
 
         private void ResolveTypeReference(TypeReference typeRef, CheckerSharedData sharedData)
         {
-            if (typeRef == null || sharedData.IsUsedTypeExists(typeRef.AssemblyQualifiedName()))
+            if (typeRef == null || typeRef.IsGenericParameter                
+                || sharedData.IsUsedTypeExists(typeRef.AssemblyQualifiedName()))
             {
                 return;
             }
