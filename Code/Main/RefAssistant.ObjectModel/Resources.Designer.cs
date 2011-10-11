@@ -61,7 +61,7 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The exception occurs during checking of BAML types..
+        ///   Looks up a localized string similar to The exception occurs during checking of XAML(BAML) types..
         /// </summary>
         internal static string BamlTypesChecker_CheckTypeException {
             get {
