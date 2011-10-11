@@ -23,6 +23,6 @@ using System.Runtime.InteropServices;
 [assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
 [assembly: SuppressMessage("Microsoft.Design", "CA1017:MarkAssembliesWithComVisible")]
 
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("10.0.11269.0")]
-[assembly: AssemblyInformationalVersion("10.0.11269.0")]
+[assembly: AssemblyVersion("1.1.11285.95")]
+[assembly: AssemblyFileVersion("1.1.11285.95")]
+[assembly: AssemblyInformationalVersion("1.1.0")]
