@@ -22,7 +22,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
     /// <summary>
     /// Reader of BAML stream.
     /// </summary>
-    internal sealed class BamlTranslator
+    internal sealed class BamlAnalyser : IXamlAnalyser
     {
         #region Fields
 
@@ -53,7 +53,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
 
         #region .ctor
 
-        private BamlTranslator()
+        public BamlAnalyser(Stream bamlStream)
         {
             _assemblyTable = new Dictionary<short, string>();
             _stringTable = new Dictionary<short, string>();
@@ -70,29 +70,26 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
 
             _dictionaryKeyStartTable = new Dictionary<Element, int>();
             _dictionaryKeyPositionTable = new Dictionary<Element, IDictionary>();
+
+            ReadBamlStream(bamlStream);
         }
 
         #endregion // .ctor
 
-        #region Public methods
+        #region IXamlAnalyser implementation
 
         /// <summary>
-        /// Reads baml stream.
+        /// Gets types list which declared into XAML markup.
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public static BamlTranslator Read(Stream stream)
+        /// <returns>Returns <see cref="Lardite.RefAssistant.ObjectModel.Checkers.XamlTypeDeclaration"/> collection.</returns>
+        public IEnumerable<XamlTypeDeclaration> GetDeclaredTypes()
         {
-            var baml = new BamlTranslator();
-            baml.ReadBamlStream(stream);
-
-            return baml;
+            return _typeTable.Select(t => new XamlTypeDeclaration(t.Value.Assembly, t.Value.Namespace, t.Value.Name));
         }
 
-        public IEnumerable<TypeDeclaration> GetDeclaredTypes()
-        {            
-            return _typeTable.Select(t => t.Value);
-        }
+        #endregion //IXamlAnalyser implementation
+
+        #region Public methods
 
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public override string ToString()

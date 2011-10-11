@@ -18,6 +18,8 @@ namespace Lardite.RefAssistant.ObjectModel
     [DebuggerDisplay("{FullName}")]
     public sealed class ProjectReference : IEquatable<ProjectReference>
     {
+        #region Fields
+
         private const string VersionField = "Version";
         private const string CultureField = "Culture";
         private const string PublicKeyTokenField = "PublicKeyToken";
@@ -26,12 +28,7 @@ namespace Lardite.RefAssistant.ObjectModel
 
         private string _fullName;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public ProjectReference()
-        { 
-        }
+        #endregion // Fields
 
         #region IEquatable Members
 
@@ -61,16 +58,31 @@ namespace Lardite.RefAssistant.ObjectModel
                 : false;
         }
 
+        
+
+        #endregion
+
+        #region Object overrides
+
         /// <summary>
         /// Get hash code.
         /// </summary>
         /// <returns>Hash code.</returns>
         public override int GetHashCode()
         {
-            return this.FullName.GetHashCode();
+            return FullName.GetHashCode();
         }
 
-        #endregion
+        /// <summary>
+        /// Convert object to string.
+        /// </summary>
+        /// <returns>Returns object string presentation.</returns>
+        public override string ToString()
+        {
+            return FullName;
+        }
+
+        #endregion // Object overrides
 
         #region Properties
 
