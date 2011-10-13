@@ -6,10 +6,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xaml;
-using System.Xaml.Schema;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xaml;
 
 namespace Lardite.RefAssistant.ObjectModel
 {
@@ -17,7 +17,7 @@ namespace Lardite.RefAssistant.ObjectModel
     /// Type that declared into a XAML markup.
     /// </summary>
     [DebuggerDisplay("{Name}")]
-    class XamlTypeDeclaration : IEquatable<XamlTypeDeclaration>, IEqualityComparer<XamlTypeDeclaration>
+    sealed class XamlTypeDeclaration : IEquatable<XamlTypeDeclaration>
     {
         #region Fields
 
@@ -25,6 +25,7 @@ namespace Lardite.RefAssistant.ObjectModel
         private readonly string _assemblyName;
         private readonly string _name;
         private readonly string _namespace;
+        private readonly static XamlTypeDeclarationComparer _comparer = new XamlTypeDeclarationComparer();
 
         #endregion // Fields
 
@@ -62,11 +63,6 @@ namespace Lardite.RefAssistant.ObjectModel
         /// <param name="name">The name of the type.</param>
         public XamlTypeDeclaration(string assemblyName, string typeNamespace, string name)
         {
-            if (string.IsNullOrWhiteSpace(typeNamespace))
-            {
-                throw Error.ArgumentNull("typeNamespace");
-            }
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw Error.ArgumentNull("name");
@@ -177,11 +173,16 @@ namespace Lardite.RefAssistant.ObjectModel
             get
             {
                 if (!string.IsNullOrWhiteSpace(Name) 
-                    && !string.IsNullOrWhiteSpace(Namespace)
-                    && IsClrNamespace
+                    && ((!string.IsNullOrWhiteSpace(Namespace) && IsClrNamespace) || string.IsNullOrWhiteSpace(Namespace))                    
                     && !string.IsNullOrWhiteSpace(AssemblyName))
                 {
-                    return string.Format("{0}.{1}, {2}", Namespace, Name, AssemblyName);
+                    var sb = new StringBuilder();
+                    if (!string.IsNullOrWhiteSpace(Namespace))
+                    {
+                        sb.Append(Namespace).Append(".");
+                    }
+                    
+                    return sb.Append(Name).Append(", ").Append(AssemblyName).ToString();
                 }
 
                 return (_xamlType != null) ?
@@ -211,6 +212,17 @@ namespace Lardite.RefAssistant.ObjectModel
             {
                 return PreferredXamlNamespace.StartsWith("clr-namespace:", StringComparison.InvariantCultureIgnoreCase)
                     || (!string.IsNullOrWhiteSpace(PreferredXamlNamespace) && !IsXmlNamespace);
+            }
+        }
+
+        /// <summary>
+        /// Get comparer for the <see cref="XamlTypeDeclaration"/> type.
+        /// </summary>
+        public static XamlTypeDeclarationComparer Comparer
+        {
+            get
+            {
+                return _comparer;
             }
         }
 
@@ -244,45 +256,55 @@ namespace Lardite.RefAssistant.ObjectModel
 
         #endregion // IEquatable implementation
 
-        #region IEqualityComparer implementation
+        #region Nested types
 
         /// <summary>
-        /// Determines whether the specified objects are equal.
+        /// The <see cref="XamlTypeDeclaration"/> comparer.
         /// </summary>
-        /// <param name="x">The first object of type <see cref="Lardite.RefAssistant.ObjectModel.Checkers.XamlTypeDeclaration"/> to compare.</param>
-        /// <param name="y">The second object of type <see cref="Lardite.RefAssistant.ObjectModel.Checkers.XamlTypeDeclaration"/> to compare.</param>
-        /// <returns>true if the specified objects are equal; otherwise, false.</returns>
-        public bool Equals(XamlTypeDeclaration obj1, XamlTypeDeclaration obj2)
+        public sealed class XamlTypeDeclarationComparer : IEqualityComparer<XamlTypeDeclaration>
         {
-            return obj1.Equals(obj2);
-        }
+            #region IEqualityComparer implementation
 
-        /// <summary>
-        /// Returns a hash code for the specified object.
-        /// </summary>
-        /// <param name="obj">The Object for which a hash code is to be returned.</param>
-        /// <returns>A hash code for the specified object.</returns>
-        public int GetHashCode(XamlTypeDeclaration obj)
-        {
-            // Check whether the object is null.
-            if (Object.ReferenceEquals(obj, null))
+            /// <summary>
+            /// Determines whether the specified objects are equal.
+            /// </summary>
+            /// <param name="x">The first object of type <see cref="Lardite.RefAssistant.ObjectModel.Checkers.XamlTypeDeclaration"/> to compare.</param>
+            /// <param name="y">The second object of type <see cref="Lardite.RefAssistant.ObjectModel.Checkers.XamlTypeDeclaration"/> to compare.</param>
+            /// <returns>true if the specified objects are equal; otherwise, false.</returns>
+            public bool Equals(XamlTypeDeclaration obj1, XamlTypeDeclaration obj2)
             {
-                return 0;
+                return obj1.Equals(obj2);
             }
 
-            if (obj._xamlType != null)
+            /// <summary>
+            /// Returns a hash code for the specified object.
+            /// </summary>
+            /// <param name="obj">The Object for which a hash code is to be returned.</param>
+            /// <returns>A hash code for the specified object.</returns>
+            public int GetHashCode(XamlTypeDeclaration obj)
             {
-                return obj._xamlType.GetHashCode();
+                // Check whether the object is null.
+                if (Object.ReferenceEquals(obj, null))
+                {
+                    return 0;
+                }
+
+                if (obj._xamlType != null)
+                {
+                    return obj._xamlType.GetHashCode();
+                }
+
+                int hashAssembly = string.IsNullOrEmpty(obj.AssemblyName) ? 0 : obj.AssemblyName.GetHashCode();
+                int hashName = string.IsNullOrEmpty(obj.Name) ? 0 : obj.Name.GetHashCode();
+                int hashNamespace = string.IsNullOrEmpty(obj.PreferredXamlNamespace) ? 0 : obj.PreferredXamlNamespace.GetHashCode();
+
+
+                return hashAssembly ^ hashName ^ hashNamespace;
             }
 
-            int hashAssembly = string.IsNullOrEmpty(obj.AssemblyName) ? 0 : obj.AssemblyName.GetHashCode();
-            int hashName = string.IsNullOrEmpty(obj.Name) ? 0 : obj.Name.GetHashCode();
-            int hashNamespace = string.IsNullOrEmpty(obj.PreferredXamlNamespace) ? 0 : obj.PreferredXamlNamespace.GetHashCode();
-            
-
-            return hashAssembly ^ hashName ^ hashNamespace;
+            #endregion // IEqualityComparer implementation
         }
 
-        #endregion // IEqualityComparer implementation
-    }
+        #endregion // Nested types
+    }    
 }

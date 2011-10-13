@@ -126,7 +126,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
                     declaredTypes = declaredTypes.Union(ReadResource(resource));
                 }
 
-                return declaredTypes.Distinct();
+                return declaredTypes.Distinct(XamlTypeDeclaration.Comparer);
             }
 
             #endregion // Public methods
