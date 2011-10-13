@@ -28,7 +28,7 @@ namespace Lardite.RefAssistant.Utils
                 project.DTE.Solution.SolutionBuild.ActiveConfiguration.Name,
                 project.UniqueName,
                 true);
-            
+
             return project.DTE.Solution.SolutionBuild.LastBuildInfo;
         }
 
@@ -117,19 +117,55 @@ namespace Lardite.RefAssistant.Utils
         public static Project GetProjectByName(IServiceProvider serviceProvider, string projectName)
         {
             var dte = (DTE)serviceProvider.GetService(typeof(DTE));
-
             var enumerator = dte.Solution.Projects.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                Project project = (Project)enumerator.Current;
-                if (project.Name.Equals(projectName, StringComparison.InvariantCultureIgnoreCase))
+                var project = SearchProjectByName(enumerator.Current as Project, projectName);
+                if (project != null)
                 {
                     return project;
                 }
             }
             return null;
-        }
+        }        
 
         #endregion // Public methods
+
+        #region Private methods
+
+        /// <summary>
+        /// Recursive search of project by name.
+        /// </summary>
+        /// <param name="project">The Visual Studion project.</param>
+        /// <param name="name">The name of project.</param>
+        /// <returns>Returns Project if found, otherwise null.</returns>
+        private static Project SearchProjectByName(Project project, string name)
+        {
+            if (project == null)
+            {
+                return null;
+            }
+
+            if (project.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+            {
+                return project;
+            }
+
+            var enumerator = project.ProjectItems.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var projectItem = (ProjectItem)enumerator.Current;
+                var findedProject = SearchProjectByName(projectItem.SubProject, name);
+                if (findedProject != null)
+                {
+                    return findedProject;
+                }
+            }
+
+            // found nothing
+            return null;
+        }
+
+        #endregion // Private methods
     }
 }
