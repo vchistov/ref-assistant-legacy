@@ -114,25 +114,29 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
 
         #region Private methods
 
-        private void ResolveTypeReference(TypeReference typeRef, CheckerSharedData sharedData)
+        private void ResolveTypeReference(TypeReference typeRefParam, CheckerSharedData sharedData)
         {
-            if (typeRef == null || typeRef.IsGenericParameter                
-                || sharedData.IsUsedTypeExists(typeRef.AssemblyQualifiedName()))
+            if (typeRefParam == null || typeRefParam.IsGenericParameter
+                || (typeRefParam.IsArray && ((ArrayType)typeRefParam).ElementType.IsGenericParameter))                
             {
                 return;
             }
 
+            var typeRef = (typeRefParam.IsArray) 
+                ? ((ArrayType)typeRefParam).ElementType 
+                : typeRefParam; 
+
             IMetadataScope forwardedFrom;
             var typeDef = typeRef.Resolve(out forwardedFrom);
             sharedData.RemoveFromCandidates(forwardedFrom);
-            if (typeDef != null)
+            if (typeDef != null && !sharedData.IsUsedTypeExists(typeDef.AssemblyQualifiedName()))
             {
                 sharedData.RemoveFromCandidates(typeDef.Scope);
 
                 _classCheckHeper.Check(typeDef, sharedData);
                 _interfaceCheckHelper.Check(typeDef, sharedData);
             }
-            else
+            else if (typeDef == null)
             {
                 sharedData.AddToUsedTypes(typeRef.AssemblyQualifiedName());
                 sharedData.RemoveFromCandidates(typeRef.Scope);
