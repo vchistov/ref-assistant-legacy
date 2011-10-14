@@ -123,8 +123,12 @@ namespace Lardite.RefAssistant.ObjectModel
         {
             get
             {
-                string name = Location.Contains(Identity) ? Identity : Name;
-                return Path.IsPathRooted(name) ? Path.GetFileNameWithoutExtension(name) : name;
+                var physicalName = Path.GetFileNameWithoutExtension(Location);
+                string assemblyName = physicalName.Equals(Identity, StringComparison.OrdinalIgnoreCase) 
+                    ? Identity
+                    : physicalName;
+
+                return assemblyName;
             }
         }
 

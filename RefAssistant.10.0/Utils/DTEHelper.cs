@@ -101,12 +101,7 @@ namespace Lardite.RefAssistant.Utils
         public static Project GetActiveProject(IServiceProvider serviceProvider)
         {
             var dte = (DTE)serviceProvider.GetService(typeof(DTE));
-
-            Array activeSolutionProjects = (Array)dte.ActiveSolutionProjects;
-            if (activeSolutionProjects.Length == 0)
-                return null;
-
-            return (Project)activeSolutionProjects.GetValue(0);
+            return GetActiveSolutionProject(dte);
         }
 
         /// <summary>
@@ -117,6 +112,15 @@ namespace Lardite.RefAssistant.Utils
         public static Project GetProjectByName(IServiceProvider serviceProvider, string projectName)
         {
             var dte = (DTE)serviceProvider.GetService(typeof(DTE));
+            
+            // check if searched project is active
+            var activeProject = GetActiveSolutionProject(dte);
+            if (activeProject != null && activeProject.Name.Equals(projectName, StringComparison.Ordinal))
+            {
+                return activeProject;
+            }
+
+            // enumerate all projects in solution
             var enumerator = dte.Solution.Projects.GetEnumerator();
             while (enumerator.MoveNext())
             {
@@ -127,7 +131,7 @@ namespace Lardite.RefAssistant.Utils
                 }
             }
             return null;
-        }        
+        }
 
         #endregion // Public methods
 
@@ -164,6 +168,20 @@ namespace Lardite.RefAssistant.Utils
 
             // found nothing
             return null;
+        }
+
+        /// <summary>
+        /// Get solution's active project.
+        /// </summary>
+        /// <param name="dte"></param>
+        /// <returns></returns>
+        private static Project GetActiveSolutionProject(DTE dte)
+        {
+            Array activeSolutionProjects = (Array)dte.ActiveSolutionProjects;
+            if (activeSolutionProjects.Length == 0)
+                return null;
+
+            return (Project)activeSolutionProjects.GetValue(0);
         }
 
         #endregion // Private methods
