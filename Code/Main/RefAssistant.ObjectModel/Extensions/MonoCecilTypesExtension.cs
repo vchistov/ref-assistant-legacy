@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 using Mono.Cecil;
 
@@ -88,7 +87,7 @@ namespace Lardite.RefAssistant.Extensions
                 return typeDef;
             }
 
-            var assemblyResolver = GetAssemblyResolver(typeRef.Module);
+            var assemblyResolver = typeRef.Module.AssemblyResolver;
             if (assemblyResolver == null)
             {
                 return null;
@@ -186,18 +185,6 @@ namespace Lardite.RefAssistant.Extensions
                 default:
                     return null;
             }
-        }
-
-        /// <summary>
-        /// Gets <see cref="IAssemblyResolver"/> instance from <see cref="ModuleDefinition"/> by Reflection.
-        /// </summary>
-        /// <param name="module">The module definition.</param>
-        /// <returns>Returns the assembly resolver extracted from module definition.</returns>
-        private static IAssemblyResolver GetAssemblyResolver(ModuleDefinition module)
-        {
-            return (IAssemblyResolver)module.GetType()
-                .GetField("AssemblyResolver", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField)
-                .GetValue(module);
         }
 
         /// <summary>

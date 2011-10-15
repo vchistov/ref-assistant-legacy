@@ -83,7 +83,7 @@ namespace Lardite.RefAssistant.Utils
             var projectReferences = ((OAVSProject)Project.Object).References;
             foreach (OAAssemblyReference projectReference in projectReferences)
             {
-                references.Add(CreateProjectReference(projectReference.Name, projectReference.Identity, projectReference.Path,
+                references.Add(BuildProjectReference(projectReference.Name, projectReference.Identity, projectReference.Path,
                     projectReference.Version, projectReference.Culture, projectReference.PublicKeyToken));
             }
 

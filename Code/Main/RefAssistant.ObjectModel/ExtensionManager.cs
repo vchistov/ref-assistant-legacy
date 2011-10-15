@@ -131,14 +131,12 @@ namespace Lardite.RefAssistant
         {
             if (_shellGateway == null && _eventList == null)
                 throw Error.ObjectDisposed(this);
-                        
-            var projectInfo = GetActiveProjectInfo();
+
+            var projectInfo = BuildActiveProjectAndGetInfo();
             if (projectInfo == null)
             {
                 return;
             }
-                        
-            _shellGateway.BuildProject(projectInfo);
 
             LogManager.OutputLog.Information(Environment.NewLine + string.Format(Resources.RefAssistantPackage_StartProcess, projectInfo.Name,
                 projectInfo.ConfigurationName, projectInfo.PlatformName));
@@ -222,11 +220,14 @@ namespace Lardite.RefAssistant
         /// Get an active solution's  project.
         /// </summary>
         /// <returns>Returns active project information.</returns>
-        private ProjectInfo GetActiveProjectInfo()
+        private ProjectInfo BuildActiveProjectAndGetInfo()
         {
             try
             {
-                return _shellGateway.GetActiveProjectInfo();
+                if (_shellGateway.BuildProject(null))
+                {
+                    return _shellGateway.GetActiveProjectInfo();
+                }
             }
             catch (Exception ex)
             {

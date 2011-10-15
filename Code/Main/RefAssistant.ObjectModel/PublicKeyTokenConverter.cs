@@ -14,7 +14,7 @@ namespace Lardite.RefAssistant
     /// <summary>
     /// Provides a way of converting PublicKeyToken value from byte array to string and back.
     /// </summary>
-    class PublicKeyTokenConverter : TypeConverter
+    public class PublicKeyTokenConverter : TypeConverter
     {
         #region Public methods
 

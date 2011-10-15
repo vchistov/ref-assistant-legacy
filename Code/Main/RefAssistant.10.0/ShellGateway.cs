@@ -55,7 +55,12 @@ namespace Lardite.RefAssistant
         public bool BuildProject(ProjectInfo projectInfo)
         {
             var project = GetProjectWrapper(projectInfo);
-            return project.Build() == 0;
+            var buildResult = project.Build();
+            if (buildResult != 0)
+            {
+                DTEHelper.ShowErrorList(_serviceProvider);
+            }
+            return buildResult == 0;
         }
 
         /// <summary>
@@ -64,7 +69,12 @@ namespace Lardite.RefAssistant
         /// <returns>Returns true if success; otherwise false.</returns>
         public bool BuildSolution()
         {
-            return DTEHelper.BuildSolution(_serviceProvider) == 0;
+            var buildResult = DTEHelper.BuildSolution(_serviceProvider);
+            if (buildResult != 0)
+            {
+                DTEHelper.ShowErrorList(_serviceProvider);
+            }
+            return buildResult == 0;
         }
 
         /// <summary>
