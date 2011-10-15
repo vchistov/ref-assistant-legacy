@@ -10,10 +10,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using EnvDTE;
 using VSLangProj80;
 
 using Lardite.RefAssistant.ObjectModel;
+
+using Mono.Cecil;
 
 namespace Lardite.RefAssistant.Utils
 {
@@ -33,6 +36,7 @@ namespace Lardite.RefAssistant.Utils
         #region Fields
 
         private Project _vsProject;
+        private readonly PublicKeyTokenConverter _tokenConverter;
 
         #endregion // Fields
 
@@ -45,6 +49,7 @@ namespace Lardite.RefAssistant.Utils
         public BaseProjectWrapper(Project vsProject)
         {
             _vsProject = vsProject;
+            _tokenConverter = new PublicKeyTokenConverter();
         }
 
         #endregion // .ctor
@@ -92,6 +97,18 @@ namespace Lardite.RefAssistant.Utils
         public bool IsBuildInProgress
         {
             get { return DTEHelper.IsBuildInProgress(Project); }
+        }
+
+        /// <summary>
+        /// Get AssemblyDefinition of project.
+        /// </summary>
+        internal AssemblyDefinition AssemblyDefinition
+        {
+            get
+            {
+                return AssemblyDefinition
+                    .ReadAssembly(GetOutputAssemblyPath(), new ReaderParameters(ReadingMode.Deferred));                
+            }
         }
 
         #endregion // Properties
@@ -147,10 +164,10 @@ namespace Lardite.RefAssistant.Utils
         {
             var references = new List<ProjectReference>();
             var projectReferences = ((VSProject2)Project.Object).References;
+
             foreach (Reference3 projectReference in projectReferences)
             {
-                references.Add(CreateProjectReference(projectReference.Name, projectReference.Identity, projectReference.Path,
-                    projectReference.Version, projectReference.Culture, projectReference.PublicKeyToken));
+                references.Add(CreateProjectReference(projectReference));
             }
 
             return references;
@@ -176,7 +193,7 @@ namespace Lardite.RefAssistant.Utils
         /// <summary>
         /// Creates project reference.
         /// </summary>
-        protected ProjectReference CreateProjectReference(string name, string identity, string location, string version,
+        protected ProjectReference BuildProjectReference(string name, string identity, string location, string version,
             string culture, string publicKeyToken)
         {
             return new ProjectReference()
@@ -188,6 +205,45 @@ namespace Lardite.RefAssistant.Utils
                     Culture = string.Compare(culture, "0", false, CultureInfo.InvariantCulture) == 0 ? string.Empty : culture,
                     PublicKeyToken = publicKeyToken
                 };
+        }
+
+        /// <summary>
+        /// Create project reference. In some cases the Visual Studio returns incorrect project output path.
+        /// </summary>
+        /// <param name="projectRef">The project reference.</param>
+        /// <returns>Returns project reference assembly.</returns>        
+        private ProjectReference CreateProjectReference(Reference3 projectRef)
+        {
+            if (projectRef.SourceProject == null)
+            {
+                return BuildProjectReference(projectRef.Name, projectRef.Identity,
+                    projectRef.Path, projectRef.Version, 
+                    projectRef.Culture, projectRef.PublicKeyToken);
+            }
+
+            var activeConfiguration = Project.DTE.Solution.SolutionBuild.ActiveConfiguration.Name;
+
+            var assemblyName = Path.GetFileName(projectRef.Path);
+            var pattern = string.Format(@"\\(obj|bin)\\(?<Configuration>(Release|Debug))\\{0}", assemblyName);
+            var regex = Regex.Match(projectRef.Path, pattern);
+            if (regex.Success)
+            {
+                var projectRefConfiguration = regex.Groups["Configuration"].Value.ToString();
+                if (projectRefConfiguration.Equals(activeConfiguration, StringComparison.Ordinal)
+                    && File.Exists(projectRef.Path))
+                {
+                    return BuildProjectReference(projectRef.Name, projectRef.Identity, 
+                        projectRef.Path, projectRef.Version, 
+                        projectRef.Culture, projectRef.PublicKeyToken);
+                }
+            }
+
+            var wrapper = DTEHelper.CreateProjectWrapper(projectRef.SourceProject);
+            var assemblyDef = wrapper.AssemblyDefinition;
+
+            return BuildProjectReference(projectRef.Name, projectRef.Identity,                 
+                wrapper.GetOutputAssemblyPath(), assemblyDef.Name.Version.ToString(), 
+                assemblyDef.Name.Culture, _tokenConverter.ConvertFrom(assemblyDef.Name.PublicKeyToken));
         }
 
         #endregion // Internal methods
