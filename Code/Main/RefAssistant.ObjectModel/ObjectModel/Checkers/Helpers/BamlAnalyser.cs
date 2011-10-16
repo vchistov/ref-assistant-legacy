@@ -83,7 +83,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
         /// </summary>
         /// <returns>Returns <see cref="Lardite.RefAssistant.ObjectModel.Checkers.XamlTypeDeclaration"/> collection.</returns>
         public IEnumerable<XamlTypeDeclaration> GetDeclaredTypes()
-        {
+        {            
             return _typeTable.Select(t => new XamlTypeDeclaration(t.Value.Assembly, t.Value.Namespace, t.Value.Name));
         }
 
@@ -100,7 +100,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                 {
                     WriteElement(this.rootElement, indentationTextWriter);
                     return stringWriter.ToString();
-                }
+                }                
             }
         }
 
@@ -3289,10 +3289,10 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                     return false;
                 }
 
-                var result = (string.Compare(ref1.Assembly, ref2.Assembly, StringComparison.InvariantCultureIgnoreCase) == 0)
-                    && (string.Compare(ref1.Name, ref2.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
-                    && (string.Compare(ref1.Namespace, ref2.Namespace, StringComparison.InvariantCultureIgnoreCase) == 0)
-                    && (string.Compare(ref1.XmlPrefix, ref2.XmlPrefix, StringComparison.InvariantCultureIgnoreCase) == 0);
+                var result = (string.Compare(ref1.Assembly, ref2.Assembly, StringComparison.OrdinalIgnoreCase) == 0)
+                    && (string.Compare(ref1.Name, ref2.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                    && (string.Compare(ref1.Namespace, ref2.Namespace, StringComparison.OrdinalIgnoreCase) == 0)
+                    && (string.Compare(ref1.XmlPrefix, ref2.XmlPrefix, StringComparison.OrdinalIgnoreCase) == 0);
 
                 return result;
             }

@@ -132,7 +132,7 @@ namespace Lardite.RefAssistant
             if (_shellGateway == null && _eventList == null)
                 throw Error.ObjectDisposed(this);
 
-            var projectInfo = BuildActiveProjectAndGetInfo();
+            var projectInfo = BuildActiveProjectAndGetProjectInfo();
             if (projectInfo == null)
             {
                 return;
@@ -220,7 +220,7 @@ namespace Lardite.RefAssistant
         /// Get an active solution's  project.
         /// </summary>
         /// <returns>Returns active project information.</returns>
-        private ProjectInfo BuildActiveProjectAndGetInfo()
+        private ProjectInfo BuildActiveProjectAndGetProjectInfo()
         {
             try
             {

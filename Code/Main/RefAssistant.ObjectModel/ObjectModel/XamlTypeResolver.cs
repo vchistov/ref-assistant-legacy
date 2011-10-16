@@ -76,7 +76,7 @@ namespace Lardite.RefAssistant.ObjectModel
                         .Where(a => a.AttributeType.FullName.EndsWith(".XmlnsDefinitionAttribute")
                             && a.HasConstructorArguments
                             && a.ConstructorArguments.Count >= 2
-                            && a.ConstructorArguments[0].Value.ToString().Equals(type.PreferredXamlNamespace, StringComparison.InvariantCultureIgnoreCase))
+                            && a.ConstructorArguments[0].Value.ToString().Equals(type.PreferredXamlNamespace, StringComparison.OrdinalIgnoreCase))
                         .Select(a => a.ConstructorArguments[1].Value.ToString());
 
                     foreach (var @namespace in xmlnsDefAttribs)
@@ -111,7 +111,7 @@ namespace Lardite.RefAssistant.ObjectModel
             }
 
             // if required assembly is current assembly project.
-            if (_evaluator.ProjectAssembly.Name.Name.Equals(assemblyName, StringComparison.InvariantCultureIgnoreCase))
+            if (_evaluator.ProjectAssembly.Name.Name.Equals(assemblyName, StringComparison.OrdinalIgnoreCase))
             {
                 return _evaluator.ProjectAssembly;
             }
@@ -122,7 +122,7 @@ namespace Lardite.RefAssistant.ObjectModel
         private ProjectReference GetProjectReferenceByName(string assemblyName)
         {
             return _evaluator.ProjectInfo.References
-                .Where(r => r.AssemblyName.Equals(assemblyName, System.StringComparison.InvariantCultureIgnoreCase))
+                .Where(r => r.AssemblyName.Equals(assemblyName, StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefault();
         }
 

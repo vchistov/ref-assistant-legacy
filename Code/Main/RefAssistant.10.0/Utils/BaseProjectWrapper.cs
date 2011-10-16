@@ -7,16 +7,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using EnvDTE;
 using VSLangProj80;
 
-using Lardite.RefAssistant.ObjectModel;
-
 using Mono.Cecil;
+
+using Lardite.RefAssistant.ObjectModel;
 
 namespace Lardite.RefAssistant.Utils
 {
@@ -182,7 +181,7 @@ namespace Lardite.RefAssistant.Utils
         /// </summary>
         /// <returns>Returns zero (0) if there are no errors.</returns>
         public int Build()
-        {
+        {            
             return DTEHelper.BuildProject(Project);
         }
 
@@ -202,7 +201,7 @@ namespace Lardite.RefAssistant.Utils
                     Identity = identity,
                     Location = location,
                     Version = version,
-                    Culture = string.Compare(culture, "0", false, CultureInfo.InvariantCulture) == 0 ? string.Empty : culture,
+                    Culture = string.Compare(culture, "0", StringComparison.Ordinal) == 0 ? string.Empty : culture,
                     PublicKeyToken = publicKeyToken
                 };
         }

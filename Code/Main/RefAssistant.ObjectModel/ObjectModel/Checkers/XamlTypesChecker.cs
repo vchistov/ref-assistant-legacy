@@ -135,7 +135,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
 
             private IEnumerable<XamlTypeDeclaration> ReadResource(EmbeddedResource resource)
             {
-                if (resource.Name.EndsWith(".resources", StringComparison.InvariantCultureIgnoreCase))
+                if (resource.Name.EndsWith(".resources", StringComparison.Ordinal))
                 {
                     IEnumerable<XamlTypeDeclaration> declaredTypes = new List<XamlTypeDeclaration>();
                     var resourceReader = new ResourceReader(resource.GetResourceStream());
@@ -176,11 +176,11 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
 
             private IXamlAnalyser CreateXamlAnalyser(string key, Stream stream)
             {
-                if (key.EndsWith(".baml", StringComparison.InvariantCultureIgnoreCase))
+                if (key.EndsWith(".baml", StringComparison.OrdinalIgnoreCase))
                 {
                     return new BamlAnalyser(stream);
                 }
-                else if (key.EndsWith(".xaml", StringComparison.InvariantCultureIgnoreCase))
+                else if (key.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase))
                 {
                     return new NativeXamlAnalyser(stream);
                 }

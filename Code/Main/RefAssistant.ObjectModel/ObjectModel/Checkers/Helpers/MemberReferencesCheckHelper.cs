@@ -139,7 +139,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
         {
             var typeName = typeRef.FullName;
             return evaluator.MemberReferences
-                .Where(item => item.DeclaringType.FullName.Equals(typeName, StringComparison.InvariantCultureIgnoreCase));
+                .Where(item => item.DeclaringType.FullName.Equals(typeName, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -154,11 +154,11 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
             // we won't pay attention that type was forwarded, more important for us it's to resolve type.
             IMetadataScope forwardedFrom;
             return from method in typeRef.Resolve(out forwardedFrom).Methods
-                   where method.Name.Equals(methodName, StringComparison.InvariantCultureIgnoreCase)
+                   where method.Name.Equals(methodName, StringComparison.OrdinalIgnoreCase)
                      && method.Parameters.Count == methodParamsAmount
                    select method;
         }
-
+        
         #endregion // Private methods
     }
 }

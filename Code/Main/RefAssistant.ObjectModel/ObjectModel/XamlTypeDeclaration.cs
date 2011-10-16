@@ -198,8 +198,8 @@ namespace Lardite.RefAssistant.ObjectModel
         {
             get
             {
-                return PreferredXamlNamespace.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase)
-                    || PreferredXamlNamespace.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase);
+                return PreferredXamlNamespace.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+                    || PreferredXamlNamespace.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -210,7 +210,7 @@ namespace Lardite.RefAssistant.ObjectModel
         {
             get
             {
-                return PreferredXamlNamespace.StartsWith("clr-namespace:", StringComparison.InvariantCultureIgnoreCase)
+                return PreferredXamlNamespace.StartsWith("clr-namespace:", StringComparison.OrdinalIgnoreCase)
                     || (!string.IsNullOrWhiteSpace(PreferredXamlNamespace) && !IsXmlNamespace);
             }
         }
@@ -247,9 +247,9 @@ namespace Lardite.RefAssistant.ObjectModel
             }
 
             var result = (_xamlType != null && _xamlType == obj._xamlType) ||
-                ((string.Compare(Name, obj.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
-                && (string.Compare(PreferredXamlNamespace, obj.PreferredXamlNamespace, StringComparison.InvariantCultureIgnoreCase) == 0)
-                && (string.Compare(AssemblyName, obj.AssemblyName, StringComparison.InvariantCultureIgnoreCase) == 0));
+                ((string.Compare(Name, obj.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                && (string.Compare(PreferredXamlNamespace, obj.PreferredXamlNamespace, StringComparison.OrdinalIgnoreCase) == 0)
+                && (string.Compare(AssemblyName, obj.AssemblyName, StringComparison.OrdinalIgnoreCase) == 0));
 
             return result;
         }

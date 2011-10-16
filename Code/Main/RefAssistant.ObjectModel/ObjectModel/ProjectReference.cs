@@ -16,7 +16,7 @@ namespace Lardite.RefAssistant.ObjectModel
     /// </summary>
     [Serializable]
     [DebuggerDisplay("{FullName}")]
-    public sealed class ProjectReference : IEquatable<ProjectReference>
+    public sealed class ProjectReference : IEquatable<ProjectReference>, IComparable<string>
     {
         #region Fields
 
@@ -29,39 +29,7 @@ namespace Lardite.RefAssistant.ObjectModel
         private string _fullName;
 
         #endregion // Fields
-
-        #region IEquatable Members
-
-        /// <summary>
-        /// Equals objects.
-        /// </summary>
-        /// <param name="other">Other object.</param>
-        /// <returns>If true, then equals.</returns>
-        public bool Equals(ProjectReference other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return string.Compare(other.FullName, this.FullName, StringComparison.InvariantCultureIgnoreCase) == 0;
-        }
-
-        /// <summary>
-        /// Equals objects.
-        /// </summary>
-        /// <param name="obj">Other object.</param>
-        /// <returns>If true, then equals.</returns>
-        public override bool Equals(Object obj)
-        {
-            if (obj == null) return base.Equals(obj);
-
-            return (obj is ProjectReference)
-                ? Equals(obj as ProjectReference)
-                : false;
-        }
-
         
-
-        #endregion
-
         #region Object overrides
 
         /// <summary>
@@ -70,7 +38,7 @@ namespace Lardite.RefAssistant.ObjectModel
         /// <returns>Hash code.</returns>
         public override int GetHashCode()
         {
-            return FullName.GetHashCode();
+            return FullName.ToUpper().GetHashCode();
         }
 
         /// <summary>
@@ -166,5 +134,50 @@ namespace Lardite.RefAssistant.ObjectModel
         }
 
         #endregion        
+
+        #region IEquatable implementation
+
+        /// <summary>
+        /// Equals objects.
+        /// </summary>
+        /// <param name="other">Other object.</param>
+        /// <returns>If true, then equals.</returns>
+        public bool Equals(ProjectReference other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            return CompareTo(other.FullName) == 0;
+        }
+
+        /// <summary>
+        /// Equals objects.
+        /// </summary>
+        /// <param name="obj">Other object.</param>
+        /// <returns>If true, then equals.</returns>
+        public override bool Equals(Object obj)
+        {
+            if (obj == null) return base.Equals(obj);
+
+            return (obj is ProjectReference)
+                ? Equals(obj as ProjectReference)
+                : false;
+        }
+
+        #endregion
+
+        #region IComparable implementation
+
+        /// <summary>
+        /// Compare this instance with string of full name of an assembly.
+        /// </summary>
+        /// <param name="assemblyFullName">An object to compare with this instance. </param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: &lt;0 - this instance precedes <paramref name="assemblyFullName"/> in the sort order; 0 - This instance occurs in the same position in the sort order as <paramref name="assemblyFullName"/>; &gt;0 - this instance follows <paramref name="assemblyFullName"/> in the sort order.</returns>
+        public int CompareTo(string assemblyFullName)
+        {
+            return string.Compare(FullName, assemblyFullName, StringComparison.OrdinalIgnoreCase);
+        }
+
+        #endregion // IComparable implementation
     }
 }

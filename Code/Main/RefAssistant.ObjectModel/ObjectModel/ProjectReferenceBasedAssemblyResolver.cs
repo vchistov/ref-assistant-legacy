@@ -61,7 +61,7 @@ namespace Lardite.RefAssistant.ObjectModel
             }
 
             var projectRef = _projectReferences.SingleOrDefault(item => IsEquals(name, item));
-            assemblyDefinition = (projectRef != null && !projectRef.FullName.Equals(name.FullName, StringComparison.InvariantCultureIgnoreCase))
+            assemblyDefinition = (projectRef != null && projectRef.CompareTo(name.FullName) != 0)
                 ? ReadAssembly(projectRef) 
                 : base.Resolve(name);
 
@@ -91,14 +91,14 @@ namespace Lardite.RefAssistant.ObjectModel
         /// <returns>If true, then equals.</returns>
         private bool IsEquals(AssemblyNameReference nameReference, ProjectReference projectReference)
         {
-            bool result = string.Equals(nameReference.Name, projectReference.AssemblyName, StringComparison.InvariantCultureIgnoreCase)
-                && string.Equals(nameReference.Culture, projectReference.Culture, StringComparison.InvariantCultureIgnoreCase);
+            bool result = string.Equals(nameReference.Name, projectReference.AssemblyName, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(nameReference.Culture, projectReference.Culture, StringComparison.OrdinalIgnoreCase);
 
             string token = (nameReference.PublicKeyToken == null || nameReference.PublicKeyToken.Length == 0)
                 ? string.Empty
                 : _converter.ConvertFrom(nameReference.PublicKeyToken);
 
-            result &= string.Equals(token, projectReference.PublicKeyToken, StringComparison.InvariantCultureIgnoreCase);
+            result &= string.Equals(token, projectReference.PublicKeyToken, StringComparison.OrdinalIgnoreCase);
             return result;
         }
 
