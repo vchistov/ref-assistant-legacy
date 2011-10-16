@@ -24,7 +24,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
         {
             var query = (from reference in sharedData.CandidateReferences
                         join assemblyRef in evaluator.ManifestAssemblies 
-                            on reference.FullName.ToLower() equals assemblyRef.FullName.ToLower()
+                            on reference.FullName.ToUpper() equals assemblyRef.FullName.ToUpper()
                         select reference).ToList();
             
             foreach (var reference in query)

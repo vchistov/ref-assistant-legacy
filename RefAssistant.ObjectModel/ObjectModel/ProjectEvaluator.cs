@@ -209,8 +209,8 @@ namespace Lardite.RefAssistant.ObjectModel
             var candidates = new List<ProjectReference>();
             foreach (ProjectReference projectReference in ProjectInfo.References)
             {
-                if (projectReference.Name.Equals(SystemCore, StringComparison.InvariantCultureIgnoreCase)
-                 || projectReference.Name.Equals(MsCorLib, StringComparison.InvariantCultureIgnoreCase))
+                if (projectReference.Name.Equals(SystemCore, StringComparison.OrdinalIgnoreCase)
+                 || projectReference.Name.Equals(MsCorLib, StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 candidates.Add(projectReference);
@@ -245,9 +245,9 @@ namespace Lardite.RefAssistant.ObjectModel
             var gacRootFolder = Path.Combine(Environment.ExpandEnvironmentVariables("%systemroot%"), @"assembly\");
             
             return ProjectInfo.References
-                .Select(r => Path.GetDirectoryName(r.Location).ToLower())
+                .Select(r => Path.GetDirectoryName(r.Location).ToUpper())
                 .Distinct()
-                .Where(r => !r.StartsWith(gacRootFolder, StringComparison.InvariantCultureIgnoreCase));
+                .Where(r => !r.StartsWith(gacRootFolder, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion

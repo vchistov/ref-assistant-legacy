@@ -212,8 +212,8 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
             string assemblyName = scope.GetAssemblyName();
 
             return CandidateReferences.FirstOrDefault(
-                item => string.Compare(item.Name, assemblyName, StringComparison.InvariantCultureIgnoreCase) == 0
-                     && string.Compare(item.PublicKeyToken, publicKeyToken, StringComparison.InvariantCultureIgnoreCase) == 0);
+                item => string.Compare(item.Name, assemblyName, StringComparison.OrdinalIgnoreCase) == 0
+                     && string.Compare(item.PublicKeyToken, publicKeyToken, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         #endregion // Private methods

@@ -51,7 +51,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                 {
                     var hasType = assemblyDefinition.Modules
                         .SelectMany(m => m.Types)
-                        .Count(t => t.FullName.Equals(type.FullName, StringComparison.InvariantCultureIgnoreCase)) > 0;
+                        .Count(t => t.FullName.Equals(type.FullName, StringComparison.OrdinalIgnoreCase)) > 0;
 
                     if (hasType)
                     {

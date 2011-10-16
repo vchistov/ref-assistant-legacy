@@ -104,7 +104,7 @@ namespace Lardite.RefAssistant.Extensions
                     : typeRef.FullName;
 
                 var forwardedType = projectAssembly.Modules.SelectMany(m => m.ExportedTypes)
-                    .Where(t => t.IsForwarder && t.FullName.Equals(typeFullName, StringComparison.InvariantCultureIgnoreCase))
+                    .Where(t => t.IsForwarder && t.FullName.Equals(typeFullName, StringComparison.OrdinalIgnoreCase))
                     .SingleOrDefault();
 
                 // type is forwarded
@@ -118,14 +118,14 @@ namespace Lardite.RefAssistant.Extensions
 
                     // search type
                     var type = forwardedToAssembly.Modules.SelectMany(m => m.Types)
-                        .Where(t => t.FullName.Equals(typeFullName, StringComparison.InvariantCultureIgnoreCase))
+                        .Where(t => t.FullName.Equals(typeFullName, StringComparison.OrdinalIgnoreCase))
                         .SingleOrDefault();
 
                     // if type was not found try to search nested type.
                     return (type != null) 
                         ? type 
                         : forwardedToAssembly.Modules.SelectMany(m => m.Types).SelectMany(t => t.NestedTypes)
-                        .Where(t => t.FullName.Equals(typeFullName, StringComparison.InvariantCultureIgnoreCase))
+                        .Where(t => t.FullName.Equals(typeFullName, StringComparison.OrdinalIgnoreCase))
                         .SingleOrDefault();
                 }
             }

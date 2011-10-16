@@ -34,7 +34,7 @@ namespace Lardite.RefAssistant.Extensions
             }
 
             return ref1.AssemblyQualifiedName()
-                .Equals(ref2.AssemblyQualifiedName(), StringComparison.InvariantCultureIgnoreCase);
+                .Equals(ref2.AssemblyQualifiedName(), StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
