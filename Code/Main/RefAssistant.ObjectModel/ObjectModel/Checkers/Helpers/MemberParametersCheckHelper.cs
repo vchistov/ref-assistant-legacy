@@ -114,17 +114,13 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
 
         #region Private methods
 
-        private void ResolveTypeReference(TypeReference typeRefParam, CheckerSharedData sharedData)
+        private void ResolveTypeReference(TypeReference paramTypeRef, CheckerSharedData sharedData)
         {
-            if (typeRefParam == null || typeRefParam.IsGenericParameter
-                || (typeRefParam.IsArray && ((ArrayType)typeRefParam).ElementType.IsGenericParameter))                
+            var typeRef = GetNativeTypeOfTypeReference(paramTypeRef);
+            if (typeRef == null || typeRef.IsGenericParameter)
             {
                 return;
             }
-
-            var typeRef = (typeRefParam.IsArray) 
-                ? ((ArrayType)typeRefParam).ElementType 
-                : typeRefParam; 
 
             IMetadataScope forwardedFrom;
             var typeDef = typeRef.Resolve(out forwardedFrom);
@@ -140,6 +136,61 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
             {
                 sharedData.AddToUsedTypes(typeRef.AssemblyQualifiedName());
                 sharedData.RemoveFromCandidates(typeRef.Scope);
+            }
+
+            // check generic parameters of the type.
+            if (typeRef is GenericInstanceType && ((GenericInstanceType)typeRef).HasGenericArguments)
+            {
+                var genericType = ((GenericInstanceType)typeRef);
+                foreach (var genericArg in genericType.GenericArguments)
+                {
+                    ResolveTypeReference(genericArg, sharedData);
+                }
+            }
+        }
+
+        private TypeReference GetNativeTypeOfTypeReference(TypeReference typeRef)
+        {
+            if (typeRef == null)
+            {
+                return null;
+            }
+
+            if (typeRef.IsArray)
+            {
+                // e.g. int[]
+                return ((ArrayType)typeRef).ElementType;
+            }            
+            else if (typeRef.IsByReference)
+            {
+                // e.g. ref int
+                return ((ByReferenceType)typeRef).ElementType;
+            }
+            else if (typeRef.IsPointer)
+            {
+                // e.g. int*
+                return ((PointerType)typeRef).ElementType;
+            }            
+            else if (typeRef.IsOptionalModifier)
+            {
+                var type = ((OptionalModifierType)typeRef).ElementType;
+                return (type is OptionalModifierType) 
+                    ? ((OptionalModifierType)type).ModifierType
+                    : type;
+            }
+            else if (typeRef.IsRequiredModifier)
+            {
+                var type = ((RequiredModifierType)typeRef).ElementType;
+                return (type is RequiredModifierType)
+                    ? ((RequiredModifierType)type).ModifierType
+                    : type;
+            }
+            else
+            {
+                // IsGenericInstance, e.g. IEnumerable<int> (IEnumerable)
+                // IsGenericParameter, e.g. IEnumerable<int> (int)
+                // IsFunctionPointer
+                return typeRef;
             }
         }
 

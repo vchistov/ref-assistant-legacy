@@ -177,7 +177,6 @@
     <ProjectReference Include="..\RefAssistant.ObjectModel\RefAssistant.ObjectModel.csproj">
       <Project>{27667DD0-A302-4D10-9D5F-694F31B1F354}</Project>
       <Name>RefAssistant.ObjectModel</Name>
-      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
