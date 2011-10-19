@@ -58,10 +58,7 @@ namespace Lardite.RefAssistant.ObjectModel
                 assemblyDef = GetAssemblyDefinition(type.AssemblyName);
                 if (assemblyDef != null)
                 {
-                    var typeDef = assemblyDef.Modules
-                        .Select(m => m.GetType(type.Namespace, type.Name))
-                        .FirstOrDefault();
-                    return typeDef;
+                    return FindTypeDefinition(assemblyDef, type.Namespace, type.Name);
                 }
             }
 
@@ -81,9 +78,7 @@ namespace Lardite.RefAssistant.ObjectModel
 
                     foreach (var @namespace in xmlnsDefAttribs)
                     {
-                        var typeDef = assemblyDef.Modules
-                            .Select(m => m.GetType(@namespace, type.Name))
-                            .FirstOrDefault();
+                        var typeDef = FindTypeDefinition(assemblyDef, @namespace, type.Name);
                         if (typeDef != null)
                         {
                             return typeDef;
@@ -124,6 +119,18 @@ namespace Lardite.RefAssistant.ObjectModel
             return _evaluator.ProjectInfo.References
                 .Where(r => r.AssemblyName.Equals(assemblyName, StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefault();
+        }
+
+        private TypeDefinition FindTypeDefinition(AssemblyDefinition assemblyDef, string @namespace, string name)
+        {
+            if (assemblyDef != null)
+            {
+                var fullname = string.Format("{0}.{1}", @namespace, name.Replace("+", "/"));
+                return assemblyDef.Modules
+                    .Select(m => m.GetType(fullname))
+                    .FirstOrDefault();
+            }
+            return null;
         }
 
         #endregion //Private methods
