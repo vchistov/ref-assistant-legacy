@@ -47,6 +47,11 @@ namespace Lardite.RefAssistant.Utils
         /// <param name="vsProject">The Visual Studio project.</param>
         public BaseProjectWrapper(Project vsProject)
         {
+            if (vsProject == null)
+            {
+                throw Error.ArgumentNull("vsProject");
+            }
+
             _vsProject = vsProject;
             _tokenConverter = new PublicKeyTokenConverter();
         }
@@ -68,28 +73,14 @@ namespace Lardite.RefAssistant.Utils
         /// </summary>
         public Guid Kind
         {
-            get { return Guid.Parse(Project.Kind); }
-        }
-
-        /// <summary>
-        /// Get project information.
-        /// </summary>
-        public ProjectInfo ProjectInfo
-        {
-            get
+            get 
             {
-                return new ProjectInfo
-                    {
-                        Name = Project.Name,
-                        Type = Kind,
-                        AssemblyPath = GetOutputAssemblyPath(),
-                        ConfigurationName = Project.ConfigurationManager.ActiveConfiguration.ConfigurationName,
-                        PlatformName = Project.ConfigurationManager.ActiveConfiguration.PlatformName,
-                        References = GetProjectReferences()
-                    };
+                Guid kind;
+                Guid.TryParse(Project.Kind, out kind);
+                return kind;
             }
         }
-
+        
         /// <summary>
         /// Check wherether project is building currently.
         /// </summary>
@@ -101,12 +92,12 @@ namespace Lardite.RefAssistant.Utils
         /// <summary>
         /// Get AssemblyDefinition of project.
         /// </summary>
-        internal AssemblyDefinition AssemblyDefinition
+        private AssemblyDefinition AssemblyDefinition
         {
             get
             {
                 return AssemblyDefinition
-                    .ReadAssembly(GetOutputAssemblyPath(), new ReaderParameters(ReadingMode.Deferred));                
+                    .ReadAssembly(GetOutputAssemblyPath(), new ReaderParameters(ReadingMode.Deferred));
             }
         }
 
@@ -115,7 +106,7 @@ namespace Lardite.RefAssistant.Utils
         #region Virtual methods
 
         /// <summary>
-        /// Get outout assembly path.
+        /// Get output assembly path.
         /// </summary>
         /// <returns>Returns full path.</returns>
         public virtual string GetOutputAssemblyPath()
@@ -181,8 +172,43 @@ namespace Lardite.RefAssistant.Utils
         /// </summary>
         /// <returns>Returns zero (0) if there are no errors.</returns>
         public int Build()
-        {            
+        {
             return DTEHelper.BuildProject(Project);
+        }
+
+        /// <summary>
+        /// Get output assembly path.
+        /// </summary>
+        /// <param name="outputPath">The full path.</param>
+        /// <returns>Returns true if error occurs, otherwise false.</returns>
+        public bool TryGetOutputAssemblyPath(out string outputPath)
+        {
+            outputPath = string.Empty;
+            try
+            {
+                outputPath = GetOutputAssemblyPath();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Get project information.
+        /// </summary>
+        public ProjectInfo GetProjectInfo()
+        {
+            return new ProjectInfo
+            {
+                Name = Project.Name,
+                Type = Kind,
+                AssemblyPath = GetOutputAssemblyPath(),
+                ConfigurationName = Project.ConfigurationManager.ActiveConfiguration.ConfigurationName,
+                PlatformName = Project.ConfigurationManager.ActiveConfiguration.PlatformName,
+                References = GetProjectReferences()
+            };
         }
 
         #endregion // Public methods
@@ -216,7 +242,7 @@ namespace Lardite.RefAssistant.Utils
             if (projectRef.SourceProject == null)
             {
                 return BuildProjectReference(projectRef.Name, projectRef.Identity,
-                    projectRef.Path, projectRef.Version, 
+                    projectRef.Path, projectRef.Version,
                     projectRef.Culture, projectRef.PublicKeyToken);
             }
 
@@ -231,8 +257,8 @@ namespace Lardite.RefAssistant.Utils
                 if (projectRefConfiguration.Equals(activeConfiguration, StringComparison.Ordinal)
                     && File.Exists(projectRef.Path))
                 {
-                    return BuildProjectReference(projectRef.Name, projectRef.Identity, 
-                        projectRef.Path, projectRef.Version, 
+                    return BuildProjectReference(projectRef.Name, projectRef.Identity,
+                        projectRef.Path, projectRef.Version,
                         projectRef.Culture, projectRef.PublicKeyToken);
                 }
             }
@@ -240,8 +266,8 @@ namespace Lardite.RefAssistant.Utils
             var wrapper = DTEHelper.CreateProjectWrapper(projectRef.SourceProject);
             var assemblyDef = wrapper.AssemblyDefinition;
 
-            return BuildProjectReference(projectRef.Name, projectRef.Identity,                 
-                wrapper.GetOutputAssemblyPath(), assemblyDef.Name.Version.ToString(), 
+            return BuildProjectReference(projectRef.Name, projectRef.Identity,
+                wrapper.GetOutputAssemblyPath(), assemblyDef.Name.Version.ToString(),
                 assemblyDef.Name.Culture, _tokenConverter.ConvertFrom(assemblyDef.Name.PublicKeyToken));
         }
 

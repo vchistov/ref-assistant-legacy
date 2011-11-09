@@ -83,7 +83,7 @@ namespace Lardite.RefAssistant
         /// <returns>Active project info.</returns>
         public ProjectInfo GetActiveProjectInfo()
         {
-            return GetProjectWrapper(null).ProjectInfo;
+            return GetProjectWrapper(null).GetProjectInfo();
         }
 
         /// <summary>
