@@ -81,7 +81,7 @@ namespace Lardite.RefAssistant.Extensions
             forwardedFrom = null;
 
             var typeDef = typeRef.Resolve();
-            if (typeDef != null)
+            if (typeDef != null && AreScopesEqual(typeDef.Scope, typeRef.Scope))
             {
                 // not forwarded type
                 return typeDef;
@@ -229,6 +229,30 @@ namespace Lardite.RefAssistant.Extensions
                     yield return innerNestedType;
                 }
             }
+        }
+
+        private static bool AreScopesEqual(IMetadataScope scope1, IMetadataScope scope2)
+        {
+            if (ReferenceEquals(scope1, null) || ReferenceEquals(scope2, null))
+                return false;
+
+            if (ReferenceEquals(scope1, scope2))
+                return true;
+
+            var assemblyName1 = GetAssemblyNameRefByMetadataScope(scope1);
+            var assemblyName2 = GetAssemblyNameRefByMetadataScope(scope2);
+
+            if (ReferenceEquals(assemblyName1, null) && ReferenceEquals(assemblyName2, null))
+            {
+                return string.Equals(scope1.Name, scope2.Name, StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (ReferenceEquals(assemblyName1, null) || ReferenceEquals(assemblyName2, null))
+            {
+                return false;
+            }
+
+            return string.Equals(assemblyName1.FullName, assemblyName2.FullName, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion // Private methods
