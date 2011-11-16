@@ -163,6 +163,36 @@ namespace Lardite.RefAssistant.Extensions
             return modules.SelectMany(m => m.GetTypesDefinitions());
         }
 
+        /// <summary>
+        /// Compares the <see cref="AssemblyNameReference"/> instances.
+        /// </summary>
+        /// <param name="assemblyNameSelf">The first <see cref="AssemblyNameReference"/>.</param>
+        /// <param name="assemblyNameRef">The second <see cref="AssemblyNameReference"/>.</param>
+        /// <param name="ignoreVersion">Whether ignore the version of assemblies.</param>
+        /// <returns>Returns true if objects are equal; otherwise false.</returns>
+        public static bool IsEquals(this AssemblyNameReference assemblyNameSelf, AssemblyNameReference assemblyNameRef, bool ignoreVersion)
+        {
+            bool result = string.Equals(assemblyNameSelf.Name, assemblyNameRef.Name, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(assemblyNameSelf.Culture, assemblyNameRef.Culture, StringComparison.OrdinalIgnoreCase);
+
+            string token1 = (assemblyNameSelf.PublicKeyToken == null || assemblyNameSelf.PublicKeyToken.Length == 0)
+                ? string.Empty
+                : _publicKeyTokenConverter.ConvertFrom(assemblyNameSelf.PublicKeyToken);
+
+            string token2 = (assemblyNameRef.PublicKeyToken == null || assemblyNameRef.PublicKeyToken.Length == 0)
+                ? string.Empty
+                : _publicKeyTokenConverter.ConvertFrom(assemblyNameRef.PublicKeyToken);
+
+            result &= string.Equals(token1, token2, StringComparison.OrdinalIgnoreCase);
+
+            if (!ignoreVersion)
+            {
+                result &= assemblyNameSelf.Version.Equals(assemblyNameRef.Version);
+            }
+
+            return result;
+        }
+
         #endregion // Public methods
 
         #region Private methods
@@ -252,7 +282,7 @@ namespace Lardite.RefAssistant.Extensions
                 return false;
             }
 
-            return string.Equals(assemblyName1.FullName, assemblyName2.FullName, StringComparison.OrdinalIgnoreCase);
+            return assemblyName1.IsEquals(assemblyName2, true);
         }
 
         #endregion // Private methods
