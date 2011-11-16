@@ -27,6 +27,7 @@ namespace Lardite.RefAssistant.ObjectModel
         private const string NullPublicKeyToken = "null";
 
         private string _fullName;
+        private string _culture;
 
         #endregion // Fields
         
@@ -72,12 +73,22 @@ namespace Lardite.RefAssistant.ObjectModel
         /// <summary>
         /// Version.
         /// </summary>
-        public string Version { get; set; }
+        public Version Version { get; set; }
 
         /// <summary>
         /// Culture.
         /// </summary>
-        public string Culture { get; set; }
+        public string Culture 
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(_culture) ? NeutralCulture : _culture;
+            }
+            set
+            {
+                _culture = value;
+            }
+        }
 
         /// <summary>
         /// Public key token
@@ -127,8 +138,8 @@ namespace Lardite.RefAssistant.ObjectModel
         {
             StringBuilder builder = new StringBuilder(AssemblyName).Append(", ");
             builder.Append(VersionField).Append("=").Append(Version).Append(", ");
-            builder.Append(CultureField).Append("=").Append(string.IsNullOrEmpty(Culture) ? NeutralCulture : Culture).Append(", ");
-            builder.Append(PublicKeyTokenField).Append("=").Append(string.IsNullOrEmpty(PublicKeyToken) ? NullPublicKeyToken : PublicKeyToken.ToLower());
+            builder.Append(CultureField).Append("=").Append(Culture).Append(", ");
+            builder.Append(PublicKeyTokenField).Append("=").Append(string.IsNullOrWhiteSpace(PublicKeyToken) ? NullPublicKeyToken : PublicKeyToken.ToLower());
 
             return builder.ToString();
         }

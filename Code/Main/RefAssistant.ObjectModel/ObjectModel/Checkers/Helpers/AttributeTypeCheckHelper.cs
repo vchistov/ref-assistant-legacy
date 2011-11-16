@@ -165,9 +165,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                 CheckMarshalInfo(marshalInfo);
             }
         }
-
-
-
+        
         #endregion // Check methods attributes
 
         #region Check properties attributes

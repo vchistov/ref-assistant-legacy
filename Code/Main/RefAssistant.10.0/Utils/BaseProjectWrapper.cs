@@ -226,7 +226,7 @@ namespace Lardite.RefAssistant.Utils
                     Name = name,
                     Identity = identity,
                     Location = location,
-                    Version = version,
+                    Version = Version.Parse(version),
                     Culture = string.Compare(culture, "0", StringComparison.Ordinal) == 0 ? string.Empty : culture,
                     PublicKeyToken = publicKeyToken
                 };
