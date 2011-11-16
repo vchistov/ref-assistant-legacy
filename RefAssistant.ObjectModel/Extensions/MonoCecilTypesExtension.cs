@@ -193,6 +193,26 @@ namespace Lardite.RefAssistant.Extensions
             return result;
         }
 
+        /// <summary>
+        /// Get <see cref="MarshalInfo"/> for the <see cref="MethodReturnType"/> instance.
+        /// </summary>
+        /// <param name="self">The <see cref="MethodReturnType"/> instance.</param>
+        /// <param name="marshalInfo">Returned <see cref="MarshalInfo"/> instance.</param>
+        /// <returns>Returns true if exceptions haven't occurred; otherwise false.</returns>
+        public static bool TryGetMarshalInfo(this IMarshalInfoProvider self, out MarshalInfo marshalInfo)
+        {
+            try
+            {
+                marshalInfo = self.MarshalInfo;
+                return true;
+            }
+            catch
+            {
+                marshalInfo = null;
+                return false;
+            }
+        }
+
         #endregion // Public methods
 
         #region Private methods

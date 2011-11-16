@@ -157,9 +157,12 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                 CheckCustomAttributes(customAttributeArgs);
             }
 
-            if (returnType.HasMarshalInfo)
+            MarshalInfo marshalInfo = null;
+            bool hasMarshalInfo = returnType.HasMarshalInfo && returnType.TryGetMarshalInfo(out marshalInfo);
+
+            if (hasMarshalInfo && marshalInfo != null)
             {
-                CheckMarshalInfo(returnType.MarshalInfo);
+                CheckMarshalInfo(marshalInfo);
             }
         }
 
@@ -203,7 +206,9 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                 if (!_sharedData.HasCandidateReferences)
                     return;
 
-                CheckMarshalInfo(field.MarshalInfo);
+                MarshalInfo marshalInfo = null;
+                field.TryGetMarshalInfo(out marshalInfo);
+                CheckMarshalInfo(marshalInfo);
                 if (!_sharedData.HasCandidateReferences)
                     return;
             }
