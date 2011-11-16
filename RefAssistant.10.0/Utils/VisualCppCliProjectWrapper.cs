@@ -7,6 +7,7 @@
 
 using System;
 using EnvDTE;
+using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Lardite.RefAssistant.Utils
 {
@@ -18,6 +19,7 @@ namespace Lardite.RefAssistant.Utils
         #region Constants
 
         private const string PrimaryOutput = "Primary Output";
+        private const string ManagedExtensions = "ManagedExtensions";
 
         #endregion // Constants
 
@@ -32,6 +34,30 @@ namespace Lardite.RefAssistant.Utils
         { }
 
         #endregion // .ctor
+
+        #region Properties
+
+        /// <summary>
+        /// Defines whether this project is managed c++ or native.
+        /// </summary>
+        public bool IsManaged
+        {
+            get
+            {
+                try
+                {
+                    var me = (compileAsManagedOptions)Project.ConfigurationManager
+                        .ActiveConfiguration.Properties.Item(ManagedExtensions).Value;
+                    return me != compileAsManagedOptions.managedNotSet;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        #endregion // Properties
 
         #region Public methods
 

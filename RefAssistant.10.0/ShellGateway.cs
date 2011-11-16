@@ -134,6 +134,12 @@ namespace Lardite.RefAssistant
             try
             {
                 var project = GetProjectWrapper(projectInfo);
+                var vcpp = project as VisualCppCliProjectWrapper;
+                if (vcpp != null && !vcpp.IsManaged)
+                {
+                    return false;
+                }
+
                 return (project.Kind != ProjectKinds.Modeling
                     && project.Kind != ProjectKinds.Database
                     && !project.IsBuildInProgress);
