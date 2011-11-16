@@ -10,6 +10,8 @@ using System.Linq;
 
 using Mono.Cecil;
 
+using Lardite.RefAssistant.Extensions;
+
 namespace Lardite.RefAssistant.ObjectModel
 {
     /// <summary>
@@ -60,7 +62,7 @@ namespace Lardite.RefAssistant.ObjectModel
                 return assemblyDefinition;
             }
 
-            var projectRef = _projectReferences.SingleOrDefault(item => IsEquals(name, item));
+            var projectRef = _projectReferences.SingleOrDefault(item => name.IsEquals(item, true));
             assemblyDefinition = (projectRef != null && projectRef.CompareTo(name.FullName) != 0)
                 ? ReadAssembly(projectRef) 
                 : base.Resolve(name);
@@ -81,25 +83,6 @@ namespace Lardite.RefAssistant.ObjectModel
         {
             var parameters = new ReaderParameters(ReadingMode.Deferred) { AssemblyResolver = this };
             return AssemblyDefinition.ReadAssembly(projectReference.Location, parameters);
-        }
-
-        /// <summary>
-        /// Is equals.
-        /// </summary>
-        /// <param name="nameReference">Assembly name reference.</param>
-        /// <param name="projectReference">Project reference.</param>
-        /// <returns>If true, then equals.</returns>
-        private bool IsEquals(AssemblyNameReference nameReference, ProjectReference projectReference)
-        {
-            bool result = string.Equals(nameReference.Name, projectReference.AssemblyName, StringComparison.OrdinalIgnoreCase)
-                && string.Equals(nameReference.Culture, projectReference.Culture, StringComparison.OrdinalIgnoreCase);
-
-            string token = (nameReference.PublicKeyToken == null || nameReference.PublicKeyToken.Length == 0)
-                ? string.Empty
-                : _converter.ConvertFrom(nameReference.PublicKeyToken);
-
-            result &= string.Equals(token, projectReference.PublicKeyToken, StringComparison.OrdinalIgnoreCase);
-            return result;
         }
 
         /// <summary>

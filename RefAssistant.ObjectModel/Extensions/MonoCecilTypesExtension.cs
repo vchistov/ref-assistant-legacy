@@ -10,6 +10,8 @@ using System.Linq;
 
 using Mono.Cecil;
 
+using Lardite.RefAssistant.ObjectModel;
+
 namespace Lardite.RefAssistant.Extensions
 {
     /// <summary>
@@ -172,22 +174,49 @@ namespace Lardite.RefAssistant.Extensions
         /// <returns>Returns true if objects are equal; otherwise false.</returns>
         public static bool IsEquals(this AssemblyNameReference assemblyNameSelf, AssemblyNameReference assemblyNameRef, bool ignoreVersion)
         {
-            bool result = string.Equals(assemblyNameSelf.Name, assemblyNameRef.Name, StringComparison.OrdinalIgnoreCase)
-                && string.Equals(assemblyNameSelf.Culture, assemblyNameRef.Culture, StringComparison.OrdinalIgnoreCase);
+            // names comparing
+            bool result = string.Equals(assemblyNameSelf.Name, assemblyNameRef.Name, StringComparison.OrdinalIgnoreCase);
+            
+            // cultures comparing
+            result &= GetAssemblyCulture(assemblyNameSelf).Equals(GetAssemblyCulture(assemblyNameRef), StringComparison.OrdinalIgnoreCase);
+            
+            // public key tokens comparing
+            result &= GetAssemblyPublicKeyTokenString(assemblyNameSelf)
+                .Equals(GetAssemblyPublicKeyTokenString(assemblyNameRef), StringComparison.OrdinalIgnoreCase);
 
-            string token1 = (assemblyNameSelf.PublicKeyToken == null || assemblyNameSelf.PublicKeyToken.Length == 0)
-                ? string.Empty
-                : _publicKeyTokenConverter.ConvertFrom(assemblyNameSelf.PublicKeyToken);
-
-            string token2 = (assemblyNameRef.PublicKeyToken == null || assemblyNameRef.PublicKeyToken.Length == 0)
-                ? string.Empty
-                : _publicKeyTokenConverter.ConvertFrom(assemblyNameRef.PublicKeyToken);
-
-            result &= string.Equals(token1, token2, StringComparison.OrdinalIgnoreCase);
-
+            // versions comparing
             if (!ignoreVersion)
             {
                 result &= assemblyNameSelf.Version.Equals(assemblyNameRef.Version);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Compares the <see cref="AssemblyNameReference"/> instance and the <see cref="ProjectReference"/>.
+        /// </summary>
+        /// <param name="assemblyNameSelf">The <see cref="AssemblyNameReference"/> instance.</param>
+        /// <param name="assemblyNameRef">The <see cref="ProjectReference"/> instance.</param>
+        /// <param name="ignoreVersion">Whether ignore the version of assemblies.</param>
+        /// <returns>Returns true if objects are equal; otherwise false.</returns>
+        public static bool IsEquals(this AssemblyNameReference assemblyNameSelf, ProjectReference projectRef, bool ignoreVersion)
+        {
+            // names comparing
+            bool result = string.Equals(assemblyNameSelf.Name, projectRef.AssemblyName, StringComparison.OrdinalIgnoreCase);
+
+            // cultures comparing
+            result &= GetAssemblyCulture(assemblyNameSelf).Equals(projectRef.Culture, StringComparison.OrdinalIgnoreCase);
+
+            // public key tokens comparing
+            string token = string.IsNullOrWhiteSpace(projectRef.PublicKeyToken) ? "null" : projectRef.PublicKeyToken;
+            result &= GetAssemblyPublicKeyTokenString(assemblyNameSelf)
+                .Equals(token, StringComparison.OrdinalIgnoreCase);
+
+            // versions comparing
+            if (!ignoreVersion)
+            {
+                result &= assemblyNameSelf.Version.Equals(projectRef.Version);
             }
 
             return result;
@@ -303,6 +332,20 @@ namespace Lardite.RefAssistant.Extensions
             }
 
             return assemblyName1.IsEquals(assemblyName2, true);
+        }
+
+        private static string GetAssemblyCulture(AssemblyNameReference assemblyName)
+        {
+            return string.IsNullOrWhiteSpace(assemblyName.Culture) ? "neutral" : assemblyName.Culture;
+        }
+
+        private static string GetAssemblyPublicKeyTokenString(AssemblyNameReference assemblyName)
+        {
+            string publicKeyToken = (assemblyName.PublicKeyToken == null || assemblyName.PublicKeyToken.Length == 0)
+                ? "null"
+                : _publicKeyTokenConverter.ConvertFrom(assemblyName.PublicKeyToken);
+
+            return publicKeyToken;
         }
 
         #endregion // Private methods
