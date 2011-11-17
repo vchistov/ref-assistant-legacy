@@ -7,7 +7,6 @@
 
 using System;
 using EnvDTE;
-using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Lardite.RefAssistant.Utils
 {
@@ -46,9 +45,10 @@ namespace Lardite.RefAssistant.Utils
             {
                 try
                 {
-                    var me = (compileAsManagedOptions)Project.ConfigurationManager
+                    // me is Microsoft.VisualStudio.VCProject.compileAsManagedOptions enum
+                    var me = (int)Project.ConfigurationManager
                         .ActiveConfiguration.Properties.Item(ManagedExtensions).Value;
-                    return me != compileAsManagedOptions.managedNotSet;
+                    return me != 0; // not equals "managedNotSet"
                 }
                 catch
                 {
