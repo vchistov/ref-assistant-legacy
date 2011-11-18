@@ -140,7 +140,8 @@ namespace Lardite.RefAssistant
                     return false;
                 }
 
-                return (project.Kind != ProjectKinds.Modeling
+                return (project.HasAssembly 
+                    && project.Kind != ProjectKinds.Modeling
                     && project.Kind != ProjectKinds.Database
                     && !project.IsBuildInProgress);
             }
