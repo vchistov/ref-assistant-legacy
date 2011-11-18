@@ -90,6 +90,24 @@ namespace Lardite.RefAssistant.Utils
         }
 
         /// <summary>
+        /// Has this project assembly.
+        /// </summary>
+        public bool HasAssembly
+        {
+            get
+            {
+                try
+                {
+                    return AssemblyDefinition != null;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Get AssemblyDefinition of project.
         /// </summary>
         private AssemblyDefinition AssemblyDefinition
@@ -157,7 +175,11 @@ namespace Lardite.RefAssistant.Utils
 
             foreach (Reference3 projectReference in projectReferences)
             {
-                references.Add(CreateProjectReference(projectReference));
+                var reference = CreateProjectReference(projectReference);
+                if (reference != null)
+                {
+                    references.Add(reference);
+                }
             }
 
             return references;
@@ -244,6 +266,11 @@ namespace Lardite.RefAssistant.Utils
                 return BuildProjectReference(projectRef.Name, projectRef.Identity,
                     projectRef.Path, projectRef.Version,
                     projectRef.Culture, projectRef.PublicKeyToken);
+            }
+
+            if (!File.Exists(projectRef.Path))
+            {
+                return null;
             }
 
             var activeConfiguration = Project.DTE.Solution.SolutionBuild.ActiveConfiguration.Name;
