@@ -19,7 +19,7 @@ namespace Lardite.RefAssistant
     /// This is the class that implements the package exposed by this assembly.
     /// </summary>
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#1001", "#1004", "1.1.11293.1030", IconResourceID = 400, LanguageIndependentName = "References Assistant")]
+    [InstalledProductRegistration("#1001", "#1004", "1.1.11323.2500", IconResourceID = 400, LanguageIndependentName = "References Assistant")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideProfile(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true, DescriptionResourceID = 1003)]
     [ProvideOptionPage(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true)]
