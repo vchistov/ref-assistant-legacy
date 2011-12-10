@@ -52,7 +52,7 @@ namespace Lardite.RefAssistant
         /// </summary>
         /// <param name="projectInfo">The project information. If null then builds active project.</param>
         /// <returns>Returns true if success; otherwise false.</returns>
-        public bool BuildProject(ProjectInfo projectInfo)
+        public CompilationInfo BuildProject(ProjectInfo projectInfo)
         {
             var project = GetProjectWrapper(projectInfo);
             var buildResult = project.Build();
@@ -60,7 +60,7 @@ namespace Lardite.RefAssistant
             {
                 DTEHelper.ShowErrorList(_serviceProvider);
             }
-            return buildResult == 0;
+            return new CompilationInfo(buildResult == 0, project.HasAssembly);
         }
 
         /// <summary>
@@ -140,8 +140,7 @@ namespace Lardite.RefAssistant
                     return false;
                 }
 
-                return (project.HasAssembly 
-                    && project.Kind != ProjectKinds.Modeling
+                return (project.Kind != ProjectKinds.Modeling
                     && project.Kind != ProjectKinds.Database
                     && !project.IsBuildInProgress);
             }

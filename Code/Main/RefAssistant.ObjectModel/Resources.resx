@@ -147,6 +147,9 @@
   <data name="ExtensionManager_GettingUnusedReferences" xml:space="preserve">
     <value>Getting unused references</value>
   </data>
+  <data name="ExtensionManager_IsNotClrAssembly" xml:space="preserve">
+    <value>The project's output is not CLR assembly. Reference Assistant cannot be  used for this project type.</value>
+  </data>
   <data name="ExtensionManager_RemoveReady" xml:space="preserve">
     <value>Ready</value>
   </data>
