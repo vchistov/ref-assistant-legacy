@@ -224,7 +224,17 @@ namespace Lardite.RefAssistant
         {
             try
             {
-                if (_shellGateway.BuildProject(null))
+                var result = _shellGateway.BuildProject(null);
+                if (!result.IsClrAssembly && result.IsSuccessed)
+                {
+                    LogManager.ActivityLog.Warning(Resources.ExtensionManager_IsNotClrAssembly);
+                    LogManager.OutputLog.Warning(Resources.ExtensionManager_IsNotClrAssembly);
+                    LogManager.ErrorListLog.Warning(Resources.ExtensionManager_IsNotClrAssembly);
+
+                    return null;
+                }
+
+                if (result.IsSuccessed)
                 {
                     return _shellGateway.GetActiveProjectInfo();
                 }

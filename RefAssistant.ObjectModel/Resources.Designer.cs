@@ -151,6 +151,15 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The project&apos;s output is not CLR assembly. Reference Assistant cannot be  used for this project type..
+        /// </summary>
+        internal static string ExtensionManager_IsNotClrAssembly {
+            get {
+                return ResourceManager.GetString("ExtensionManager_IsNotClrAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready.
         /// </summary>
         internal static string ExtensionManager_RemoveReady {

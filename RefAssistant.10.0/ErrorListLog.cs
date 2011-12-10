@@ -116,10 +116,11 @@ namespace Lardite.RefAssistant
         /// <param name="errorCategory">Error category.</param>
         private void LogMessage(string message, TaskErrorCategory errorCategory)
         {
-            if (string.IsNullOrWhiteSpace(message))
-                return;
-
             ErrorListProvider.Tasks.Clear();
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return;
+            }
 
             ErrorTask errorTask = new ErrorTask()
             {

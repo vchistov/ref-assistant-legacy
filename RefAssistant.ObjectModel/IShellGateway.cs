@@ -21,7 +21,7 @@ namespace Lardite.RefAssistant
         /// </summary>
         /// <param name="projectInfo">The project information. If null then builds active project.</param>
         /// <returns>Returns true if success; otherwise false.</returns>
-        bool BuildProject(ProjectInfo projectInfo);
+        CompilationInfo BuildProject(ProjectInfo projectInfo);
 
         /// <summary>
         /// Builds current solution.
