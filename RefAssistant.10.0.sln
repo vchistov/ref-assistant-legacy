@@ -7,16 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.10.0", "RefAss
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
-		SccProjectUniqueName0 = RefAssistant.ObjectModel\\RefAssistant.ObjectModel.csproj
-		SccProjectName0 = RefAssistant.ObjectModel
-		SccLocalPath0 = RefAssistant.ObjectModel
-		SccProjectUniqueName1 = RefAssistant.Package\\RefAssistant.10.0.csproj
-		SccProjectName1 = RefAssistant.10.0
-		SccLocalPath1 = RefAssistant.Package
-		SccLocalPath2 = .
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = RefAssistant.ObjectModel\\RefAssistant.ObjectModel.csproj
+		SccProjectName1 = RefAssistant.ObjectModel
+		SccLocalPath1 = RefAssistant.ObjectModel
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

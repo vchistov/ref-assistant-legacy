@@ -24,7 +24,7 @@
     </Buttons>
    
     <Bitmaps>
-      <Bitmap guid="guidImages" href="Resources\MenuIcons_32bit.bmp" usedList="bmpPic1"/>
+      <Bitmap guid="guidImages" href="Images\MenuIcons_100_32bit.bmp" usedList="bmpPic1"/>
     </Bitmaps>
   </Commands>
   
