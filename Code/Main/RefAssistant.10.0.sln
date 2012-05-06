@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.ObjectModel", "RefAssistant.ObjectModel\RefAssistant.ObjectModel.csproj", "{27667DD0-A302-4D10-9D5F-694F31B1F354}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.10.0", "RefAssistant.10.0\RefAssistant.10.0.csproj", "{7A162EAB-6204-4143-8DA0-3F214D092532}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.10.0", "RefAssistant.Package\RefAssistant.10.0.csproj", "{7A162EAB-6204-4143-8DA0-3F214D092532}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -13,9 +13,9 @@ Global
 		SccProjectUniqueName0 = RefAssistant.ObjectModel\\RefAssistant.ObjectModel.csproj
 		SccProjectName0 = RefAssistant.ObjectModel
 		SccLocalPath0 = RefAssistant.ObjectModel
-		SccProjectUniqueName1 = RefAssistant.10.0\\RefAssistant.10.0.csproj
+		SccProjectUniqueName1 = RefAssistant.Package\\RefAssistant.10.0.csproj
 		SccProjectName1 = RefAssistant.10.0
-		SccLocalPath1 = RefAssistant.10.0
+		SccLocalPath1 = RefAssistant.Package
 		SccLocalPath2 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

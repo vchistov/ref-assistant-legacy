@@ -17,7 +17,7 @@ using Mono.Cecil;
 
 using Lardite.RefAssistant.ObjectModel;
 
-namespace Lardite.RefAssistant.Utils
+namespace Lardite.RefAssistant.VsProxy.Projects
 {
     /// <summary>
     /// Base features to wrap visual studio project.
