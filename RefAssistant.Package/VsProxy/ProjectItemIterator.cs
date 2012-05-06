@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 
-namespace Lardite.RefAssistant.Utils
+namespace Lardite.RefAssistant.VsProxy
 {
     /// <summary>
     /// Iterator for project item hierachy.

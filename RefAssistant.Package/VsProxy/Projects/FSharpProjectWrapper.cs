@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.FSharp.ProjectSystem.Automation;
 
 using Lardite.RefAssistant.ObjectModel;
 
-namespace Lardite.RefAssistant.Utils
+namespace Lardite.RefAssistant.VsProxy.Projects
 {
     /// <summary>
     /// Wraps F# project.

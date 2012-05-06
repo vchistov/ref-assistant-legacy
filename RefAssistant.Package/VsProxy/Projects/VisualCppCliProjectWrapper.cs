@@ -8,7 +8,7 @@
 using System;
 using EnvDTE;
 
-namespace Lardite.RefAssistant.Utils
+namespace Lardite.RefAssistant.VsProxy.Projects
 {
     /// <summary>
     /// Wraps Visual C++/CLI project.

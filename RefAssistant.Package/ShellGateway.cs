@@ -12,7 +12,8 @@ using System.Text;
 
 using Lardite.RefAssistant.ObjectModel;
 using Lardite.RefAssistant.UI;
-using Lardite.RefAssistant.Utils;
+using Lardite.RefAssistant.VsProxy;
+using Lardite.RefAssistant.VsProxy.Projects;
 
 namespace Lardite.RefAssistant
 {

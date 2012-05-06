@@ -8,7 +8,9 @@ using System;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
-namespace Lardite.RefAssistant.Utils
+using Lardite.RefAssistant.VsProxy.Projects;
+
+namespace Lardite.RefAssistant.VsProxy
 {
     /// <summary>
     /// Work with high-level Visual Studio's DTE object.

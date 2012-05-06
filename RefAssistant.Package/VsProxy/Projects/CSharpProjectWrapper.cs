@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
-namespace Lardite.RefAssistant.Utils
+namespace Lardite.RefAssistant.VsProxy.Projects
 {
     /// <summary>
     /// Wraps C# project.

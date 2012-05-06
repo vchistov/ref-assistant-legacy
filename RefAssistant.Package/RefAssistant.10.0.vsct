@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <Extern href="stdidcmd.h"/>
-  <Extern href="vsshlids.h"/>
-  <Extern href="msobtnid.h"/>
-  <Commands package="guidRefAssistantPkg">
+  <Extern href="vsshlids.h"/>  
+  <Commands package="guidRefAssistant100Pkg">
     <Groups>
       <Group guid="guidRefAssistantCmdSet" id="grpidRemoveUnusedReferencesCommandGroup1" priority="0x0100">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_REFERENCEROOT"/>
@@ -39,7 +38,7 @@
   </CommandPlacements>
   
   <Symbols>
-    <GuidSymbol name="guidRefAssistantPkg" value="{CA8E8309-7ED1-4F8C-A768-7A8CAE5D165E}" />
+    <GuidSymbol name="guidRefAssistant100Pkg" value="{CA8E8309-7ED1-4F8C-A768-7A8CAE5D165E}" />
     <GuidSymbol name="guidRefAssistantCmdSet" value="{820B0D5D-901D-44D0-B956-CA55F308BDC4}">      
       <IDSymbol name="grpidRemoveUnusedReferencesCommandGroup1" value="0x1020" />
       <IDSymbol name="grpidRemoveUnusedReferencesCommandGroup2" value="0x1021" />

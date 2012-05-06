@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Lardite.RefAssistant.UI;
-using Lardite.RefAssistant.Utils;
+using Lardite.RefAssistant.VsProxy;
 
 namespace Lardite.RefAssistant
 {
@@ -23,7 +23,7 @@ namespace Lardite.RefAssistant
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideProfile(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true, DescriptionResourceID = 1003)]
     [ProvideOptionPage(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true)]
-    [Guid(GuidList.guidRefAssistantPkgString)]
+    [Guid(GuidList.guidRefAssistant100PkgString)]
     [ProvideLoadKey("Standard", "10.0", "References Assistant", "Lardite Group", 1)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
     public sealed class RefAssistantPackage : Package
