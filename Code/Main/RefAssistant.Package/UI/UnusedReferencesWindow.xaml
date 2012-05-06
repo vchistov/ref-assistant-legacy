@@ -2,15 +2,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.10.0"
-    xmlns:vsfx="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.10.0"
+    xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.10.0"    
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ld="clr-namespace:Lardite.RefAssistant.UI"
-    xmlns:app="clr-namespace:Lardite.RefAssistant"
-    Background="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}"
+    xmlns:app="clr-namespace:Lardite.RefAssistant"    
     mc:Ignorable="d" Title="{x:Static app:Resources.UI_UnusedReferencesWindow_Title}" 
-    d:DesignHeight="400" d:DesignWidth="600" 
-    Icon="/Lardite.RefAssistant.10.0;component/Resources/References_32bit.png" ShowInTaskbar="False" 
+    d:DesignHeight="400" d:DesignWidth="600" ShowInTaskbar="False" 
     MinWidth="560" MinHeight="380" Width="600" Height="400"
     WindowStartupLocation="CenterOwner">
     <Window.Resources>
@@ -24,7 +21,7 @@
                             FlowDirection="LeftToRight" Orientation="Horizontal" 
                             CanHorizontallyScroll="False" CanVerticallyScroll="False">
                     <CheckBox IsChecked="{Binding IsUnused}" ToolTip="{x:Static app:Resources.UI_UnusedReferencesWindow_CheckReference_ToolTip}"/>
-                    <Image Margin="3,0,2,0" Source="/Lardite.RefAssistant.10.0;component/Resources/Assembly_32bit.png" />
+                    <Image Margin="3,0,2,0" Source="/Lardite.RefAssistant.10.0;component/Images/Assembly_100_32bit.png" />
                     <TextBlock Text="{Binding AssemblyName}" ToolTip="{Binding AssemblyFullName}"  
                                HorizontalAlignment="Stretch"/>
                 </StackPanel>

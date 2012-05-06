@@ -55,6 +55,7 @@
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -90,10 +91,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivityLog.cs" />
-    <Compile Include="ErrorListLog.cs" />
+    <Compile Include="Logs\ActivityLog.cs" />
+    <Compile Include="Logs\ErrorListLog.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="OutputLog.cs" />
+    <Compile Include="Logs\OutputLog.cs" />
     <Compile Include="PkgCmdID.cs" />
     <Compile Include="ShellGateway.cs" />
     <Compile Include="UI\GeneralOptionsControl.xaml.cs">
@@ -133,12 +134,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Package.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Images\RefAssistantPreview.10.0.png">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="RefAssistantPreview.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Resources\Package.10.0.ico">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="VsixManifest.10.0\source.extension.vsixmanifest" />
@@ -151,9 +150,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\MenuIcons_32bit.bmp" />
-    <Resource Include="Resources\References_32bit.png" />
-    <Resource Include="Resources\Assembly_32bit.png" />
+    <Resource Include="Images\MenuIcons_100_32bit.bmp" />
+    <Resource Include="Images\Assembly_100_32bit.png" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="RefAssistant.10.0.vsct">
@@ -176,9 +174,6 @@
       <Project>{27667DD0-A302-4D10-9D5F-694F31B1F354}</Project>
       <Name>RefAssistant.ObjectModel</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
