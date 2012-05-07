@@ -1,5 +1,5 @@
 ﻿//
-// Copyright © 2011 Lardite.
+// Copyright © 2011-2012 Lardite.
 //
 // Author: Chistov Victor (vchistov@lardite.com),
 //         Belikov Sergey (sbelikov@lardite.com)
@@ -11,18 +11,26 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
+#if VS10
 [assembly: AssemblyTitle("Lardite.RefAssistant.10.0.dll")]
 [assembly: AssemblyDescription("Lardite Reference Assistant for Visual Studio 2010")]
-[assembly: AssemblyCompany("Lardite Group")]
 [assembly: AssemblyProduct("Lardite Reference Assistant for Visual Studio 2010")]
-[assembly: AssemblyCopyright("Copyright © 2011 Lardite.")]
+[assembly: Guid("CA8E8309-7ED1-4F8C-A768-7A8CAE5D165E")]
+#elif VS11
+[assembly: AssemblyTitle("Lardite.RefAssistant.11.0.dll")]
+[assembly: AssemblyDescription("Lardite Reference Assistant for Visual Studio 11")]
+[assembly: AssemblyProduct("Lardite Reference Assistant for Visual Studio 11")]
+[assembly: Guid("16F6FC93-74AB-4348-87E6-426148BF8227")]
+#endif
+
+[assembly: AssemblyCompany("Lardite Group")]
+[assembly: AssemblyCopyright("Copyright © 2011-2012 Lardite.")]
 
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
-[assembly: Guid("CA8E8309-7ED1-4F8C-A768-7A8CAE5D165E")]
 [assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
 [assembly: SuppressMessage("Microsoft.Design", "CA1017:MarkAssembliesWithComVisible")]
 
-[assembly: AssemblyVersion("1.1.11345.1020")]
-[assembly: AssemblyFileVersion("1.1.11345.1020")]
+[assembly: AssemblyVersion("1.1.12130.850")]
+[assembly: AssemblyFileVersion("1.1.12130.850")]
 [assembly: AssemblyInformationalVersion("1.1")]

@@ -9,9 +9,13 @@
     mc:Ignorable="d" Title="{x:Static app:Resources.UI_UnusedReferencesWindow_Title}" 
     d:DesignHeight="400" d:DesignWidth="600" ShowInTaskbar="False" 
     MinWidth="560" MinHeight="380" Width="600" Height="400"
+    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
     WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <ResourceDictionary>
+            
+            <ld:ImageManager x:Key="ImageManager" />
+            
             <Style TargetType="{x:Type DockPanel}">
                 <Setter Property="Margin" Value="10"/>
             </Style>
@@ -21,7 +25,9 @@
                             FlowDirection="LeftToRight" Orientation="Horizontal" 
                             CanHorizontallyScroll="False" CanVerticallyScroll="False">
                     <CheckBox IsChecked="{Binding IsUnused}" ToolTip="{x:Static app:Resources.UI_UnusedReferencesWindow_CheckReference_ToolTip}"/>
-                    <Image Margin="3,0,2,0" Source="/Lardite.RefAssistant.10.0;component/Images/Assembly_100_32bit.png" />
+
+                    <Image Margin="3,0,2,0" Source="{Binding AssemblyImage, Mode=OneTime, Source={StaticResource ImageManager}}"/>
+
                     <TextBlock Text="{Binding AssemblyName}" ToolTip="{Binding AssemblyFullName}"  
                                HorizontalAlignment="Stretch"/>
                 </StackPanel>
