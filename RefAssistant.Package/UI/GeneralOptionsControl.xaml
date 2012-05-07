@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:app="clr-namespace:Lardite.RefAssistant"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" 
-             Loaded="UserControl_Loaded">
+             Loaded="UserControl_Loaded" SnapsToDevicePixels="True">
     
     <UserControl.Resources>
         <ResourceDictionary>

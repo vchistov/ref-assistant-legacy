@@ -14,6 +14,7 @@ namespace Lardite.RefAssistant
     public static class GuidList
     {
         public const string guidRefAssistant100PkgString = "CA8E8309-7ED1-4F8C-A768-7A8CAE5D165E";
+        public const string guidRefAssistant110PkgString = "F9E800C2-C25C-4DEA-8C14-2EF7A18A8A51";
         public const string guidRefAssistantCmdSetString = "820B0D5D-901D-44D0-B956-CA55F308BDC4";
 
         public static readonly Guid guidRefAssistantCmdSet = new Guid(guidRefAssistantCmdSetString);

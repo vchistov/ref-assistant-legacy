@@ -7,11 +7,10 @@
 using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-
 using Lardite.RefAssistant.UI;
 using Lardite.RefAssistant.VsProxy;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Lardite.RefAssistant
 {
@@ -19,13 +18,15 @@ namespace Lardite.RefAssistant
     /// This is the class that implements the package exposed by this assembly.
     /// </summary>
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#1001", "#1004", "1.1.11345.1020", IconResourceID = 400, LanguageIndependentName = "References Assistant")]
+    [InstalledProductRegistration("#1001", "#1004", "1.1.12130.850", IconResourceID = 400, LanguageIndependentName = "References Assistant")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideProfile(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true, DescriptionResourceID = 1003)]
     [ProvideOptionPage(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true)]
-    [Guid(GuidList.guidRefAssistant100PkgString)]
-    [ProvideLoadKey("Standard", "10.0", "References Assistant", "Lardite Group", 1)]
-    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
+#if VS10
+    [Guid(GuidList.guidRefAssistant100PkgString)]    
+#elif VS11
+    [Guid(GuidList.guidRefAssistant110PkgString)]    
+#endif    
     public sealed class RefAssistantPackage : Package
     {
         #region Constants
