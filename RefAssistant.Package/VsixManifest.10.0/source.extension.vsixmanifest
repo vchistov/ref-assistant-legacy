@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
     <Identifier Id="6a81f670-4219-4d59-90cb-51bd4ff8821d">
-        <Name>Reference Assistant</Name>
+        <Name>Reference Assistant for Visual Studio 2010</Name>
         <Author>Lardite Group</Author>
         <Version>1.1.12130.850</Version>
         <Description xml:space="preserve">Removes unused references from C#, F#, VB.NET or VC++/CLI projects in the Visual Studio 2010</Description>
@@ -26,5 +26,7 @@
             <Name>Visual Studio MPF</Name>
         </Reference>
     </References>
-    <Content />
+    <Content>
+        <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
+    </Content>
 </Vsix>
