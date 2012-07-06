@@ -31,5 +31,6 @@ namespace Lardite.RefAssistant
         public static readonly Guid FSharp = new Guid("f2a71f9b-5d33-465a-a702-920d77279786");
         public static readonly Guid Modeling = new Guid("f088123c-0e9e-452a-89e6-6ba2f21d5cac");
         public static readonly Guid Database = new Guid("c8d11400-126e-41cd-887f-60bd40844f9e");
+        public static readonly Guid SolutionFolder = new Guid("66a26720-8fb5-11d2-aa7e-00c04f688dde");
     }
 }

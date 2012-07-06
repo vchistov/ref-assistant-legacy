@@ -5,10 +5,10 @@
 //
 
 using System;
+using System.Collections.Generic;
 using EnvDTE;
-using Microsoft.VisualStudio.Shell;
-
 using Lardite.RefAssistant.VsProxy.Projects;
+using Microsoft.VisualStudio.Shell;
 
 namespace Lardite.RefAssistant.VsProxy
 {
@@ -88,11 +88,11 @@ namespace Lardite.RefAssistant.VsProxy
         /// <summary>
         /// Check wherether project is building currently.
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="dte">The DTE.</param>
         /// <returns>Returns True if project is building currently.</returns>
-        public static bool IsBuildInProgress(Project project)
+        public static bool IsBuildInProgress(DTE dte)
         {
-            return project.DTE.Solution.SolutionBuild.BuildState == vsBuildState.vsBuildStateInProgress;
+            return dte.Solution.SolutionBuild.BuildState == vsBuildState.vsBuildStateInProgress;
         }
 
         /// <summary>
@@ -113,11 +113,16 @@ namespace Lardite.RefAssistant.VsProxy
         /// <returns>Returns the active project.</returns>
         public static Project GetProjectByName(IServiceProvider serviceProvider, string projectName)
         {
+            if (string.IsNullOrWhiteSpace(projectName))
+            {
+                return null;
+            }
+
             var dte = (DTE)serviceProvider.GetService(typeof(DTE));
             
             // check if searched project is active
             var activeProject = GetActiveSolutionProject(dte);
-            if (activeProject != null && activeProject.Name.Equals(projectName, StringComparison.Ordinal))
+            if (activeProject != null && GetProjectName(activeProject).Equals(projectName, StringComparison.Ordinal))
             {
                 return activeProject;
             }
@@ -133,6 +138,61 @@ namespace Lardite.RefAssistant.VsProxy
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Get list of solution's projects.
+        /// </summary>
+        /// <param name="serviceProvider">Service provider.</param>
+        /// <returns>Returns list of projects.</returns>
+        public static IEnumerable<Project> GetSolutionProjects(IServiceProvider serviceProvider)
+        {
+            var dte = (DTE)serviceProvider.GetService(typeof(DTE));
+
+            // result set
+            var projects = new List<Project>();
+
+            // temporaty lists
+            var parentProjects = new List<Project>();
+            var subProjects = new List<Project>();
+
+            // enumerate all projects in solution
+            var enumerator = dte.Solution.Projects.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var project = enumerator.Current as Project;
+                parentProjects.Add(project);
+                AddProjectToList(projects, project);
+            }
+
+            // enumerate all sub-projects in solution
+            while (parentProjects.Count > 0)
+            {
+                foreach (var project in parentProjects)
+                {
+                    if (project.ProjectItems == null)
+                        continue;
+
+                    var subProjectsEnumerator = project.ProjectItems.GetEnumerator();
+                    while (subProjectsEnumerator.MoveNext())
+                    {
+                        var projectItem = (ProjectItem)subProjectsEnumerator.Current;
+                        if (projectItem.SubProject != null)
+                        {
+                            subProjects.Add(projectItem.SubProject);
+                            AddProjectToList(projects, projectItem.SubProject);
+                        }
+                    }
+                }
+
+                List<Project> tempProjects = parentProjects;
+                parentProjects = subProjects;
+                subProjects = tempProjects;
+
+                subProjects.Clear();
+            }
+
+            return projects;
         }
 
         #endregion // Public methods
@@ -152,9 +212,14 @@ namespace Lardite.RefAssistant.VsProxy
                 return null;
             }
 
-            if (project.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+            if (GetProjectName(project).Equals(name, StringComparison.OrdinalIgnoreCase))
             {
                 return project;
+            }
+
+            if (project.ProjectItems == null)
+            {
+                return null;
             }
 
             var enumerator = project.ProjectItems.GetEnumerator();
@@ -184,6 +249,55 @@ namespace Lardite.RefAssistant.VsProxy
                 return null;
 
             return (Project)activeSolutionProjects.GetValue(0);
+        }
+
+        /// <summary>
+        /// Adds "real" project to collection. This method hepls to avoid adding Solution Folders, Unactived projects, etc to collection.
+        /// </summary>
+        /// <param name="projects">The projects collection.</param>
+        /// <param name="project">The added project.</param>
+        private static void AddProjectToList(IList<Project> projects, object project)
+        {
+            var p = project as Project;
+            if (p != null && !string.IsNullOrWhiteSpace(GetProjectFullName(p)) 
+                && !string.IsNullOrWhiteSpace(GetProjectName(p)))
+            {
+                projects.Add(p);
+            }                
+        }
+
+        /// <summary>
+        /// Gets name of project. Several types of projects raise exception when try to get FullName property.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns>Returns project name, otherwise null.</returns>
+        private static string GetProjectFullName(Project project)
+        {
+            try
+            {
+                return project.FullName;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets name of project. Several types of projects raise exception when try to get FullName property.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns>Returns project name, otherwise empty string.</returns>
+        private static string GetProjectName(Project project)
+        {
+            try
+            {
+                return project.Name;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         #endregion // Private methods

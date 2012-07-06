@@ -86,7 +86,7 @@ namespace Lardite.RefAssistant.VsProxy.Projects
         /// </summary>
         public bool IsBuildInProgress
         {
-            get { return DTEHelper.IsBuildInProgress(Project); }
+            get { return DTEHelper.IsBuildInProgress(Project.DTE); }
         }
 
         /// <summary>

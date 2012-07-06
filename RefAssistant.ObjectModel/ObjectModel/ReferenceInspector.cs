@@ -1,13 +1,13 @@
 ﻿//
-// Copyright © 2011 Lardite.
+// Copyright © 2011-2012 Lardite.
 //
 // Author: Belikov Sergey (sbelikov@lardite.com)
 //
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Lardite.RefAssistant.ObjectModel
 {
@@ -73,7 +73,7 @@ namespace Lardite.RefAssistant.ObjectModel
         /// </summary>
         /// <param name="evaluator">The project evaluator.</param>
         /// <returns>Not used project references.</returns>
-        public IEnumerable<ProjectReference> Inspect(IProjectEvaluator evaluator)
+        public IProjectInspectResult Inspect(IProjectEvaluator evaluator)
         {
             try
             {
@@ -86,9 +86,10 @@ namespace Lardite.RefAssistant.ObjectModel
                     BindingFlags.CreateInstance,
                     null,
                     null,
-                    null,                       
+                    null,
                     null);
-                return checkExecutor.Execute(evaluator);
+
+                return new ProjectInspectResult(evaluator.ProjectInfo, checkExecutor.Execute(evaluator));
             }
             finally
             {

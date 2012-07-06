@@ -144,11 +144,26 @@
   <data name="ExtensionManager_CannotGetActiveProject" xml:space="preserve">
     <value>Cannot get active project.</value>
   </data>
+  <data name="ExtensionManager_CannotGetProjectsInfo" xml:space="preserve">
+    <value>Cannot get information for solution's projects.</value>
+  </data>
+  <data name="ExtensionManager_EndProcess" xml:space="preserve">
+    <value>========== Remove: succeeded, {0} reference(s) removed ==========</value>
+  </data>
+  <data name="ExtensionManager_EndProcessWithoutReferences" xml:space="preserve">
+    <value>========== Remove: unused references are not found ==========</value>
+  </data>
   <data name="ExtensionManager_GettingUnusedReferences" xml:space="preserve">
     <value>Getting unused references</value>
   </data>
   <data name="ExtensionManager_IsNotClrAssembly" xml:space="preserve">
     <value>The project's output is not CLR assembly. Reference Assistant cannot be  used for this project type.</value>
+  </data>
+  <data name="ExtensionManager_NoProjects" xml:space="preserve">
+    <value>========== Remove: there are not supportable projects in the solution ==========</value>
+  </data>
+  <data name="ExtensionManager_NoReferencesForProject" xml:space="preserve">
+    <value>Unused references are not found for the project.</value>
   </data>
   <data name="ExtensionManager_RemoveReady" xml:space="preserve">
     <value>Ready</value>
@@ -159,6 +174,21 @@
   <data name="ExtensionManager_RemovingUnusedUsings" xml:space="preserve">
     <value>Removing unused usings</value>
   </data>
+  <data name="ExtensionManager_StartProcess" xml:space="preserve">
+    <value>------ Remove Unused References started: Project: {0}, Configuration: {1} {2} ------</value>
+  </data>
+  <data name="ExtensionManager_StartSolutionCleanup" xml:space="preserve">
+    <value>------ Remove Unused References started for the Solution ------</value>
+  </data>
+  <data name="ExtensionManager_UnsupportedProject" xml:space="preserve">
+    <value>The kind of the project is not supported by Reference Assistant.</value>
+  </data>
+  <data name="ExtensionManager_UserCancelledOperation" xml:space="preserve">
+    <value>========== Remove: user cancelled operation ==========</value>
+  </data>
+  <data name="InspectResult_ResultAlreadyAdded" xml:space="preserve">
+    <value>The result for project '{0}' is already added.</value>
+  </data>
   <data name="MemberReferencesCheckHelper_CheckMemberReferenceException" xml:space="preserve">
     <value>The exception occurs during checking parameters of a member '{0}' from a module '{1}'.</value>
   </data>
@@ -167,17 +197,5 @@
   </data>
   <data name="MemberReferencesCheckHelper_CheckTypeException" xml:space="preserve">
     <value>The exception occurs during checking of referenced methods of type '{0}'.</value>
-  </data>
-  <data name="RefAssistantPackage_EndProcess" xml:space="preserve">
-    <value>========== Remove: succeeded, {0} references removed ==========</value>
-  </data>
-  <data name="RefAssistantPackage_EndProcessWithoutReferences" xml:space="preserve">
-    <value>========== Remove: unused references are not found ==========</value>
-  </data>
-  <data name="RefAssistantPackage_StartProcess" xml:space="preserve">
-    <value>------ Remove Unused References started: Project: {0}, Configuration: {1} {2} ------</value>
-  </data>
-  <data name="RefAssistantPackage_UserCancelledOperation" xml:space="preserve">
-    <value>========== Remove: user cancelled operation ==========</value>
   </data>
 </root>

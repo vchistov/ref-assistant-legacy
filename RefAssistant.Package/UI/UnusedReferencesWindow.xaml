@@ -13,31 +13,13 @@
     WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <ResourceDictionary>
-            
-            <ld:ImageManager x:Key="ImageManager" />
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="UnusedReferencesWindowResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             
             <Style TargetType="{x:Type DockPanel}">
                 <Setter Property="Margin" Value="10"/>
-            </Style>
-
-            <DataTemplate x:Key="ItemDataTemplate">
-                <StackPanel Margin="1"
-                            FlowDirection="LeftToRight" Orientation="Horizontal" 
-                            CanHorizontallyScroll="False" CanVerticallyScroll="False">
-                    <CheckBox IsChecked="{Binding IsUnused}" ToolTip="{x:Static app:Resources.UI_UnusedReferencesWindow_CheckReference_ToolTip}"/>
-
-                    <Image Margin="3,0,2,0" Source="{Binding AssemblyImage, Mode=OneTime, Source={StaticResource ImageManager}}"/>
-
-                    <TextBlock Text="{Binding AssemblyName}" ToolTip="{Binding AssemblyFullName}"  
-                               HorizontalAlignment="Stretch"/>
-                </StackPanel>
-            </DataTemplate>
-
-            <Style TargetType="{x:Type ListBox}">
-                <Setter Property="Margin" Value="0,7,0,10"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="ItemTemplate" Value="{StaticResourceExtension ItemDataTemplate}"/>
-                <Setter Property="IsSynchronizedWithCurrentItem" Value="True"/>
             </Style>
             
             <Style TargetType="{x:Type Button}">
@@ -51,7 +33,7 @@
             
         </ResourceDictionary>        
     </Window.Resources>
-    <DockPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:DialogWindow, AncestorLevel=1}, Path=ProjectReferencesList}">
+    <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="{x:Static app:Resources.UI_UnusedReferencesWindow_RemovableReferences_Text}" />
         <Grid DockPanel.Dock="Bottom">
             <CheckBox HorizontalAlignment="Left" VerticalAlignment="Bottom"
@@ -62,7 +44,7 @@
                 <Button Content="{x:Static app:Resources.UI_UnusedReferencesWindow_Cancel_Content}" IsCancel="True"></Button>
             </UniformGrid>
         </Grid>
-        <ListBox ItemsSource="{Binding}"></ListBox>
+        <ContentControl Margin="0,7,0,10" Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:DialogWindow, AncestorLevel=1}, Path=UnusedReferencesViewModel}"/>
     </DockPanel>
 </ui:DialogWindow>
 

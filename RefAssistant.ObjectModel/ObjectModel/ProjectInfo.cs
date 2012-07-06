@@ -51,5 +51,27 @@ namespace Lardite.RefAssistant.ObjectModel
         public IEnumerable<ProjectReference> References { get; set; }
 
         #endregion // Properties
+
+        #region Overrides
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            var projectInfo = (ProjectInfo)obj;
+
+            return this.Name.Equals(projectInfo.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Name.GetHashCode();
+        }
+
+        #endregion // Overrides
     }
 }
