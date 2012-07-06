@@ -88,22 +88,54 @@ namespace Lardite.RefAssistant
         }
 
         /// <summary>
+        /// Gets project info by name.
+        /// </summary>
+        /// <param name="projectName">The project name.</param>
+        /// <returns>The project info.</returns>
+        public ProjectInfo GetProjectInfo(string projectName)
+        {
+            return GetProjectWrapperByName(projectName).GetProjectInfo();
+        }
+
+        /// <summary>
         /// Gets solution's projects.
         /// </summary>
+        /// <param name="unsupportedProjects">The list of unsupported projects.</param>
         /// <returns>The projects list.</returns>
-        public IEnumerable<ProjectInfo> GetSolutionProjectsInfo()
+        public IEnumerable<ProjectInfo> GetSolutionProjects(out IEnumerable<string> unsupportedProjects)
         {
-            throw Error.NotImplemented();
+            var unsupported = new List<string>();
+            unsupportedProjects = unsupported;
+            var projects = DTEHelper.GetSolutionProjects(_serviceProvider);
+            var projectsInfo = new List<ProjectInfo>();
+
+            foreach (var project in projects)
+            {
+                var projectName = project.Name;
+                if (CanRemoveUnusedReferences(projectName))
+                {
+                    projectsInfo.Add(GetProjectWrapperByName(projectName).GetProjectInfo());
+                }
+                else
+                {
+                    unsupported.Add(projectName);
+                }
+            }
+
+            return projectsInfo;
         }
 
         /// <summary>
         /// Can show unused references window.
         /// </summary>
         /// <returns>If true, then can.</returns>
-        public bool CanShowUnusedReferencesWindow()
+        public bool IsRemovingConfirmationRequired
         {
-            return _options.IsShowUnusedReferencesWindow.HasValue
-                && _options.IsShowUnusedReferencesWindow.Value;
+            get
+            {
+                return _options.IsShowUnusedReferencesWindow.HasValue
+                    && _options.IsShowUnusedReferencesWindow.Value;
+            }
         }
 
         /// <summary>
@@ -111,15 +143,16 @@ namespace Lardite.RefAssistant
         /// </summary>
         /// <param name="unusedProjectReferences">Unused project references.</param>
         /// <returns>If true, then continue.</returns>
-        public bool ShowUnusedReferencesWindow(ref IEnumerable<ProjectReference> unusedProjectReferences)
+        public bool ConfirmUnusedReferencesRemoving(IInspectResult inspectResults)
         {
-            var window = new UnusedReferencesWindow();
-            window.SetProjectReferences(unusedProjectReferences);
-            window.IsShowThisWindowAgain = _options.IsShowUnusedReferencesWindow.Value;
+            var window = new UnusedReferencesWindow(inspectResults)
+                {
+                    IsShowThisWindowAgain = _options.IsShowUnusedReferencesWindow.Value
+                };
             var result = window.ShowModal();
             if (result.HasValue && result.Value)
             {
-                unusedProjectReferences = window.GetUnusedReferences();
+                //unusedProjectReferences = window.GetUnusedReferences();
                 _options.IsShowUnusedReferencesWindow = window.IsShowThisWindowAgain;
                 return true;
             }
@@ -129,19 +162,20 @@ namespace Lardite.RefAssistant
         /// <summary>
         /// Can remove unused references.
         /// </summary>
-        /// <param name="projectInfo">The project information. If null then gets active project.</param>
-        public bool CanRemoveUnusedReferences(ProjectInfo projectInfo)
+        /// <param name="projectName">The project name. If null then gets active project.</param>
+        public bool CanRemoveUnusedReferences(string projectName)
         {
             try
             {
-                var project = GetProjectWrapper(projectInfo);
+                var project = GetProjectWrapperByName(projectName);
                 var vcpp = project as VisualCppCliProjectWrapper;
                 if (vcpp != null && !vcpp.IsManaged)
                 {
                     return false;
                 }
 
-                return (project.Kind != ProjectKinds.Modeling
+                return (project.HasAssembly 
+                    && project.Kind != ProjectKinds.Modeling
                     && project.Kind != ProjectKinds.Database
                     && !project.IsBuildInProgress);
             }
@@ -154,39 +188,45 @@ namespace Lardite.RefAssistant
         /// <summary>
         /// Removes unused references.
         /// </summary>
-        /// <param name="projectInfo">The project information. If null then gets active project.</param>
-        /// <param name="unusedProjectReferences">Unused project references.</param>
-        /// <returns>Removed references count.</returns>
-        public int RemoveUnusedReferences(ProjectInfo projectInfo, IEnumerable<ProjectReference> unusedProjectReferences)
+        /// <param name="inspectResults">Unused project references.</param>
+        public void RemoveUnusedReferences(IInspectResult inspectResults)
         {
-            var project = GetProjectWrapper(projectInfo);
-
-            StringBuilder builder = new StringBuilder();
-            IEnumerable<ProjectReference> unusedReferences = project.RemoveUnusedReferences(unusedProjectReferences);
-
-            foreach (var unusedReference in unusedReferences)
+            foreach (var projectInspectResult in inspectResults.InspectResults.Where(p => p.IsSuccess))
             {
-                builder.Append("  ").AppendLine(unusedReference.FullName);
+                RemoveUnusedReferences(projectInspectResult.Project, projectInspectResult.UnusedReferences);
             }
+        }
 
-            LogManager.OutputLog.Information(builder.ToString());
-            return unusedReferences.Count();
+        /// <summary>
+        /// Can remove unused using. Checks only settings.
+        /// </summary>        
+        /// <returns>If true, then can.</returns>
+        public bool CanRemoveUnusedUsings()
+        {
+            try
+            {
+                return _options.IsRemoveUsingsAfterRemoving.HasValue
+                    && _options.IsRemoveUsingsAfterRemoving.Value;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
         /// Can remove unused references.
         /// </summary>
-        /// <param name="projectInfo">The project information. If null then gets active project.</param>
+        /// <param name="projectName">The project name. If null then gets active project.</param>
         /// <returns>If true, then can.</returns>
-        public bool CanRemoveUnusedUsings(ProjectInfo projectInfo)
+        public bool CanRemoveUnusedUsings(string projectName)
         {
             try
             {
-                var project = GetProjectWrapper(projectInfo);
-                return (project.Kind == ProjectKinds.CSharp
-                    && !project.IsBuildInProgress
-                    && _options.IsRemoveUsingsAfterRemoving.HasValue
-                    && _options.IsRemoveUsingsAfterRemoving.Value);
+                var project = GetProjectWrapperByName(projectName);
+                return (CanRemoveUnusedUsings()
+                    && project.Kind == ProjectKinds.CSharp
+                    && !project.IsBuildInProgress);
             }
             catch
             {
@@ -201,7 +241,8 @@ namespace Lardite.RefAssistant
         public void RemoveUnusedUsings(ProjectInfo projectInfo)
         {
             var project = GetProjectWrapper(projectInfo);
-            LogManager.OutputLog.Information("  " + Resources.RefAssistantPackage_RemoveUnusedUsings);
+            LogManager.OutputLog.Information(
+                string.Format("  {0} -> {1}{2}", projectInfo.Name, Resources.RefAssistantPackage_RemoveUnusedUsings, Environment.NewLine));
             project.RemoveUnusedUsings(_serviceProvider);
         }
 
@@ -217,7 +258,18 @@ namespace Lardite.RefAssistant
         /// <exception cref="System.InvalidOperationException"/>        
         private BaseProjectWrapper GetProjectWrapper(ProjectInfo projectInfo)
         {
-            if (projectInfo == null)
+            return GetProjectWrapperByName(projectInfo != null ? projectInfo.Name : null);
+        }
+
+        /// <summary>
+        /// Gets cached project wrapper.
+        /// </summary>
+        /// <param name="projectName">The project name. If null or empty then gets active project.</param>
+        /// <returns>Returns the project wrapper.</returns>
+        /// <exception cref="System.InvalidOperationException"/>        
+        private BaseProjectWrapper GetProjectWrapperByName(string projectName)
+        {
+            if (string.IsNullOrWhiteSpace(projectName))
             {
                 // gets active project
                 var project = DTEHelper.GetActiveProject(_serviceProvider);
@@ -226,11 +278,11 @@ namespace Lardite.RefAssistant
                     throw Error.InvalidOperation(Resources.ShellGateway_CannotGetActiveProject);
                 }
 
-                return GetProjectWrapperByName(project.Name);
+                return CreateProjectWrapperOrGetCached(project.Name);
             }
 
             // gets project by name
-            return GetProjectWrapperByName(projectInfo.Name);
+            return CreateProjectWrapperOrGetCached(projectName);
         }
 
         /// <summary>
@@ -240,7 +292,7 @@ namespace Lardite.RefAssistant
         /// <returns>Returns the project wrapper.</returns>
         /// <exception cref="System.ArgumentNullException"/>
         /// <exception cref="System.InvalidOperationException"/> 
-        private BaseProjectWrapper GetProjectWrapperByName(string projectName)
+        private BaseProjectWrapper CreateProjectWrapperOrGetCached(string projectName)
         {
             if (string.IsNullOrWhiteSpace(projectName))
             {
@@ -254,6 +306,30 @@ namespace Lardite.RefAssistant
             }
 
             return wrapper;
+        }
+
+        /// <summary>
+        /// Removes unused references.
+        /// </summary>
+        /// <param name="projectInfo">The project information. If null then gets active project.</param>
+        /// <param name="unusedProjectReferences">Unused project references.</param>
+        /// <returns>Removed references count.</returns>
+        private void RemoveUnusedReferences(ProjectInfo projectInfo, IEnumerable<ProjectReference> unusedProjectReferences)
+        {
+            var project = GetProjectWrapper(projectInfo);
+
+            StringBuilder builder = new StringBuilder();
+            IEnumerable<ProjectReference> unusedReferences = project.RemoveUnusedReferences(unusedProjectReferences);
+
+            foreach (var unusedReference in unusedReferences)
+            {
+                builder.Append("  ")
+                    .Append(projectInfo.Name)
+                    .Append(" -> ")
+                    .AppendLine(unusedReference.FullName);
+            }
+
+            LogManager.OutputLog.Information(builder.ToString().TrimEnd());
         }
 
         #endregion // Private methods

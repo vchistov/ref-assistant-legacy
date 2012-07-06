@@ -1,5 +1,5 @@
 ﻿//
-// Copyright © 2011 Lardite.
+// Copyright © 2011-2012 Lardite.
 //
 // Author: Chistov Victor (vchistov@lardite.com)
 //
@@ -7,10 +7,11 @@
 using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
+
 using Lardite.RefAssistant.UI;
-using Lardite.RefAssistant.VsProxy;
+using Lardite.RefAssistant.VsProxy.Commands;
+
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Lardite.RefAssistant
 {
@@ -18,7 +19,7 @@ namespace Lardite.RefAssistant
     /// This is the class that implements the package exposed by this assembly.
     /// </summary>
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#1001", "#1004", "1.1.12130.850", IconResourceID = 400, LanguageIndependentName = "References Assistant")]
+    [InstalledProductRegistration("#1001", "#1004", "1.2.12190.4000", IconResourceID = 400, LanguageIndependentName = "References Assistant")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideProfile(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true, DescriptionResourceID = 1003)]
     [ProvideOptionPage(typeof(GeneralOptionsPage), "References Assistant", "General", 1001, 1002, true)]
@@ -29,29 +30,6 @@ namespace Lardite.RefAssistant
 #endif    
     public sealed class RefAssistantPackage : Package
     {
-        #region Constants
-
-        private object statusBarIcon = (short)Microsoft.VisualStudio.Shell.Interop.Constants.SBAI_General;
-
-        #endregion
-
-        #region Fields
-
-        private IShellGateway _shellGateway;
-
-        #endregion // Fields
-
-        #region .ctor
-
-        /// <summary>
-        /// Default constructor of the package.
-        /// </summary>
-        public RefAssistantPackage()
-        {            
-        }
-
-        #endregion // .ctor
-
         #region Overriden Package Implementation
 
         /// <summary>
@@ -69,163 +47,14 @@ namespace Lardite.RefAssistant
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
+                var shellGateway = new ShellGateway(this, GetDialogPage(typeof(GeneralOptionsPage)) as IExtensionOptions);
+
                 // Create the command for the menu item.
-                CommandID menuRemoveUnusedReferencesCommand = new CommandID(
-                    GuidList.guidRefAssistantCmdSet, (int)PkgCmdIDList.cmdidRemoveUnusedReferencesCommand);
-                OleMenuCommand menuItem = new OleMenuCommand(RemoveUnusedReferencesCommand_Exec,
-                    menuRemoveUnusedReferencesCommand);
-                menuItem.BeforeQueryStatus += RemoveUnusedReferencesCommand_BeforeQueryStatus;
-                mcs.AddCommand(menuItem);
+                mcs.AddCommand(new RemoveProjectReferencesCommand(this, shellGateway));
+                mcs.AddCommand(new RemoveSolutionReferencesCommand(this, shellGateway));
             }
         }
 
         #endregion // Overriden Package Implementation
-
-        #region Events handlers
-
-        /// <summary>
-        /// Checking up of possibility to show command in the menu.
-        /// </summary>
-        /// <param name="sender">OleMenuCommand.</param>
-        /// <param name="e">Arguments of the command.</param>
-        private void RemoveUnusedReferencesCommand_BeforeQueryStatus(object sender, EventArgs e)
-        {
-            var oleMenuCmd = sender as OleMenuCommand;
-            if (oleMenuCmd != null)
-            {
-                oleMenuCmd.Visible = ShellGateway.CanRemoveUnusedReferences(null);
-            }
-        }        
-
-        /// <summary>
-        /// Execute Remove Unused Reference command.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RemoveUnusedReferencesCommand_Exec(object sender, EventArgs e)
-        {
-            var oleMenuCmd = sender as OleMenuCommand;
-            if (oleMenuCmd != null && 
-                oleMenuCmd.CommandID.ID == (int)PkgCmdIDList.cmdidRemoveUnusedReferencesCommand && 
-                ShellGateway.CanRemoveUnusedReferences(null))
-            {
-                try
-                {
-                    LogManager.ErrorListLog.Information(string.Empty);
-
-                    var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(this).Kind);
-
-                    LogManager.ActivityLog.Information(string.Format(Resources.RefAssistantPackage_StartRemoving, activeProjectGuid.ToString("D")));
-
-                    StartStatusBarAnimation();
-
-                    using (var manager = new ExtensionManager(ShellGateway))
-                    {
-                        manager.ProgressChanged += manager_ProgressChanged;
-                        manager.StartCleanup();
-                    }
-                }
-                catch (Exception ex)
-                {                    
-#if DEBUG
-                    LogManager.OutputLog.Error(Resources.RefAssistantPackage_ErrorOccured, ex);
-#else
-                    LogManager.OutputLog.Information(Resources.RefAssistantPackage_EndProcessFailed);
-#endif
-                    LogManager.ErrorListLog.Error(Resources.RefAssistantPackage_ErrorOccured);
-                    LogManager.ActivityLog.Error(Resources.RefAssistantPackage_ErrorOccured, ex);
-                }
-                finally
-                {
-                    StopStatusBarAnimation();
-                    SetStatusBarText(string.Empty);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removing progress changed.
-        /// </summary>
-        private void manager_ProgressChanged(object sender, ProgressEventArgs e)
-        {
-            string text = e.Progress == 100 ? e.Text : string.Format("[{1}%] {0}", e.Text, e.Progress.ToString());
-            SetStatusBarText(text);            
-        } 
-
-        #endregion // Events handlers
-
-        #region Private methods/properties
-
-        /// <summary>
-        /// Status bar.
-        /// </summary>
-        private IVsStatusbar Statusbar
-        {
-            get { return (IVsStatusbar)GetService(typeof(SVsStatusbar)); }
-        }
-
-        /// <summary>
-        /// Shell gateway.
-        /// </summary>
-        private IShellGateway ShellGateway
-        {
-            get
-            {
-                return _shellGateway ?? (_shellGateway = new ShellGateway(this, GetDialogPage(typeof(GeneralOptionsPage)) as IExtensionOptions));
-            }
-        }
-
-        #region Status bar
-
-        /// <summary>
-        /// Starts status bar animation.
-        /// </summary>
-        private void StartStatusBarAnimation()
-        {
-            try
-            {
-                Statusbar.SetText(string.Empty);
-                Statusbar.Animation(1, ref statusBarIcon);
-            }
-            catch (Exception ex)
-            {
-                LogManager.ErrorListLog.Error(string.Empty, ex);
-            }
-        }
-
-        /// <summary>
-        /// Stops status bar animation.
-        /// </summary>
-        private void StopStatusBarAnimation()
-        {
-            try
-            {
-                Statusbar.Animation(0, ref statusBarIcon);
-            }
-            catch (Exception ex)
-            {
-                LogManager.ErrorListLog.Error(string.Empty, ex);
-            }
-        }
-
-        /// <summary>
-        /// Sets status bar text.
-        /// </summary>
-        /// <param name="text">Text.</param>
-        private void SetStatusBarText(string text)
-        {
-            try
-            {
-                Statusbar.SetText(text);
-            }
-            catch (Exception ex)
-            {
-                LogManager.ErrorListLog.Error(string.Empty, ex);
-            }
-        }
-
-        #endregion
-
-        #endregion // Private methods/properties
     }
 }

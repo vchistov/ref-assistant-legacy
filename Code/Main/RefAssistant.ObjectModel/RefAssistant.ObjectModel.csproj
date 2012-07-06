@@ -58,11 +58,15 @@
     <Compile Include="ExtensionManager.cs" />
     <Compile Include="Extensions\ExceptionExtension.cs" />
     <Compile Include="Extensions\MonoCecilTypesExtension.cs" />
+    <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Extensions\TypeReferenceComparer.cs" />
     <Compile Include="IExtensionOptions.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="ILogManager.cs" />
     <Compile Include="IShellGateway.cs" />
+    <Compile Include="ObjectModel\InspectResult.cs" />
+    <Compile Include="ObjectModel\IProjectInspectResult.cs" />
+    <Compile Include="ObjectModel\IInspectResult.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="NullLog.cs" />
     <Compile Include="ObjectModel\Checkers\AssemblyManifestTypesChecker.cs" />
@@ -92,6 +96,7 @@
     <Compile Include="ObjectModel\Checkers\ProjectCheckerType.cs" />
     <Compile Include="ObjectModel\IXamlTypeResolver.cs" />
     <Compile Include="ObjectModel\ProjectEvaluator.cs" />
+    <Compile Include="ObjectModel\ProjectInspectResult.cs" />
     <Compile Include="ObjectModel\ProjectReference.cs" />
     <Compile Include="ObjectModel\ProjectReferenceBasedAssemblyResolver.cs" />
     <Compile Include="ObjectModel\ReferenceInspector.cs" />

@@ -1,15 +1,14 @@
 ﻿//
-// Copyright © 2011 Lardite.
+// Copyright © 2011-2012 Lardite.
 //
 // Author: Chistov Victor (vchistov@lardite.com)
 //
 
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
-using Lardite.RefAssistant.ObjectModel;
+using Lardite.RefAssistant.UI.ViewModel;
 using Microsoft.VisualStudio.PlatformUI;
+using Lardite.RefAssistant.ObjectModel;
+using System.Linq;
 
 namespace Lardite.RefAssistant.UI
 {
@@ -20,7 +19,7 @@ namespace Lardite.RefAssistant.UI
     {
         #region Fields
 
-        private ObservableCollection<ProjectReferenceViewModel> _projectReferences;
+        private readonly IInspectResult _inspectResults;
 
         #endregion // Fields
 
@@ -29,9 +28,17 @@ namespace Lardite.RefAssistant.UI
         /// <summary>
         /// Initialize a new instance of the <see cref="Lardite.RefAssistant.UI.UnusedReferencesWindow"/> class.
         /// </summary>
-        public UnusedReferencesWindow()
+        public UnusedReferencesWindow(IInspectResult inspectResults)
         {
-            _projectReferences = new ObservableCollection<ProjectReferenceViewModel>();
+            if (inspectResults == null)
+            {
+                throw Error.ArgumentNull("inspectResults");
+            }
+
+            _inspectResults = inspectResults;
+            this.UnusedReferencesViewModel = (inspectResults.InspectResults.Count() > 1)
+                ? new SolutionReferencesViewModel(inspectResults.InspectResults) 
+                : (IReferencesViewModel) new ProjectReferencesViewModel(inspectResults.InspectResults.First());
 
             InitializeComponent();
         }
@@ -40,6 +47,11 @@ namespace Lardite.RefAssistant.UI
         {
             IsShowThisWindowAgainProperty = DependencyProperty.Register("IsShowThisWindowAgain",
                 typeof(bool), typeof(UnusedReferencesWindow), new PropertyMetadata(true));
+
+            UnusedReferencesViewModelPropertyKey = DependencyProperty.RegisterReadOnly("UnusedReferencesViewModelProperty", 
+                typeof(IReferencesViewModel), typeof(UnusedReferencesWindow), new PropertyMetadata(null));
+
+            UnusedReferencesViewModelProperty = UnusedReferencesViewModelPropertyKey.DependencyProperty;
         }
 
         #endregion // .ctor
@@ -48,20 +60,13 @@ namespace Lardite.RefAssistant.UI
 
         public static readonly DependencyProperty IsShowThisWindowAgainProperty;
 
+        public static readonly DependencyProperty UnusedReferencesViewModelProperty;
+
+        private static readonly DependencyPropertyKey UnusedReferencesViewModelPropertyKey;
+
         #endregion // Dependency properties
 
         #region Properties
-
-        /// <summary>
-        /// Get list of the project references.
-        /// </summary>
-        public ReadOnlyObservableCollection<ProjectReferenceViewModel> ProjectReferencesList
-        {
-            get
-            {
-                return new ReadOnlyObservableCollection<ProjectReferenceViewModel>(_projectReferences);
-            }
-        }
 
         /// <summary>
         /// Get or set whether to show this dialog again in next time.
@@ -70,38 +75,29 @@ namespace Lardite.RefAssistant.UI
         {
             get { return (bool)GetValue(IsShowThisWindowAgainProperty); }
             set { SetValue(IsShowThisWindowAgainProperty, value); }
-        }           
+        }
+
+        /// <summary>
+        /// Get project's unused references view model.
+        /// </summary>
+        public IReferencesViewModel UnusedReferencesViewModel
+        {
+            get { return (IReferencesViewModel)GetValue(UnusedReferencesViewModelProperty); }
+            private set { SetValue(UnusedReferencesViewModelPropertyKey, value); }
+        }
 
         #endregion // Properties
 
-        #region Public methods
-
-        /// <summary>
-        /// Set list of project references which can be removed.
-        /// </summary>
-        /// <param name="projectReferences">Project references list.</param>
-        public void SetProjectReferences(IEnumerable<ProjectReference> projectReferences)
-        {
-            _projectReferences.Clear();
-            foreach (var item in projectReferences)
-            {
-                _projectReferences.Add(new ProjectReferenceViewModel(item));
-            }
-        }
-
-        /// <summary>
-        /// Get list of the unused project references.
-        /// </summary>
-        public IEnumerable<ProjectReference> GetUnusedReferences()
-        {
-            return (from projectRef in ProjectReferencesList
-                    where projectRef.IsUnused
-                    select projectRef.ProjectReference).ToList();
-        }
-
-        #endregion // Public methods
-
         #region Events handlers
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (this.DialogResult.HasValue && this.DialogResult.Value)
+            {
+                this.UnusedReferencesViewModel.UpdateReferences();
+            }
+            base.OnClosing(e);
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -110,61 +106,5 @@ namespace Lardite.RefAssistant.UI
         }
 
         #endregion // Events handlers
-
-        #region Nested types
-
-        public class ProjectReferenceViewModel : DependencyObject
-        {
-            #region .ctor
-
-            public ProjectReferenceViewModel(ProjectReference projectReference)
-            {
-                IsUnused = true;
-                ProjectReference = projectReference;
-            }
-
-            static ProjectReferenceViewModel()
-            {
-                IsUnusedProperty = DependencyProperty.Register("IsUnused", typeof(bool),
-                    typeof(ProjectReferenceViewModel), new UIPropertyMetadata(true));
-
-                ProjectReferencePropertyKey = DependencyProperty.RegisterReadOnly("ProjectReference",
-                    typeof(ProjectReference), typeof(ProjectReferenceViewModel), new UIPropertyMetadata(null));
-                ProjectReferenceProperty = ProjectReferencePropertyKey.DependencyProperty;
-            }
-
-            #endregion // .ctor
-
-            #region Properties
-
-            public static readonly DependencyProperty IsUnusedProperty;
-            public bool IsUnused
-            {
-                get { return (bool)GetValue(IsUnusedProperty); }
-                set { SetValue(IsUnusedProperty, value); }
-            }
-
-            public string AssemblyName
-            {
-                get { return ProjectReference.Name; }
-            }
-
-            public string AssemblyFullName
-            {
-                get { return ProjectReference.FullName; }
-            }
-
-            private static readonly DependencyPropertyKey ProjectReferencePropertyKey;
-            public static readonly DependencyProperty ProjectReferenceProperty;
-            public ProjectReference ProjectReference
-            {
-                get { return (ProjectReference)GetValue(ProjectReferenceProperty); }
-                private set { SetValue(ProjectReferencePropertyKey, value); }
-            }
-
-            #endregion // Properties
-        }
-
-        #endregion // Nested types
     }
 }
