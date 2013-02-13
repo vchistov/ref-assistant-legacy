@@ -242,7 +242,7 @@ namespace Lardite.RefAssistant
         {
             var project = GetProjectWrapper(projectInfo);
             LogManager.OutputLog.Information(
-                string.Format("  {0} -> {1}{2}", projectInfo.Name, Resources.RefAssistantPackage_RemoveUnusedUsings, Environment.NewLine));
+                string.Format("  {0} -> {1}", projectInfo.Name, Resources.RefAssistantPackage_RemoveUnusedUsings));
             project.RemoveUnusedUsings(_serviceProvider);
         }
 
