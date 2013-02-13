@@ -1,0 +1,50 @@
+﻿<ui:DialogWindow x:Class="Lardite.RefAssistant.UI.UnusedReferencesWindow" x:ClassModifier="internal"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.10.0"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ld="clr-namespace:Lardite.RefAssistant.UI"
+    xmlns:app="clr-namespace:Lardite.RefAssistant"    
+    mc:Ignorable="d" Title="{x:Static app:Resources.UI_UnusedReferencesWindow_Title}" 
+    d:DesignHeight="400" d:DesignWidth="600" ShowInTaskbar="False" 
+    MinWidth="560" MinHeight="380" Width="600" Height="400"
+    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+    WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="UnusedReferencesWindowResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style TargetType="{x:Type DockPanel}">
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+            
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="MinWidth" Value="75"/>
+                <Setter Property="MinHeight" Value="23"/>
+                <Setter Property="Margin" Value="10,0,0,0"/>
+                <Setter Property="Padding" Value="10,0,10,0"/>
+            </Style>
+
+            <ld:InvertBooleanConverter x:Key="InvertBoolean"/>
+            
+        </ResourceDictionary>        
+    </Window.Resources>
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static app:Resources.UI_UnusedReferencesWindow_RemovableReferences_Text}" />
+        <Grid DockPanel.Dock="Bottom">
+            <CheckBox HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                      Content="{x:Static app:Resources.UI_UnusedReferencesWindow_DontShowDialogAgain_Content}"
+                      IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:DialogWindow, AncestorLevel=1}, Path=IsShowThisWindowAgain, Mode=TwoWay, Converter={StaticResource InvertBoolean}}"/>
+            <UniformGrid Rows="1" Columns="2" HorizontalAlignment="Right">
+                <Button Content="{x:Static app:Resources.UI_UnusedReferencesWindow_Ok_Content}" Click="Button_Click" IsDefault="True"></Button>
+                <Button Content="{x:Static app:Resources.UI_UnusedReferencesWindow_Cancel_Content}" IsCancel="True"></Button>
+            </UniformGrid>
+        </Grid>
+        <ContentControl Margin="0,7,0,10" Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:DialogWindow, AncestorLevel=1}, Path=UnusedReferencesViewModel}"/>
+    </DockPanel>
+</ui:DialogWindow>
+

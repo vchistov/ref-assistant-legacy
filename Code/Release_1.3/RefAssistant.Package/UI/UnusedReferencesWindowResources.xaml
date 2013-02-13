@@ -1,0 +1,30 @@
+﻿<!--
+    Copyright © 2011 Lardite.    
+    Author: Chistov Victor (vchistov@lardite.com)    
+-->
+    
+<!-- 
+    This resource dictionary is used by UnusedReferencesWindow.xaml
+-->    
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Lardite.RefAssistant.UI.ViewModel"
+                    xmlns:vw="clr-namespace:Lardite.RefAssistant.UI.View">
+
+    <!--
+    This template applies an ProjectReferencesView to an instance 
+    of the ProjectReferencesViewModel class shown in the unused references window.
+    -->
+    <DataTemplate DataType="{x:Type vm:ProjectReferencesViewModel}">
+        <vw:ProjectReferencesView />
+    </DataTemplate>
+
+    <!--
+    This template applies an SolutionReferencesView to an instance 
+    of the SolutionReferencesViewModel class shown in the unused references window.
+    -->
+    <DataTemplate DataType="{x:Type vm:SolutionReferencesViewModel}">
+        <vw:SolutionReferencesView />
+    </DataTemplate>
+    
+</ResourceDictionary>

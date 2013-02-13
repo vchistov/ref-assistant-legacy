@@ -8,9 +8,4 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartAction>Program</StartAction>
-    <StartProgram>C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</StartProgram>
-    <StartArguments>/rootsuffix Exp</StartArguments>
-  </PropertyGroup>
 </Project>

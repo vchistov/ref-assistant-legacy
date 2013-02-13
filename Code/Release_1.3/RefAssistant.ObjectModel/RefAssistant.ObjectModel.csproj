@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{27667DD0-A302-4D10-9D5F-694F31B1F354}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Lardite.RefAssistant</RootNamespace>
+    <AssemblyName>Lardite.RefAssistant.ObjectModel</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\_Shared\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xaml.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Assemblies\Microsoft XAML Toolkit\v4.0\Microsoft.Xaml.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Assemblies\Mono.Cecil\v4.0\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.Xaml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.XML, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CompilationInfo.cs" />
+    <Compile Include="Error.cs" />
+    <Compile Include="ExtensionManager.cs" />
+    <Compile Include="Extensions\ExceptionExtension.cs" />
+    <Compile Include="Extensions\MonoCecilTypesExtension.cs" />
+    <Compile Include="Extensions\StringExtension.cs" />
+    <Compile Include="Extensions\TypeReferenceComparer.cs" />
+    <Compile Include="IExtensionOptions.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="ILogManager.cs" />
+    <Compile Include="IShellGateway.cs" />
+    <Compile Include="ObjectModel\InspectResult.cs" />
+    <Compile Include="ObjectModel\IProjectInspectResult.cs" />
+    <Compile Include="ObjectModel\IInspectResult.cs" />
+    <Compile Include="LogManager.cs" />
+    <Compile Include="NullLog.cs" />
+    <Compile Include="ObjectModel\Checkers\AssemblyManifestTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\CheckerSharedData.cs" />
+    <Compile Include="ObjectModel\Checkers\AttributesTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\XamlTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\DependentAssembliesTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\FSharpProjectChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\AttributeTypeCheckHelper.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\BamlAnalyser.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\MemberParametersCheckHelper.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\MemberReferencesCheckHelper.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\NativeXamlAnalyser.cs" />
+    <Compile Include="ObjectModel\CheckTypeException.cs" />
+    <Compile Include="ObjectModel\CheckExecutor.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\ClassCheckHelper.cs" />
+    <Compile Include="ObjectModel\Checkers\CSharpProjectChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\DefaultProjectChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\ImportedTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\InterfaceCheckHelper.cs" />
+    <Compile Include="ObjectModel\Checkers\InterfacesTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\ITypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\Helpers\ImportedTypeCheckHelper.cs" />
+    <Compile Include="ObjectModel\Checkers\IProjectChecker.cs" />
+    <Compile Include="ObjectModel\IProjectEvaluator.cs" />
+    <Compile Include="ObjectModel\Checkers\ProjectChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\ProjectCheckerType.cs" />
+    <Compile Include="ObjectModel\IXamlTypeResolver.cs" />
+    <Compile Include="ObjectModel\ProjectEvaluator.cs" />
+    <Compile Include="ObjectModel\ProjectInspectResult.cs" />
+    <Compile Include="ObjectModel\ProjectReference.cs" />
+    <Compile Include="ObjectModel\ProjectReferenceBasedAssemblyResolver.cs" />
+    <Compile Include="ObjectModel\ReferenceInspector.cs" />
+    <Compile Include="ObjectModel\ProjectInfo.cs" />
+    <Compile Include="ObjectModel\Checkers\ClassHierarchyTypesChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\VisualBasicProjectChecker.cs" />
+    <Compile Include="ObjectModel\Checkers\VisualCppCliProjectChecker.cs" />
+    <Compile Include="ObjectModel\IXamlAnalyser.cs" />
+    <Compile Include="ObjectModel\XamlTypeDeclaration.cs" />
+    <Compile Include="ObjectModel\XamlTypeResolver.cs" />
+    <Compile Include="ProgressEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicKeyTokenConverter.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SimpleCache.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\_Shared\Key.snk">
+      <Link>Key.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

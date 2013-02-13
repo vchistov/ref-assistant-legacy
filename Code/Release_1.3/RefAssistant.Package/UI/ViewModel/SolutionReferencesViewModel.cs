@@ -88,7 +88,7 @@ namespace Lardite.RefAssistant.UI.ViewModel
             return new ObservableCollection<ProjectData>
                 (
                     _solutionInspectResult
-                        .Where(item => (item.IsSuccess && item.UnusedReferences.Count > 0))
+                        .Where(item => (!item.IsSuccess || item.UnusedReferences.Count > 0))
                         .Select(item => new ProjectData(item))
                 );
         }
