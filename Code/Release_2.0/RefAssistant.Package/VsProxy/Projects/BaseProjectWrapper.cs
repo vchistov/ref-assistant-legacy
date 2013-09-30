@@ -22,6 +22,8 @@ namespace Lardite.RefAssistant.VsProxy.Projects
     /// <summary>
     /// Base features to wrap visual studio project.
     /// </summary>
+    /// <see cref=""/>
+    [Obsolete("Use Lardite.RefAssistant.Model.Projects.IVsProject instead of.")]
     internal class BaseProjectWrapper
     {
         #region Constants

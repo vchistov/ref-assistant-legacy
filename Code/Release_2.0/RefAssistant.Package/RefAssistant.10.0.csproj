@@ -130,6 +130,7 @@
     <Compile Include="VsProxy\Commands\RemoveProjectReferencesCommand.cs" />
     <Compile Include="VsProxy\Commands\RemoveSolutionReferencesCommand.cs" />
     <Compile Include="VsProxy\Projects\BaseProjectWrapper.cs" />
+    <Compile Include="VsProxy\Projects\CSharpProject.cs" />
     <Compile Include="VsProxy\Projects\CSharpProjectWrapper.cs" />
     <Compile Include="VsProxy\DTEHelper.cs" />
     <Compile Include="VsProxy\Projects\FSharpProjectWrapper.cs" />
@@ -198,6 +199,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RefAssistant.Model\RefAssistant.Model.csproj">
+      <Project>{FEA922F4-F099-498E-93B1-71B3ED035067}</Project>
+      <Name>RefAssistant.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RefAssistant.ObjectModel\RefAssistant.ObjectModel.csproj">
       <Project>{27667DD0-A302-4D10-9D5F-694F31B1F354}</Project>
       <Name>RefAssistant.ObjectModel</Name>

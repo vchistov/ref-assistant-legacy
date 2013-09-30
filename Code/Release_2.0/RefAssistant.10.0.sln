@@ -5,15 +5,30 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.ObjectModel", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.10.0", "RefAssistant.Package\RefAssistant.10.0.csproj", "{7A162EAB-6204-4143-8DA0-3F214D092532}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8438E795-22AB-4860-B6C6-996EC4CBCF78}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Model", "RefAssistant.Model\RefAssistant.Model.csproj", "{FEA922F4-F099-498E-93B1-71B3ED035067}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = RefAssistant.ObjectModel\\RefAssistant.ObjectModel.csproj
 		SccProjectName1 = RefAssistant.ObjectModel
 		SccLocalPath1 = RefAssistant.ObjectModel
+		SccProjectUniqueName2 = RefAssistant.Package\\RefAssistant.10.0.csproj
+		SccProjectName2 = RefAssistant.Package
+		SccLocalPath2 = RefAssistant.Package
+		SccProjectUniqueName3 = RefAssistant.Model\\RefAssistant.Model.csproj
+		SccProjectName3 = RefAssistant.Model
+		SccLocalPath3 = RefAssistant.Model
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +43,10 @@ Global
 		{7A162EAB-6204-4143-8DA0-3F214D092532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A162EAB-6204-4143-8DA0-3F214D092532}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A162EAB-6204-4143-8DA0-3F214D092532}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEA922F4-F099-498E-93B1-71B3ED035067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEA922F4-F099-498E-93B1-71B3ED035067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEA922F4-F099-498E-93B1-71B3ED035067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEA922F4-F099-498E-93B1-71B3ED035067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
