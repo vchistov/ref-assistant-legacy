@@ -5,10 +5,11 @@
 //
 
 using System.Windows;
-using Lardite.RefAssistant.UI.ViewModel;
-using Microsoft.VisualStudio.PlatformUI;
+
 using Lardite.RefAssistant.ObjectModel;
-using System.Linq;
+using Lardite.RefAssistant.UI.ViewModel;
+
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace Lardite.RefAssistant.UI
 {
@@ -17,28 +18,20 @@ namespace Lardite.RefAssistant.UI
     /// </summary>
     partial class UnusedReferencesWindow : DialogWindow
     {
-        #region Fields
-
-        private readonly IInspectResult _inspectResults;
-
-        #endregion // Fields
-
-        #region .ctor
+        private readonly IInspectResult _inspectResult;
 
         /// <summary>
         /// Initialize a new instance of the <see cref="Lardite.RefAssistant.UI.UnusedReferencesWindow"/> class.
         /// </summary>
-        public UnusedReferencesWindow(IInspectResult inspectResults)
+        public UnusedReferencesWindow(IInspectResult inspectResult)
         {
-            if (inspectResults == null)
+            if (inspectResult == null)
             {
-                throw Error.ArgumentNull("inspectResults");
+                throw Error.ArgumentNull("inspectResult");
             }
 
-            _inspectResults = inspectResults;
-            this.UnusedReferencesViewModel = (inspectResults.InspectResults.Count() > 1)
-                ? new SolutionReferencesViewModel(inspectResults.InspectResults) 
-                : (IReferencesViewModel) new ProjectReferencesViewModel(inspectResults.InspectResults.First());
+            _inspectResult = inspectResult;
+            this.UnusedReferencesViewModel = new ProjectReferencesViewModel(inspectResult.Result);                
 
             InitializeComponent();
         }
@@ -53,8 +46,6 @@ namespace Lardite.RefAssistant.UI
 
             UnusedReferencesViewModelProperty = UnusedReferencesViewModelPropertyKey.DependencyProperty;
         }
-
-        #endregion // .ctor
 
         #region Dependency properties
 

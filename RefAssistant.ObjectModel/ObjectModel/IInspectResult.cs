@@ -4,8 +4,6 @@
 // Author: Chistov Victor (vchistov@lardite.com)
 //
 
-using System.Collections.Generic;
-
 namespace Lardite.RefAssistant.ObjectModel
 {
     /// <summary>
@@ -14,12 +12,12 @@ namespace Lardite.RefAssistant.ObjectModel
     public interface IInspectResult
     {
         /// <summary>
-        /// Gets the list of inspection results for projects.
+        /// Gets the inspection result for project.
         /// </summary>
-        IEnumerable<IProjectInspectResult> InspectResults { get; }
+        IProjectInspectResult Result { get; }
 
         /// <summary>
-        /// Returns true if there is unused reference for any project.
+        /// Returns true if there is unused reference for project.
         /// </summary>
         bool HasUnusedReferences { get; }
     }

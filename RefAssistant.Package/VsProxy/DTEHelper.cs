@@ -5,7 +5,6 @@
 //
 
 using System;
-using System.Collections.Generic;
 using EnvDTE;
 using Lardite.RefAssistant.VsProxy.Projects;
 using Microsoft.VisualStudio.Shell;
@@ -32,21 +31,6 @@ namespace Lardite.RefAssistant.VsProxy
                 true);
 
             return project.DTE.Solution.SolutionBuild.LastBuildInfo;
-        }
-
-        /// <summary>
-        /// Compiles a solution.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <returns>Returns zero (0) if there are no exceptions.</returns>
-        public static int BuildSolution(IServiceProvider serviceProvider)
-        {
-            var dte = (DTE)serviceProvider.GetService(typeof(DTE));
-
-            Solution solution = dte.Solution;
-            solution.SolutionBuild.Build(true);
-
-            return solution.SolutionBuild.LastBuildInfo;
         }
 
         /// <summary>
@@ -138,62 +122,7 @@ namespace Lardite.RefAssistant.VsProxy
                 }
             }
             return null;
-        }
-
-        /// <summary>
-        /// Get list of solution's projects.
-        /// </summary>
-        /// <param name="serviceProvider">Service provider.</param>
-        /// <returns>Returns list of projects.</returns>
-        public static IEnumerable<Project> GetSolutionProjects(IServiceProvider serviceProvider)
-        {
-            var dte = (DTE)serviceProvider.GetService(typeof(DTE));
-
-            // result set
-            var projects = new List<Project>();
-
-            // temporaty lists
-            var parentProjects = new List<Project>();
-            var subProjects = new List<Project>();
-
-            // enumerate all projects in solution
-            var enumerator = dte.Solution.Projects.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var project = enumerator.Current as Project;
-                parentProjects.Add(project);
-                AddProjectToList(projects, project);
-            }
-
-            // enumerate all sub-projects in solution
-            while (parentProjects.Count > 0)
-            {
-                foreach (var project in parentProjects)
-                {
-                    if (project.ProjectItems == null)
-                        continue;
-
-                    var subProjectsEnumerator = project.ProjectItems.GetEnumerator();
-                    while (subProjectsEnumerator.MoveNext())
-                    {
-                        var projectItem = (ProjectItem)subProjectsEnumerator.Current;
-                        if (projectItem.SubProject != null)
-                        {
-                            subProjects.Add(projectItem.SubProject);
-                            AddProjectToList(projects, projectItem.SubProject);
-                        }
-                    }
-                }
-
-                List<Project> tempProjects = parentProjects;
-                parentProjects = subProjects;
-                subProjects = tempProjects;
-
-                subProjects.Clear();
-            }
-
-            return projects;
-        }
+        }        
 
         #endregion // Public methods
 
@@ -249,21 +178,6 @@ namespace Lardite.RefAssistant.VsProxy
                 return null;
 
             return (Project)activeSolutionProjects.GetValue(0);
-        }
-
-        /// <summary>
-        /// Adds "real" project to collection. This method hepls to avoid adding Solution Folders, Unactived projects, etc to collection.
-        /// </summary>
-        /// <param name="projects">The projects collection.</param>
-        /// <param name="project">The added project.</param>
-        private static void AddProjectToList(IList<Project> projects, object project)
-        {
-            var p = project as Project;
-            if (p != null && !string.IsNullOrWhiteSpace(GetProjectFullName(p)) 
-                && !string.IsNullOrWhiteSpace(GetProjectName(p)))
-            {
-                projects.Add(p);
-            }                
         }
 
         /// <summary>

@@ -7,50 +7,90 @@
 using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
 namespace Lardite.RefAssistant.VsProxy.Commands
 {
     [GuidAttribute(GuidList.guidRefAssistantCmdSetString)]
-    internal class RemoveProjectReferencesCommand : CleanupCommandBase
+    internal sealed class RemoveProjectReferencesCommand : OleMenuCommand
     {
-        #region Constants
-
         public const int ID = 0x100;
 
-        #endregion // Constants
-
-        #region .ctor
+        private DTE _dte;
+        private readonly StatusBar _statusBar;
+        private IServiceProvider _serviceProvider;
+        private IShellGateway _shellGateway;
 
         public RemoveProjectReferencesCommand(IServiceProvider serviceProvider, IShellGateway shellGateway)
-            : base(serviceProvider, new CommandID(typeof(RemoveProjectReferencesCommand).GUID, ID), shellGateway)
+            : base(OnExecuteRemoving, null, OnBeforeQueryStatus, new CommandID(typeof(RemoveProjectReferencesCommand).GUID, ID))
         {
+            _serviceProvider = serviceProvider;
+            _shellGateway = shellGateway;
+            _statusBar = new StatusBar(serviceProvider);
         }
 
-        #endregion // .ctor
+        #region Methods
 
-        #region Overrides
-
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
-        protected override void OnExecute()
+        private static void OnExecuteRemoving(object sender, EventArgs e)
         {
-            var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(ServiceProvider).Kind);
-            LogManager.ActivityLog.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));            
+            var self = sender as RemoveProjectReferencesCommand;
 
-            using (var manager = new ExtensionManager(this.ShellGateway))
+            try
             {
-                manager.ProgressChanged += OnProgressChanged;
-                manager.StartProjectCleanup();
+                self._statusBar.StartStatusBarAnimation();
+                self.OnExecuteRemoving();
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                LogManager.OutputLog.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured, ex);
+#else
+                LogManager.OutputLog.Information(Resources.RemoveUnusedReferencesCmd_EndProcessFailed);
+#endif
+                LogManager.ErrorListLog.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured);
+                LogManager.ActivityLog.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured, ex);
+            }
+            finally
+            {
+                if (self != null)
+                {
+                    self._statusBar.StopStatusBarAnimation();
+                    self._statusBar.SetStatusBarText(string.Empty);
+                }
             }
         }
 
-        protected override bool CanExecute(OleMenuCommand command)
+        private static void OnBeforeQueryStatus(object sender, EventArgs e)
         {
-            return this.ShellGateway.CanRemoveUnusedReferences(null);
+            var self = sender as RemoveProjectReferencesCommand;
+
+            self.Enabled = self.Visible = self.Supported = self.CanExecuteRemoving();
         }
 
-        #endregion // Overrides        
+        private bool CanExecuteRemoving()
+        {
+            return _shellGateway.CanRemoveUnusedReferences(null);
+        }
+
+        private void OnExecuteRemoving()
+        {
+            var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(_serviceProvider).Kind);
+            LogManager.ActivityLog.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));
+
+            using (var manager = new ExtensionManager(_shellGateway))
+            {
+                manager.ProgressChanged += OnRemovingProgressChanged;
+                manager.StartProjectCleanup();
+            }
+        }                
+
+        private void OnRemovingProgressChanged(object sender, ProgressEventArgs e)
+        {
+            string text = e.Progress == 100 ? e.Text : string.Format("[{1}%] {0}", e.Text, e.Progress.ToString());
+            _statusBar.SetStatusBarText(text);
+        }
+
+        #endregion    
     }
 }

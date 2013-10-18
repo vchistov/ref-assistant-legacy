@@ -18,13 +18,5 @@
     <DataTemplate DataType="{x:Type vm:ProjectReferencesViewModel}">
         <vw:ProjectReferencesView />
     </DataTemplate>
-
-    <!--
-    This template applies an SolutionReferencesView to an instance 
-    of the SolutionReferencesViewModel class shown in the unused references window.
-    -->
-    <DataTemplate DataType="{x:Type vm:SolutionReferencesViewModel}">
-        <vw:SolutionReferencesView />
-    </DataTemplate>
     
 </ResourceDictionary>
