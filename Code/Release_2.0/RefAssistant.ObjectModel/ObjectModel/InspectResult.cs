@@ -4,68 +4,41 @@
 // Author: Chistov Victor (vchistov@lardite.com)
 //
 
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Lardite.RefAssistant.ObjectModel
 {
     internal sealed class InspectResult : IInspectResult
     {
-        #region Fields
+        private readonly IProjectInspectResult _inspectResult;
 
-        private readonly List<IProjectInspectResult> _inspectResults;
-
-        #endregion // Fields
-
-        public InspectResult(IEnumerable<IProjectInspectResult> results = null)
+        public InspectResult(IProjectInspectResult inspectResult)
         {
-            _inspectResults = new List<IProjectInspectResult>();
-
-            if (results != null)
-            {
-                _inspectResults.AddRange(results);
-            }
-        }
-
-        #region Public methods
-
-        /// <summary>
-        /// Add result of inspection of a project.
-        /// </summary>
-        /// <param name="result"></param>
-        public void AddResult(IProjectInspectResult result)
-        {
-            if (result == null)
-            {
-                throw Error.ArgumentNull("result");
-            }
-
-            if (_inspectResults.Any(p => p.Project.Equals(result.Project)))
-            {
-                throw Error.InvalidOperation(Resources.InspectResult_ResultAlreadyAdded, result.Project.Name);
-            }
-
-            _inspectResults.Add(result);
-        }
-
-        #endregion // Public methods
+            _inspectResult = inspectResult;
+        }        
 
         #region InspectResults implementation
 
         /// <summary>
-        /// Gets the list of inspection results for projects.
+        /// Gets inspection result for project.
         /// </summary>
-        public IEnumerable<IProjectInspectResult> InspectResults
+        public IProjectInspectResult Result
         {
-            get { return _inspectResults; }
+            get 
+            { 
+                return _inspectResult; 
+            }
         }
 
         /// <summary>
-        /// Returns true if there is unused reference for any project.
+        /// Returns true if there is unused reference for project.
         /// </summary>
         public bool HasUnusedReferences
         {
-            get { return _inspectResults.Any(p => p.UnusedReferences.Any()); }
+            get 
+            {
+                return _inspectResult.UnusedReferences.Any(); 
+            }
         }
 
         #endregion

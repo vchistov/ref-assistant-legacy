@@ -10,9 +10,6 @@
       <Group guid="guidRefAssistantCmdSet" id="grpidRemoveUnusedReferencesCommandGroup2" priority="0x0100">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
       </Group>
-      <Group guid="guidRefAssistantCmdSet" id="grpidRemoveUnusedReferencesCommandGroup3" priority="0x0100">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE"/>
-      </Group>
     </Groups>
     
     <Buttons>    
@@ -23,16 +20,7 @@
           <CommandName>cmdidRemoveUnusedReferencesCommand</CommandName>
           <ButtonText>Remove Unused References</ButtonText>
         </Strings>
-      </Button>
-
-      <Button guid="guidRefAssistantCmdSet" id="cmdidRemoveUnusedSolutionReferencesCommand" priority="0x0100" type="Button">
-        <Icon guid="guidImages" id="bmpPic1" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <Strings>
-          <CommandName>cmdidRemoveUnusedSolutionReferencesCommand</CommandName>
-          <ButtonText>Remove Unused References</ButtonText>
-        </Strings>
-      </Button>
+      </Button>      
     </Buttons>
    
     <Bitmaps>
@@ -47,9 +35,6 @@
     <CommandPlacement guid="guidRefAssistantCmdSet" id="cmdidRemoveUnusedReferencesCommand" priority="0x0100" >
       <Parent guid="guidRefAssistantCmdSet" id="grpidRemoveUnusedReferencesCommandGroup2"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidRefAssistantCmdSet" id="cmdidRemoveUnusedSolutionReferencesCommand" priority="0x0100" >
-      <Parent guid="guidRefAssistantCmdSet" id="grpidRemoveUnusedReferencesCommandGroup3"/>
-    </CommandPlacement>
   </CommandPlacements>
   
   <Symbols>
@@ -57,9 +42,7 @@
     <GuidSymbol name="guidRefAssistantCmdSet" value="{820B0D5D-901D-44D0-B956-CA55F308BDC4}">      
       <IDSymbol name="grpidRemoveUnusedReferencesCommandGroup1" value="0x1020" />
       <IDSymbol name="grpidRemoveUnusedReferencesCommandGroup2" value="0x1021" />
-      <IDSymbol name="grpidRemoveUnusedReferencesCommandGroup3" value="0x1022" />
-      <IDSymbol name="cmdidRemoveUnusedReferencesCommand" value="0x0100" />
-      <IDSymbol name="cmdidRemoveUnusedSolutionReferencesCommand" value="0x0110" />      
+      <IDSymbol name="cmdidRemoveUnusedReferencesCommand" value="0x0100" />    
     </GuidSymbol>    
     <GuidSymbol name="guidImages" value="{b3cd9a88-b4a4-4ef9-9b9d-b0bab864e758}" >
       <IDSymbol name="bmpPic1" value="1" />

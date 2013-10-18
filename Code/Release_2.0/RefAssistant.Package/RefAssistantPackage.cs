@@ -51,7 +51,6 @@ namespace Lardite.RefAssistant
 
                 // Create the command for the menu item.
                 mcs.AddCommand(new RemoveProjectReferencesCommand(this, shellGateway));
-                mcs.AddCommand(new RemoveSolutionReferencesCommand(this, shellGateway));
             }
         }
 

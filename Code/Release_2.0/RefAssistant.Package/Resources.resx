@@ -150,9 +150,6 @@
   <data name="RemoveProjectReferencesCmd_StartRemoving" xml:space="preserve">
     <value>Start removing unused references from a project. The project kind is '{0}'.</value>
   </data>
-  <data name="RemoveSolutionReferencesCmd_StartRemoving" xml:space="preserve">
-    <value>Start removing unused references from solution's projects.</value>
-  </data>
   <data name="RemoveUnusedReferencesCmd_EndProcessFailed" xml:space="preserve">
     <value>========== Remove: failed ==========</value>
   </data>

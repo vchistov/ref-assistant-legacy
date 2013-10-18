@@ -119,16 +119,10 @@
     <Compile Include="UI\ViewModel\IReferencesViewModel.cs" />
     <Compile Include="UI\ViewModel\ProjectReferencesViewModel.cs" />
     <Compile Include="UI\ViewModel\ReferenceData.cs" />
-    <Compile Include="UI\ViewModel\SolutionReferencesViewModel.cs" />
     <Compile Include="UI\View\ProjectReferencesView.xaml.cs">
       <DependentUpon>ProjectReferencesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\View\SolutionReferencesView.xaml.cs">
-      <DependentUpon>SolutionReferencesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="VsProxy\Commands\CleanupCommandBase.cs" />
     <Compile Include="VsProxy\Commands\RemoveProjectReferencesCommand.cs" />
-    <Compile Include="VsProxy\Commands\RemoveSolutionReferencesCommand.cs" />
     <Compile Include="VsProxy\Projects\BaseProjectWrapper.cs" />
     <Compile Include="VsProxy\Projects\CSharpProject.cs" />
     <Compile Include="VsProxy\Projects\CSharpProjectWrapper.cs" />
@@ -190,10 +184,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\View\ProjectReferencesView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\View\SolutionReferencesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
