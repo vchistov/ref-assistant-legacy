@@ -15,7 +15,7 @@ namespace Lardite.RefAssistant.VsProxy
     /// <summary>
     /// Iterator for project item hierachy.
     /// </summary>
-    sealed class ProjectItemIterator : IEnumerable<ProjectItem>
+    internal sealed class ProjectItemIterator : IEnumerable<ProjectItem>
     {
         private ProjectItems projectItems;
 
@@ -25,8 +25,7 @@ namespace Lardite.RefAssistant.VsProxy
         /// <param name="items">Items.</param>
         public ProjectItemIterator(ProjectItems items)
         {
-            if (items == null)
-                throw new ArgumentNullException("items");
+            ThrowUtils.ArgumentNull(() => items);
 
             this.projectItems = items;
         }

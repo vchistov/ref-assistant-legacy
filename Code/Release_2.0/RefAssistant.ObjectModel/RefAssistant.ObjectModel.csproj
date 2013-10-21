@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="CompilationInfo.cs" />
     <Compile Include="Error.cs" />
-    <Compile Include="ExtensionManager.cs" />
+    <Compile Include="ExtensionManagerOld.cs" />
     <Compile Include="Extensions\ExceptionExtension.cs" />
     <Compile Include="Extensions\MonoCecilTypesExtension.cs" />
     <Compile Include="Extensions\StringExtension.cs" />

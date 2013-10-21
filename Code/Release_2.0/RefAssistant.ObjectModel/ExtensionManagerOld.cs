@@ -16,7 +16,8 @@ namespace Lardite.RefAssistant
     /// <summary>
     /// Extension manager.
     /// </summary>
-    public sealed class ExtensionManager : IDisposable
+    [Obsolete("Use Lardite.RefAssistant.ExtensionManager instead of.")]
+    public sealed class ExtensionManagerOld : IDisposable
     {
         private IShellGateway _shellGateway;
         private EventHandlerList _eventList;
@@ -35,7 +36,7 @@ namespace Lardite.RefAssistant
         /// Constructor.
         /// </summary>
         /// <param name="shellGateway">Shell gateway.</param>
-        public ExtensionManager(IShellGateway shellGateway)
+        public ExtensionManagerOld(IShellGateway shellGateway)
         {
             if (shellGateway == null)
                 throw Error.ArgumentNull("shellGateway");
