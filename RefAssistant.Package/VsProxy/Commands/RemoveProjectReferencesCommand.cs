@@ -76,18 +76,14 @@ namespace Lardite.RefAssistant.VsProxy.Commands
 
         private void OnExecuteRemoving()
         {
-            var project = DTEHelper.GetActiveProject(_serviceProvider);
-            var csharp = new CSharpProject(project);
-            csharp.RemoveAndSortUsings();
+            var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(_serviceProvider).Kind);
+            LogManager.ActivityLog.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));
 
-            //var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(_serviceProvider).Kind);
-            //LogManager.ActivityLog.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));
-
-            //using (var manager = new ExtensionManagerOld(_shellGateway))
-            //{
-            //    manager.ProgressChanged += OnRemovingProgressChanged;
-            //    manager.StartProjectCleanup();
-            //}
+            using (var manager = new ExtensionManagerOld(_shellGateway))
+            {
+                manager.ProgressChanged += OnRemovingProgressChanged;
+                manager.StartProjectCleanup();
+            }
         }                
 
         private void OnRemovingProgressChanged(object sender, ProgressEventArgs e)
