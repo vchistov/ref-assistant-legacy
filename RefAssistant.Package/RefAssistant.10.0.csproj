@@ -90,13 +90,19 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup>    
+    <Compile Include="ExtensionManager.cs" />
+    <Compile Include="ExtensionManager.Actions.cs">
+        <DependentUpon>ExtensionManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logs\ActivityLog.cs" />
     <Compile Include="Logs\ErrorListLog.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Logs\OutputLog.cs" />
     <Compile Include="PkgCmdID.cs" />
+    <Compile Include="ProjectNotFoundException.cs" />
     <Compile Include="ShellGateway.cs" />
+    <Compile Include="ThrowUtils.cs" />
     <Compile Include="UI\GeneralOptionsControl.xaml.cs">
       <DependentUpon>GeneralOptionsControl.xaml</DependentUpon>
     </Compile>
@@ -122,15 +128,22 @@
     <Compile Include="UI\View\ProjectReferencesView.xaml.cs">
       <DependentUpon>ProjectReferencesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VsProxy\Building\BuildResult.cs" />
     <Compile Include="VsProxy\Commands\RemoveProjectReferencesCommand.cs" />
+    <Compile Include="VsProxy\IVsProjectFacade.cs" />
+    <Compile Include="VsProxy\IVsSolutionFacade.cs" />
     <Compile Include="VsProxy\Projects\BaseProjectWrapper.cs" />
     <Compile Include="VsProxy\Projects\CSharpProject.cs" />
     <Compile Include="VsProxy\Projects\CSharpProjectWrapper.cs" />
     <Compile Include="VsProxy\DTEHelper.cs" />
     <Compile Include="VsProxy\Projects\FSharpProjectWrapper.cs" />
     <Compile Include="VsProxy\ProjectItemIterator.cs" />
+    <Compile Include="VsProxy\Projects\IVsProjectExtended.cs" />
     <Compile Include="VsProxy\Projects\VisualCppCliProjectWrapper.cs" />
+    <Compile Include="VsProxy\Projects\VsProjectMapper.cs" />
     <Compile Include="VsProxy\StatusBar.cs" />
+    <Compile Include="VsProxy\VsFacade.cs" />
+    <Compile Include="VsProxy\VsFacadeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

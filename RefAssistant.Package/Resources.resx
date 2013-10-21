@@ -126,6 +126,9 @@
   <data name="OutputLog_Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="ProjectNotFoundException_Msg" xml:space="preserve">
+    <value>The specified project '{0}' could not be found.</value>
+  </data>
   <data name="RefAssistantPackage_CanNotCreateWindow" xml:space="preserve">
     <value>Can not create window to show removed references list.</value>
   </data>
