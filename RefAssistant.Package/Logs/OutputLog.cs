@@ -6,33 +6,23 @@
 //
 
 using System;
+using System.Collections;
 using System.Text;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio.Shell;
-
 using Lardite.RefAssistant.Extensions;
+using Microsoft.VisualStudio.Shell;
 
 namespace Lardite.RefAssistant
 {
     /// <summary>
     /// Writes information to visual studio output window.
     /// </summary>
-    sealed class OutputLog : ILog
+    internal sealed class OutputLog : ILog
     {
-        #region Constants
+        private const string WindowPaneName = "Reference Assistant";
 
-        private const string SourceName = "Lardite.RefAssistant";
-
-        #endregion
-
-        #region Fields
-
-        private readonly IServiceProvider _serviceProvider;
-
-        #endregion // Fields
-
-        #region .ctor
+        private readonly Lazy<OutputWindowPane> _outputPane;
 
         /// <summary>
         /// Initialize a new instance of the <see cref="OutputLog"/> class.
@@ -40,22 +30,9 @@ namespace Lardite.RefAssistant
         /// <param name="serviceProvider">Package service provider.</param>
         public OutputLog(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            ThrowUtils.ArgumentNull(() => serviceProvider);
+            _outputPane = new Lazy<OutputWindowPane>(() => GetOutputPane(serviceProvider));
         }
-
-        #endregion // .ctor
-
-        #region Properties
-
-        /// <summary>
-        /// Get DTE2 object.
-        /// </summary>
-        private DTE2 DTE2
-        {
-            get { return (DTE2)_serviceProvider.GetService(typeof(DTE)); }
-        }
-
-        #endregion // Properties
 
         #region ILog Implementation
 
@@ -113,29 +90,46 @@ namespace Lardite.RefAssistant
 
         #region Private methods
 
-        /// <summary>
-        /// Writes message.
-        /// </summary>
-        /// <param name="message">Message.</param>
-        /// <param name="errorCategory">Error category.</param>
+        private OutputWindowPane OutputPane
+        {
+            get { return _outputPane.Value; }
+        }
+
         private void LogMessage(string message, TaskErrorCategory errorCategory)
         {
-            if (string.IsNullOrWhiteSpace(message) || DTE2.ToolWindows.OutputWindow.ActivePane == null)
+            if (string.IsNullOrWhiteSpace(message) || OutputPane == null)
                 return;
 
             StringBuilder sb = new StringBuilder();
             switch (errorCategory)
             {
                 case TaskErrorCategory.Warning:
-                    sb.Append(SourceName).Append(" ").Append(Resources.OutputLog_Warning).Append(": ").Append(message).AppendLine(); break;
+                    sb.Append(Resources.OutputLog_Warning).Append(": ").Append(message).AppendLine(); break;
                 case TaskErrorCategory.Error:
-                    sb.Append(SourceName).Append(" ").Append(Resources.OutputLog_Error).Append(": ").Append(message).AppendLine(); break;
+                    sb.Append(Resources.OutputLog_Error).Append(": ").Append(message).AppendLine(); break;
                 default:
                     sb.Append(message).AppendLine(); break;
             }
 
-            DTE2.ToolWindows.OutputWindow.ActivePane.OutputString(sb.ToString());
-            DTE2.ExecuteCommand("View.Output", "");
+            OutputPane.OutputString(sb.ToString());
+            OutputPane.Activate();
+        }
+
+        private OutputWindowPane GetOutputPane(IServiceProvider serviceProvider)
+        {
+            var dte = (DTE2)serviceProvider.GetService(typeof(DTE));
+
+            IEnumerator windowsEnumerator = dte.ToolWindows.OutputWindow.OutputWindowPanes.GetEnumerator();
+            while (windowsEnumerator.MoveNext())
+            {
+                OutputWindowPane windowPane = (OutputWindowPane)windowsEnumerator.Current;
+                if (string.Equals(WindowPaneName, windowPane.Name, StringComparison.Ordinal))
+                {
+                    return windowPane;
+                }
+            }
+
+            return dte.ToolWindows.OutputWindow.OutputWindowPanes.Add(WindowPaneName);
         }
 
         #endregion // Private methods
