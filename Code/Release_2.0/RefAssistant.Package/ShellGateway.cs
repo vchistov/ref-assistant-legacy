@@ -258,10 +258,7 @@ namespace Lardite.RefAssistant
 
             foreach (var unusedReference in unusedReferences)
             {
-                builder.Append("  ")
-                    .Append(projectInfo.Name)
-                    .Append(" -> ")
-                    .AppendLine(unusedReference.FullName);
+                builder.Append("  ").AppendLine(unusedReference.FullName);
             }
 
             LogManager.OutputLog.Information(builder.ToString().TrimEnd());
