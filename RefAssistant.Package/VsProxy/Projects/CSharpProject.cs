@@ -36,6 +36,16 @@ namespace Lardite.RefAssistant.VsProxy.Projects
             get { return GetProjectReferences(); }
         }
 
+        public Guid Kind
+        {
+            get
+            {
+                Guid kind;
+                Guid.TryParse(_project.Kind, out kind);
+                return kind;
+            }
+        }
+
         public void RemoveReferences(IEnumerable<VsProjectReference> references)
         {
             IEnumerable<Reference3> projectReferences = ((VSProject2)_project.Object).References.Cast<Reference3>();
@@ -108,11 +118,11 @@ namespace Lardite.RefAssistant.VsProxy.Projects
             foreach (Reference3 projectRef in projectReferences)
             {
                 yield return new VsProjectReference(
-                    projectRef.Name, 
-                    projectRef.Path, 
-                    Version.Parse(projectRef.Version), 
+                    projectRef.Name,
+                    projectRef.Path,
+                    Version.Parse(projectRef.Version),
                     string.Equals(projectRef.Culture, "0", StringComparison.Ordinal) ? string.Empty : projectRef.Culture,
-                    projectRef.SpecificVersion);
+                    projectRef.SpecificVersion) { PublicKeyToken = projectRef.PublicKeyToken };
             }
         }
 

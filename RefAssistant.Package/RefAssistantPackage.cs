@@ -47,10 +47,11 @@ namespace Lardite.RefAssistant
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
-                var shellGateway = new ShellGateway(this, GetDialogPage(typeof(GeneralOptionsPage)) as IExtensionOptions);
+                IExtensionOptions options = (IExtensionOptions)GetDialogPage(typeof(GeneralOptionsPage));
+                var shellGateway = new ShellGateway(this, options);
 
                 // Create the command for the menu item.
-                mcs.AddCommand(new RemoveProjectReferencesCommand(this, shellGateway));
+                mcs.AddCommand(new RemoveProjectReferencesCommand(this, shellGateway, options));
             }
         }
 

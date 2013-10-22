@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Lardite.RefAssistant.Model.Projects
 {
@@ -9,5 +10,8 @@ namespace Lardite.RefAssistant.Model.Projects
         string OutputAssemblyPath { get; }
 
         IEnumerable<VsProjectReference> References { get; }
+
+        [Obsolete]
+        Guid Kind { get; }
     }
 }
