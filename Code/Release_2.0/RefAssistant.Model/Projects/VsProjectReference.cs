@@ -28,5 +28,8 @@ namespace Lardite.RefAssistant.Model.Projects
         public string Culture { get; private set; }
 
         public bool IsSpecificVersion { get; private set; }
+
+        [Obsolete]
+        public string PublicKeyToken { get; set; }
     }
 }

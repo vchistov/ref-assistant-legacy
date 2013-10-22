@@ -22,13 +22,15 @@ namespace Lardite.RefAssistant.VsProxy.Commands
         private readonly StatusBar _statusBar;
         private IServiceProvider _serviceProvider;
         private IShellGateway _shellGateway;
+        private readonly IExtensionOptions _options;
 
-        public RemoveProjectReferencesCommand(IServiceProvider serviceProvider, IShellGateway shellGateway)
+        public RemoveProjectReferencesCommand(IServiceProvider serviceProvider, IShellGateway shellGateway, IExtensionOptions options)
             : base(OnExecuteRemoving, null, OnBeforeQueryStatus, new CommandID(typeof(RemoveProjectReferencesCommand).GUID, ID))
         {
             _serviceProvider = serviceProvider;
             _shellGateway = shellGateway;
             _statusBar = new StatusBar(serviceProvider);
+            _options = options;
         }
 
         #region Methods
@@ -76,6 +78,10 @@ namespace Lardite.RefAssistant.VsProxy.Commands
 
         private void OnExecuteRemoving()
         {
+            //var facade = new VsFacade(_serviceProvider);
+            //var manager = new ExtensionManager(_options,  facade);
+            //manager.ProcessProject(facade.GetActiveProject());
+
             var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(_serviceProvider).Kind);
             LogManager.ActivityLog.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));
 

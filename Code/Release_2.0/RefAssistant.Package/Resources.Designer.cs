@@ -61,6 +61,51 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The error(s) occurred during analysis of the project. See InternalException for details..
+        /// </summary>
+        public static string ExtensionManager_AnalysisError {
+            get {
+                return ResourceManager.GetString("ExtensionManager_AnalysisError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The error(s) occurred during project compilation. See Output for details..
+        /// </summary>
+        public static string ExtensionManager_BuildError {
+            get {
+                return ResourceManager.GetString("ExtensionManager_BuildError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project&apos;s output is not CLR assembly. Reference Assistant cannot be  used for this project type..
+        /// </summary>
+        public static string ExtensionManager_IsNotClrAssembly {
+            get {
+                return ResourceManager.GetString("ExtensionManager_IsNotClrAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unused references are not found..
+        /// </summary>
+        public static string ExtensionManager_NotFound {
+            get {
+                return ResourceManager.GetString("ExtensionManager_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User cancelled operation..
+        /// </summary>
+        public static string ExtensionManager_UserCancelledOperation {
+            get {
+                return ResourceManager.GetString("ExtensionManager_UserCancelledOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The target must be a boolean..
         /// </summary>
         public static string InvertBooleanConverter_InvalidOperation {

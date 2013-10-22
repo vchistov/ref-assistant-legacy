@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ExtensionManager_AnalysisError" xml:space="preserve">
+    <value>The error(s) occurred during analysis of the project. See InternalException for details.</value>
+  </data>
+  <data name="ExtensionManager_BuildError" xml:space="preserve">
+    <value>The error(s) occurred during project compilation. See Output for details.</value>
+  </data>
+  <data name="ExtensionManager_IsNotClrAssembly" xml:space="preserve">
+    <value>The project's output is not CLR assembly. Reference Assistant cannot be  used for this project type.</value>
+  </data>
+  <data name="ExtensionManager_NotFound" xml:space="preserve">
+    <value>Unused references are not found.</value>
+  </data>
+  <data name="ExtensionManager_UserCancelledOperation" xml:space="preserve">
+    <value>User cancelled operation.</value>
+  </data>
   <data name="InvertBooleanConverter_InvalidOperation" xml:space="preserve">
     <value>The target must be a boolean.</value>
   </data>

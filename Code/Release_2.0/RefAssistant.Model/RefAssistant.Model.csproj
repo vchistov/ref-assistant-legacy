@@ -70,7 +70,16 @@
     <Compile Include="Projects\VsProjectReference.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\_Shared\Key.snk">
+      <Link>Key.snk</Link>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RefAssistant.ObjectModel\RefAssistant.ObjectModel.csproj">
+      <Project>{27667DD0-A302-4D10-9D5F-694F31B1F354}</Project>
+      <Name>RefAssistant.ObjectModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
