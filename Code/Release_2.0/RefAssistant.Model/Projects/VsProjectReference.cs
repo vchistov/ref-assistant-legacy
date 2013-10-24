@@ -2,7 +2,7 @@
 
 namespace Lardite.RefAssistant.Model.Projects
 {
-    public class VsProjectReference
+    public class VsProjectReference : IEquatable<VsProjectReference>
     {
         public VsProjectReference(string name, string location, Version version, string culture = null, bool isSpecificVerions = false)
         {
@@ -18,7 +18,7 @@ namespace Lardite.RefAssistant.Model.Projects
             Culture = culture;
             IsSpecificVersion = isSpecificVerions;
         }
-
+        
         public string Name { get; private set; }
 
         public string Location { get; private set; }
@@ -31,5 +31,13 @@ namespace Lardite.RefAssistant.Model.Projects
 
         [Obsolete]
         public string PublicKeyToken { get; set; }
+
+        public bool Equals(VsProjectReference other)
+        {
+            if (other == null)
+                return false;
+
+            return string.Equals(Name, other.Name, StringComparison.Ordinal);
+        }
     }
 }

@@ -14,6 +14,7 @@ using Lardite.RefAssistant.ObjectModel;
 using Lardite.RefAssistant.UI;
 using Lardite.RefAssistant.VsProxy;
 using Lardite.RefAssistant.VsProxy.Projects;
+using Lardite.RefAssistant.Model.Projects;
 
 namespace Lardite.RefAssistant
 {
@@ -95,14 +96,29 @@ namespace Lardite.RefAssistant
         /// <returns>If true, then continue.</returns>
         public bool ConfirmUnusedReferencesRemoving(IInspectResult inspectResults)
         {
-            var window = new UnusedReferencesWindow(inspectResults)
+            var input = inspectResults.Result.UnusedReferences
+                .Select(item => new VsProjectReference(item.Name, item.Location, item.Version, item.Culture, false));
+            var window = new UnusedReferencesWindow(input)
                 {
                     IsShowThisWindowAgain = _options.IsShowUnusedReferencesWindow.Value
                 };
+
             var result = window.ShowModal();
             if (result.HasValue && result.Value)
             {
-                //unusedProjectReferences = window.GetUnusedReferences();
+                var selectedRefs = inspectResults.Result.UnusedReferences.Join(
+                    window.ViewModel.SelectedReferences,
+                    ur => ur.Name,
+                    sr => sr.Name,
+                    (ur, sr) => ur);
+                var unusedRefs = inspectResults.Result.UnusedReferences.Except(selectedRefs).ToArray();
+
+                for (int i = 0; i < unusedRefs.Length; ++i)
+                {
+                    var @ref = unusedRefs[i];
+                    inspectResults.Result.UnusedReferences.Remove(@ref);
+                }
+
                 _options.IsShowUnusedReferencesWindow = window.IsShowThisWindowAgain;
 
                 return true;
@@ -126,7 +142,7 @@ namespace Lardite.RefAssistant
                     return false;
                 }
 
-                return (project.HasAssembly 
+                return (project.HasAssembly
                     && project.Kind != ProjectKinds.Modeling
                     && project.Kind != ProjectKinds.Database
                     && !project.IsBuildInProgress);
@@ -147,7 +163,7 @@ namespace Lardite.RefAssistant
             {
                 RemoveUnusedReferences(inspectResults.Result.Project, inspectResults.Result.UnusedReferences);
             }
-        }        
+        }
 
         /// <summary>
         /// Can remove unused references.

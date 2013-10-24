@@ -146,7 +146,6 @@
     </Compile>
     <Compile Include="UI\ImageManager.cs" />
     <Compile Include="UI\InvertBooleanConverter.cs" />
-    <Compile Include="UI\ViewModel\ProjectData.cs" />
     <Compile Include="UI\UnusedReferencesWindow.xaml.cs">
       <DependentUpon>UnusedReferencesWindow.xaml</DependentUpon>
     </Compile>

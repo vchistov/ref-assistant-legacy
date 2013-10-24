@@ -18,7 +18,7 @@
                             CanHorizontallyScroll="False" CanVerticallyScroll="False">
                     <CheckBox IsChecked="{Binding IsUnused}" ToolTip="{x:Static app:Resources.UI_UnusedReferencesWindow_CheckReference_ToolTip}"/>
                     <Image Margin="3,0,2,0" Source="{Binding AssemblyImage, Mode=OneTime, Source={StaticResource ImageManager}}" />
-                    <TextBlock Text="{Binding AssemblyName}" ToolTip="{Binding AssemblyFullName}"  
+                    <TextBlock Text="{Binding ProjectName}" ToolTip="{Binding AssemblyFullName}"  
                                HorizontalAlignment="Stretch"/>
                 </StackPanel>
             </DataTemplate>
@@ -32,6 +32,6 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <ListBox ItemsSource="{Binding Path=Project.References}"></ListBox>            
+        <ListBox ItemsSource="{Binding Path=References}"></ListBox>            
     </Grid>
 </UserControl>

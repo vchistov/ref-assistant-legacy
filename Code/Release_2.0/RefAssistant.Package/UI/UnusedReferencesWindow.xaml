@@ -44,7 +44,7 @@
                 <Button Content="{x:Static app:Resources.UI_UnusedReferencesWindow_Cancel_Content}" IsCancel="True"></Button>
             </UniformGrid>
         </Grid>
-        <ContentControl Margin="0,7,0,10" Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:DialogWindow, AncestorLevel=1}, Path=UnusedReferencesViewModel}"/>
+        <ContentControl Margin="0,7,0,10" Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:DialogWindow, AncestorLevel=1}, Path=ViewModel}"/>
     </DockPanel>
 </ui:DialogWindow>
 
