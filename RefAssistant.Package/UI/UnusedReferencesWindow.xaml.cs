@@ -4,11 +4,10 @@
 // Author: Chistov Victor (vchistov@lardite.com)
 //
 
+using System.Collections.Generic;
 using System.Windows;
-
-using Lardite.RefAssistant.ObjectModel;
+using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.UI.ViewModel;
-
 using Microsoft.VisualStudio.PlatformUI;
 
 namespace Lardite.RefAssistant.UI
@@ -18,20 +17,14 @@ namespace Lardite.RefAssistant.UI
     /// </summary>
     partial class UnusedReferencesWindow : DialogWindow
     {
-        private readonly IInspectResult _inspectResult;
-
         /// <summary>
         /// Initialize a new instance of the <see cref="Lardite.RefAssistant.UI.UnusedReferencesWindow"/> class.
         /// </summary>
-        public UnusedReferencesWindow(IInspectResult inspectResult)
+        public UnusedReferencesWindow(IEnumerable<VsProjectReference> references)
         {
-            if (inspectResult == null)
-            {
-                throw Error.ArgumentNull("inspectResult");
-            }
+            ThrowUtils.ArgumentNull(() => references);
 
-            _inspectResult = inspectResult;
-            this.UnusedReferencesViewModel = new ProjectReferencesViewModel(inspectResult.Result);                
+            this.ViewModel = new ProjectReferencesViewModel(references);                
 
             InitializeComponent();
         }
@@ -41,19 +34,19 @@ namespace Lardite.RefAssistant.UI
             IsShowThisWindowAgainProperty = DependencyProperty.Register("IsShowThisWindowAgain",
                 typeof(bool), typeof(UnusedReferencesWindow), new PropertyMetadata(true));
 
-            UnusedReferencesViewModelPropertyKey = DependencyProperty.RegisterReadOnly("UnusedReferencesViewModelProperty", 
+            ViewModelPropertyKey = DependencyProperty.RegisterReadOnly("ViewModelProperty", 
                 typeof(IReferencesViewModel), typeof(UnusedReferencesWindow), new PropertyMetadata(null));
 
-            UnusedReferencesViewModelProperty = UnusedReferencesViewModelPropertyKey.DependencyProperty;
+            ViewModelProperty = ViewModelPropertyKey.DependencyProperty;
         }
 
         #region Dependency properties
 
         public static readonly DependencyProperty IsShowThisWindowAgainProperty;
 
-        public static readonly DependencyProperty UnusedReferencesViewModelProperty;
+        public static readonly DependencyProperty ViewModelProperty;
 
-        private static readonly DependencyPropertyKey UnusedReferencesViewModelPropertyKey;
+        private static readonly DependencyPropertyKey ViewModelPropertyKey;
 
         #endregion // Dependency properties
 
@@ -71,24 +64,15 @@ namespace Lardite.RefAssistant.UI
         /// <summary>
         /// Get project's unused references view model.
         /// </summary>
-        public IReferencesViewModel UnusedReferencesViewModel
+        public IReferencesViewModel ViewModel
         {
-            get { return (IReferencesViewModel)GetValue(UnusedReferencesViewModelProperty); }
-            private set { SetValue(UnusedReferencesViewModelPropertyKey, value); }
+            get { return (IReferencesViewModel)GetValue(ViewModelProperty); }
+            private set { SetValue(ViewModelPropertyKey, value); }
         }
 
         #endregion // Properties
 
         #region Events handlers
-
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            if (this.DialogResult.HasValue && this.DialogResult.Value)
-            {
-                this.UnusedReferencesViewModel.UpdateReferences();
-            }
-            base.OnClosing(e);
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

@@ -7,6 +7,7 @@
 using System.Windows;
 
 using Lardite.RefAssistant.ObjectModel;
+using Lardite.RefAssistant.Model.Projects;
 
 namespace Lardite.RefAssistant.UI.ViewModel
 {
@@ -21,7 +22,7 @@ namespace Lardite.RefAssistant.UI.ViewModel
         /// Initialize a new instance of the <see cref="ReferenceData"/> class.
         /// </summary>
         /// <param name="projectReference">The assembly reference.</param>
-        public ReferenceData(ProjectReference projectReference)
+        public ReferenceData(VsProjectReference projectReference)
         {
             IsUnused = true;
             ProjectReference = projectReference;
@@ -36,7 +37,7 @@ namespace Lardite.RefAssistant.UI.ViewModel
                 typeof(ReferenceData), new UIPropertyMetadata(true));
 
             ProjectReferencePropertyKey = DependencyProperty.RegisterReadOnly("ProjectReference",
-                typeof(ProjectReference), typeof(ReferenceData), new UIPropertyMetadata(null));
+                typeof(VsProjectReference), typeof(ReferenceData), new UIPropertyMetadata(null));
             ProjectReferenceProperty = ProjectReferencePropertyKey.DependencyProperty;
         }
 
@@ -63,9 +64,9 @@ namespace Lardite.RefAssistant.UI.ViewModel
         }
 
         /// <summary>
-        /// The assembly name.
+        /// Get the project name.
         /// </summary>
-        public string AssemblyName
+        public string ProjectName
         {
             get { return ProjectReference.Name; }
         }
@@ -75,15 +76,16 @@ namespace Lardite.RefAssistant.UI.ViewModel
         /// </summary>
         public string AssemblyFullName
         {
-            get { return ProjectReference.FullName; }
+#warning TODO: Do we really need this one?
+            get { return ProjectReference.Name; }
         }
 
         /// <summary>
         /// The reference. This is dependency property.
         /// </summary>
-        public ProjectReference ProjectReference
+        public VsProjectReference ProjectReference
         {
-            get { return (ProjectReference)GetValue(ProjectReferenceProperty); }
+            get { return (VsProjectReference)GetValue(ProjectReferenceProperty); }
             private set { SetValue(ProjectReferencePropertyKey, value); }
         }
 

@@ -4,14 +4,13 @@
 // Author: Chistov Victor (vchistov@lardite.com)
 //
 
+using System.Collections.Generic;
+using Lardite.RefAssistant.Model.Projects;
+
 namespace Lardite.RefAssistant.UI.ViewModel
 {
     internal interface IReferencesViewModel
     {
-        /// <summary>
-        /// Update the list of project references according to user input, 
-        /// i.e. need to exclude from the list references which user didn't select.
-        /// </summary>
-        void UpdateReferences();
+        IEnumerable<VsProjectReference> SelectedReferences { get; }
     }
 }
