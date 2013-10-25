@@ -213,4 +213,7 @@
   <data name="UI_UnusedReferencesWindow_Title" xml:space="preserve">
     <value>Unused References List</value>
   </data>
+  <data name="VsProjectMapper_NotSupported" xml:space="preserve">
+    <value>The project kind {0} is not supported.</value>
+  </data>
 </root>

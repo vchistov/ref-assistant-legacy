@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using EnvDTE;
 using Lardite.RefAssistant.Model.Projects;
 using VSLangProj80;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
-    internal sealed class CSharpProject : VsBaseProject
+    internal sealed class VBNetProject : VsBaseProject
     {
-        public CSharpProject(Project project)
+        public VBNetProject(Project project)
             : base(project)
         {
         }
@@ -38,44 +36,6 @@ namespace Lardite.RefAssistant.VsProxy.Projects
             foreach (var reference in readyForRemoveRefs)
             {
                 reference.Remove();
-            }
-        }
-
-        public override void RemoveAndSortUsings()
-        {
-            var alreadyOpenFiles = new HashSet<string>(
-                DTE.Documents.Cast<Document>().Select(d => d.FullName), 
-                StringComparer.OrdinalIgnoreCase);
-
-            var codeFiles = new ProjectItemIterator(Project.ProjectItems)
-                .Where(item => item.FileCodeModel != null);
-
-            foreach (ProjectItem file in codeFiles)
-            {
-                string fileName = file.get_FileNames(0);
-
-                Window window = DTE.OpenFile(EnvDTE.Constants.vsViewKindTextView, fileName);
-                window.Activate();
-
-                try
-                {
-                    DTE.ExecuteCommand("Edit.RemoveAndSort", string.Empty);
-                }
-                catch (COMException e)
-                {
-                    //Do nothing, go to the next item
-                    if (LogManager.ActivityLog != null)
-                        LogManager.ActivityLog.Error(null, e);
-                }
-
-                if (alreadyOpenFiles.Contains(fileName))
-                {
-                    DTE.ActiveDocument.Save();
-                }
-                else
-                {
-                    window.Close(vsSaveChanges.vsSaveChangesYes);
-                }
             }
         }
 

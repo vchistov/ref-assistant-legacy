@@ -1,6 +1,5 @@
 ﻿using System;
 using EnvDTE;
-using Lardite.RefAssistant.Model.Projects;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
@@ -14,8 +13,20 @@ namespace Lardite.RefAssistant.VsProxy.Projects
             {
                 return new CSharpProject(project);
             }
+            else if (kind == ProjectKinds.FSharp)
+            {
+                return new FSharpProject(project);
+            }
+            else if (kind == ProjectKinds.VisualCppCli)
+            {
+                return new VisualCppCliProject(project);
+            }
+            else if (kind == ProjectKinds.VisualBasic)
+            {
+                return new VBNetProject(project);
+            }
 
-            throw new NotSupportedException(string.Format("The project kind {0} is not supported.", kind));
+            throw new NotSupportedException(string.Format(Resources.VsProjectMapper_NotSupported, kind));
         }
     }
 }

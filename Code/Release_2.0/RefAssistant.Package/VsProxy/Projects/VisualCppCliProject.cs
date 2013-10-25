@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using EnvDTE;
 using Lardite.RefAssistant.Model.Projects;
 using VSLangProj80;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
-    internal sealed class CSharpProject : VsBaseProject
+    internal sealed class VisualCppCliProject : VsBaseProject
     {
-        public CSharpProject(Project project)
+        public VisualCppCliProject(Project project)
             : base(project)
         {
         }
@@ -41,53 +39,17 @@ namespace Lardite.RefAssistant.VsProxy.Projects
             }
         }
 
-        public override void RemoveAndSortUsings()
-        {
-            var alreadyOpenFiles = new HashSet<string>(
-                DTE.Documents.Cast<Document>().Select(d => d.FullName), 
-                StringComparer.OrdinalIgnoreCase);
-
-            var codeFiles = new ProjectItemIterator(Project.ProjectItems)
-                .Where(item => item.FileCodeModel != null);
-
-            foreach (ProjectItem file in codeFiles)
-            {
-                string fileName = file.get_FileNames(0);
-
-                Window window = DTE.OpenFile(EnvDTE.Constants.vsViewKindTextView, fileName);
-                window.Activate();
-
-                try
-                {
-                    DTE.ExecuteCommand("Edit.RemoveAndSort", string.Empty);
-                }
-                catch (COMException e)
-                {
-                    //Do nothing, go to the next item
-                    if (LogManager.ActivityLog != null)
-                        LogManager.ActivityLog.Error(null, e);
-                }
-
-                if (alreadyOpenFiles.Contains(fileName))
-                {
-                    DTE.ActiveDocument.Save();
-                }
-                else
-                {
-                    window.Close(vsSaveChanges.vsSaveChangesYes);
-                }
-            }
-        }
-
         #region Private methods
 
         private string GetOutputAssemblyPath()
         {
-            string outputPath = Project.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
-            string buildPath = Project.Properties.Item("LocalPath").Value.ToString();
-            string targetName = Project.Properties.Item("OutputFileName").Value.ToString();
-
-            return Path.Combine(buildPath, outputPath, targetName);
+            var primaryOutput = Project.ConfigurationManager.ActiveConfiguration.OutputGroups.Item("Primary Output");
+            if (primaryOutput != null && primaryOutput.FileCount > 0)
+            {
+                var url = ((object[])primaryOutput.FileURLs)[0].ToString();
+                return new Uri(url).LocalPath;
+            }
+            return string.Empty;
         }
 
         private IEnumerable<VsProjectReference> GetProjectReferences()
@@ -106,6 +68,25 @@ namespace Lardite.RefAssistant.VsProxy.Projects
                     projectRef.SpecificVersion);
             }
         }
+
+        //private const string ManagedExtensions = "ManagedExtensions";
+        //public bool IsManaged
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            // me is Microsoft.VisualStudio.VCProject.compileAsManagedOptions enum
+        //            var me = (int)Project.ConfigurationManager
+        //                .ActiveConfiguration.Properties.Item(ManagedExtensions).Value;
+        //            return me != 0; // not equals "managedNotSet"
+        //        }
+        //        catch
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //}
 
         #endregion
     }

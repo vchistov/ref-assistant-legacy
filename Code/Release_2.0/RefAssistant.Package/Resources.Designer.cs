@@ -347,5 +347,14 @@ namespace Lardite.RefAssistant {
                 return ResourceManager.GetString("UI_UnusedReferencesWindow_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project kind {0} is not supported..
+        /// </summary>
+        public static string VsProjectMapper_NotSupported {
+            get {
+                return ResourceManager.GetString("VsProjectMapper_NotSupported", resourceCulture);
+            }
+        }
     }
 }
