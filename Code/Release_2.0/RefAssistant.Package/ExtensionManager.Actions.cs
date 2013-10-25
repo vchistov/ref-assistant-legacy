@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+
 using Lardite.RefAssistant.Model;
 using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.UI;
 using Lardite.RefAssistant.VsProxy;
 using Lardite.RefAssistant.VsProxy.Building;
 using Lardite.RefAssistant.VsProxy.Projects;
@@ -56,14 +58,19 @@ namespace Lardite.RefAssistant
         {
             Contract.Requires(project != null);
             Contract.Requires(references != null);
+            Contract.Requires(references.Any());
 
+            IEnumerable<VsProjectReference> readyForRemoveRefs = references;
             if (_options.IsShowUnusedReferencesWindow.GetValueOrDefault())
             {
-                throw new NotImplementedException("It's necessary to update UI clases before.");
+                readyForRemoveRefs = ConfirmUnusedReferencesRemoving(references);
+
+                if (!readyForRemoveRefs.Any())
+                    throw new ActionInterruptedException(Resources.ExtensionManager_NotFound);
             }
 
-            project.RemoveReferences(references);
-            PrintUnusedReferences(references);
+            project.RemoveReferences(readyForRemoveRefs);
+            PrintUnusedReferences(readyForRemoveRefs);
         }
 
         private void RemoveAndSortUsings(IVsProjectExtended project)
@@ -77,6 +84,23 @@ namespace Lardite.RefAssistant
         }
 
         #region Helpers
+
+        public IEnumerable<VsProjectReference> ConfirmUnusedReferencesRemoving(IEnumerable<VsProjectReference> references)
+        {
+            var window = new UnusedReferencesWindow(references)
+                {
+                    IsShowThisWindowAgain = _options.IsShowUnusedReferencesWindow.Value
+                };
+
+            var result = window.ShowModal();
+            if (result.GetValueOrDefault())
+            {
+                _options.IsShowUnusedReferencesWindow = window.IsShowThisWindowAgain;
+                return window.ViewModel.SelectedReferences.ToList();
+            }
+
+            throw new ActionInterruptedException(Resources.ExtensionManager_UserCancelledOperation);
+        }
 
         private void PrintUnusedReferences(IEnumerable<VsProjectReference> references)
         { 
