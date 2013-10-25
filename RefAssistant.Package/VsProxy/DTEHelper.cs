@@ -14,6 +14,7 @@ namespace Lardite.RefAssistant.VsProxy
     /// <summary>
     /// Work with high-level Visual Studio's DTE object.
     /// </summary>
+    [Obsolete("Use IVsSolutionFacade or IVsProjectFacade instead.")]
     static class DTEHelper
     {
         #region Public methods
