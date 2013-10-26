@@ -70,7 +70,43 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The error(s) occurred during project compilation. See Output for details..
+        ///   Looks up a localized string similar to user cancelled operation.
+        /// </summary>
+        public static string ExtensionManager_Break_Cancelled {
+            get {
+                return ResourceManager.GetString("ExtensionManager_Break_Cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ========== Remove: {0} ==========.
+        /// </summary>
+        public static string ExtensionManager_Break_EndProcess {
+            get {
+                return ResourceManager.GetString("ExtensionManager_Break_EndProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to project&apos;s output is not CLI assembly.
+        /// </summary>
+        public static string ExtensionManager_Break_IsNotCliAssembly {
+            get {
+                return ResourceManager.GetString("ExtensionManager_Break_IsNotCliAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unused references are not found.
+        /// </summary>
+        public static string ExtensionManager_Break_NotFound {
+            get {
+                return ResourceManager.GetString("ExtensionManager_Break_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The error(s) occurred during project compilation. See Build output for details..
         /// </summary>
         public static string ExtensionManager_BuildError {
             get {
@@ -79,29 +115,29 @@ namespace Lardite.RefAssistant {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The project&apos;s output is not CLR assembly. Reference Assistant cannot be  used for this project type..
+        ///   Looks up a localized string similar to ========== Remove: succeeded, {0} reference(s) removed ==========.
         /// </summary>
-        public static string ExtensionManager_IsNotClrAssembly {
+        public static string ExtensionManager_EndProcess {
             get {
-                return ResourceManager.GetString("ExtensionManager_IsNotClrAssembly", resourceCulture);
+                return ResourceManager.GetString("ExtensionManager_EndProcess", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unused references are not found..
+        ///   Looks up a localized string similar to Removing unused usings....
         /// </summary>
-        public static string ExtensionManager_NotFound {
+        public static string ExtensionManager_RemovingUnusedUsings {
             get {
-                return ResourceManager.GetString("ExtensionManager_NotFound", resourceCulture);
+                return ResourceManager.GetString("ExtensionManager_RemovingUnusedUsings", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User cancelled operation..
+        ///   Looks up a localized string similar to ------ Remove Unused References started: Project: {0}, Configuration: {1} ------.
         /// </summary>
-        public static string ExtensionManager_UserCancelledOperation {
+        public static string ExtensionManager_StartProcess {
             get {
-                return ResourceManager.GetString("ExtensionManager_UserCancelledOperation", resourceCulture);
+                return ResourceManager.GetString("ExtensionManager_StartProcess", resourceCulture);
             }
         }
         

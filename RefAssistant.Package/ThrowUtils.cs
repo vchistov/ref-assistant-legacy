@@ -21,6 +21,16 @@ namespace Lardite.RefAssistant
         }
 
         [DebuggerStepThrough]
+        public static void ArgumentNullOrEmpty(Expression<Func<string>> param)
+        {
+            var paramValue = GetParameter(param);
+            if (string.IsNullOrWhiteSpace(paramValue.Value))
+            {
+                throw new ArgumentNullException(paramValue.Key);
+            }
+        }
+
+        [DebuggerStepThrough]
         public static void InvalidOperation(string message)
         {
             throw new InvalidOperationException(message);

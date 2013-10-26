@@ -15,16 +15,11 @@ namespace Lardite.RefAssistant
 {
     internal partial class ExtensionManager
     {
-        private IVsProjectExtended BuildProject(IVsProject project)
+        private BuildResult BuildProject(IVsProject project)
         {
             Contract.Requires(project != null);
 
-            BuildResult result = _vsFacade.Build(project);
-
-            if (!result.IsSuccessed)
-                throw new ActionInterruptedException(Resources.ExtensionManager_BuildError);
-
-            return result.Project;
+            return _vsFacade.Build(project);
         }
 
         private IEnumerable<VsProjectReference> GetUnusedReferences(IVsProject project)
@@ -39,14 +34,14 @@ namespace Lardite.RefAssistant
                 var referenses = task.Result;
                 
                 if (!referenses.Any())
-                    throw new ActionInterruptedException(Resources.ExtensionManager_NotFound);
+                    throw new ActionInterruptedException(Resources.ExtensionManager_Break_NotFound);
              
                 return referenses;
             }
             catch (AggregateException ex)
             {
                 if (ex.InnerException is BadImageFormatException)
-                    throw new ActionInterruptedException(Resources.ExtensionManager_IsNotClrAssembly, ex);
+                    throw new ActionInterruptedException(Resources.ExtensionManager_Break_IsNotCliAssembly);
 
                 throw new InvalidOperationException(
                     Resources.ExtensionManager_AnalysisError,
@@ -54,23 +49,25 @@ namespace Lardite.RefAssistant
             }
         }
 
-        private void RemoveProjectReferences(IVsProjectExtended project, IEnumerable<VsProjectReference> references)
+        private int RemoveProjectReferences(IVsProjectExtended project, IEnumerable<VsProjectReference> references)
         {
             Contract.Requires(project != null);
             Contract.Requires(references != null);
             Contract.Requires(references.Any());
 
-            IEnumerable<VsProjectReference> readyForRemoveRefs = references;
+            IList<VsProjectReference> readyForRemoveRefs = references.ToList();
             if (_options.IsShowUnusedReferencesWindow.GetValueOrDefault())
             {
-                readyForRemoveRefs = ConfirmUnusedReferencesRemoving(references);
+                readyForRemoveRefs = ConfirmUnusedReferencesRemoving(references).ToList();
 
-                if (!readyForRemoveRefs.Any())
-                    throw new ActionInterruptedException(Resources.ExtensionManager_NotFound);
+                if (readyForRemoveRefs.Count == 0)
+                    throw new ActionInterruptedException(Resources.ExtensionManager_Break_Cancelled);
             }
 
             project.RemoveReferences(readyForRemoveRefs);
             PrintUnusedReferences(readyForRemoveRefs);
+
+            return readyForRemoveRefs.Count;
         }
 
         private void RemoveAndSortUsings(IVsProjectExtended project)
@@ -79,6 +76,7 @@ namespace Lardite.RefAssistant
 
             if (_options.IsRemoveUsingsAfterRemoving.GetValueOrDefault())
             {
+                LogManager.OutputLog.Information(Environment.NewLine + Resources.ExtensionManager_RemovingUnusedUsings);
                 project.RemoveAndSortUsings();
             }
         }
@@ -99,7 +97,7 @@ namespace Lardite.RefAssistant
                 return window.ViewModel.SelectedReferences.ToList();
             }
 
-            throw new ActionInterruptedException(Resources.ExtensionManager_UserCancelledOperation);
+            throw new ActionInterruptedException(Resources.ExtensionManager_Break_Cancelled);
         }
 
         private void PrintUnusedReferences(IEnumerable<VsProjectReference> references)
