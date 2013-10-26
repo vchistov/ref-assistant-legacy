@@ -6,9 +6,7 @@
 //
 
 using System;
-using System.Globalization;
 using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
 
 using Lardite.RefAssistant.Extensions;
 
@@ -19,45 +17,7 @@ namespace Lardite.RefAssistant
     /// </summary>
     sealed class ActivityLog : ILog
     {
-        #region Constants
-
-        private const string SourceName = "Lardite.RefAssistant";
-
-        #endregion
-
-        #region Fields
-
-        private readonly IServiceProvider _serviceProvider;
-
-        #endregion // Fields
-
-        #region .ctor
-
-        /// <summary>
-        /// Initialize a new instance of the <see cref="ActivityLog"/> class.
-        /// </summary>
-        /// <param name="serviceProvider">Package service provider.</param>
-        public ActivityLog(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
-        #endregion // .ctor
-
-        #region Properties
-
-        /// <summary>
-        /// Vs activity log.
-        /// </summary>
-        private IVsActivityLog VsActivityLog
-        {
-            get
-            {
-                return _serviceProvider.GetService(typeof(SVsActivityLog)) as IVsActivityLog;
-            }
-        }
-
-        #endregion // Properties
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger("ReferenceAssistant");
 
         #region ILog Implementation
 
@@ -67,7 +27,7 @@ namespace Lardite.RefAssistant
         /// <param name="message">Message.</param>
         public void Information(string message)
         {
-            LogMessage(message, (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_INFORMATION);
+            log.Info(message);
         }
 
         /// <summary>
@@ -76,7 +36,7 @@ namespace Lardite.RefAssistant
         /// <param name="message">Message.</param>
         public void Warning(string message)
         {
-            LogMessage(message, (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_WARNING);
+            log.Warn(message);
         }
 
         /// <summary>
@@ -85,7 +45,7 @@ namespace Lardite.RefAssistant
         /// <param name="message">Message.</param>
         public void Error(string message)
         {
-            LogMessage(message, (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR);
+            log.Error(message);
         }
 
         /// <summary>
@@ -111,23 +71,6 @@ namespace Lardite.RefAssistant
             Error(sb.ToString());
         }
 
-        #endregion // ILog implementation
-
-        #region Private methods
-
-        /// <summary>
-        /// Writes message.
-        /// </summary>
-        /// <param name="message">Message.</param>
-        /// <param name="messageCategory">Message category.</param>
-        private void LogMessage(string message, UInt32 messageCategory)
-        {
-            if (string.IsNullOrWhiteSpace(message))
-                return;
-
-            VsActivityLog.LogEntry(messageCategory, SourceName, string.Format(CultureInfo.CurrentCulture, message));
-        }
-
-        #endregion // Private methods
+        #endregion
     }
 }

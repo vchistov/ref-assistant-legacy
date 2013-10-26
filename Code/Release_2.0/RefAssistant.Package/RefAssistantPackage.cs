@@ -6,6 +6,8 @@
 
 using System;
 using System.ComponentModel.Design;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 using Lardite.RefAssistant.UI;
@@ -39,7 +41,10 @@ namespace Lardite.RefAssistant
         protected override void Initialize()
         {
             base.Initialize();
-            LogManager.ActivityLog = new ActivityLog(this);
+
+            log4net.Config.XmlConfigurator.Configure(new FileInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "App.config")));
+
+            LogManager.ActivityLog = new ActivityLog();
             LogManager.ErrorListLog = new ErrorListLog(this);
             LogManager.OutputLog = new OutputLog(this);
 
