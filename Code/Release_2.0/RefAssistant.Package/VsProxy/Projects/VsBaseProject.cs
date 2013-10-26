@@ -2,25 +2,38 @@
 using System.Collections.Generic;
 using EnvDTE;
 using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.VsProxy.Projects.References;
+using VSLangProj;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
     internal abstract class VsBaseProject : IVsProjectExtended
     {
         protected readonly Project Project;
+        private readonly Lazy<VsReferenceController> _refController;
 
-        protected VsBaseProject(Project project)
+        protected VsBaseProject(Project project, Func<VSProject, VsReferenceController> refControllerFactory)
         {
             ThrowUtils.ArgumentNull(() => project);
+            ThrowUtils.ArgumentNull(() => refControllerFactory);
 
             Project = project;
+            _refController = new Lazy<VsReferenceController>(() => refControllerFactory((VSProject)Project.Object));
         }
 
         public abstract string OutputAssemblyPath { get; }
 
-        public abstract IEnumerable<VsProjectReference> References { get; }
+        public virtual IEnumerable<VsProjectReference> References 
+        {
+            get { return _refController.Value.References; }                
+        }
 
-        public abstract void RemoveReferences(IEnumerable<VsProjectReference> references);
+        public virtual void RemoveReferences(IEnumerable<VsProjectReference> references)
+        {
+            ThrowUtils.ArgumentNull(() => references);
+
+            _refController.Value.Remove(references);
+        }
 
         public virtual void RemoveAndSortUsings()
         {
@@ -47,16 +60,6 @@ namespace Lardite.RefAssistant.VsProxy.Projects
         protected DTE DTE
         {
             get { return Project.DTE; }
-        }
-
-        protected VsProjectReference BuildReference(string name, string location, string version, string culture, string publicKeyToken, bool isSpecificVersion)
-        {
-            return new VsProjectReference(
-                    name,
-                    location,
-                    Version.Parse(version),
-                    string.Equals(culture, "0", StringComparison.Ordinal) ? string.Empty : culture,
-                    isSpecificVersion) { PublicKeyToken = publicKeyToken };
         }
 
         #endregion
