@@ -1,71 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using EnvDTE;
-using Lardite.RefAssistant.Model.Projects;
-using VSLangProj80;
+using Lardite.RefAssistant.VsProxy.Projects.References;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
     internal sealed class VisualCppCliProject : VsBaseProject
     {
         public VisualCppCliProject(Project project)
-            : base(project)
+            : base(project, (vsp) => new Reference3Controller(vsp))
         {
         }
 
         public override string OutputAssemblyPath
         {
-            get { return GetOutputAssemblyPath(); }
-        }
-
-        public override IEnumerable<VsProjectReference> References
-        {
-            get { return GetProjectReferences(); }
-        }
-
-        public override void RemoveReferences(IEnumerable<VsProjectReference> references)
-        {
-            IEnumerable<Reference3> projectReferences = ((VSProject2)Project.Object).References.Cast<Reference3>();
-            IEnumerable<Reference3> readyForRemoveRefs = projectReferences.Join(
-                references, 
-                pr => pr.Name, 
-                r => r.Name, 
-                (pr, r) => pr);
-            
-            foreach (var reference in readyForRemoveRefs)
+            get
             {
-                reference.Remove();
-            }
-        }
-
-        #region Private methods
-
-        private string GetOutputAssemblyPath()
-        {
-            var primaryOutput = Project.ConfigurationManager.ActiveConfiguration.OutputGroups.Item("Primary Output");
-            if (primaryOutput != null && primaryOutput.FileCount > 0)
-            {
-                var url = ((object[])primaryOutput.FileURLs)[0].ToString();
-                return new Uri(url).LocalPath;
-            }
-            return string.Empty;
-        }
-
-        private IEnumerable<VsProjectReference> GetProjectReferences()
-        {
-            var proj = (VSProject2)Project.Object;
-            var projectReferences = ((VSProject2)Project.Object).References;
-
-            foreach (Reference3 projectRef in projectReferences)
-            {
-                yield return BuildReference(
-                    projectRef.Name,
-                    projectRef.Path,
-                    projectRef.Version,
-                    projectRef.Culture,
-                    projectRef.PublicKeyToken,
-                    projectRef.SpecificVersion);
+                var primaryOutput = Project.ConfigurationManager.ActiveConfiguration.OutputGroups.Item("Primary Output");
+                if (primaryOutput != null && primaryOutput.FileCount > 0)
+                {
+                    var url = ((object[])primaryOutput.FileURLs)[0].ToString();
+                    return new Uri(url).LocalPath;
+                }
+                return string.Empty;
             }
         }
 
@@ -87,7 +43,5 @@ namespace Lardite.RefAssistant.VsProxy.Projects
         //        }
         //    }
         //}
-
-        #endregion
     }
 }
