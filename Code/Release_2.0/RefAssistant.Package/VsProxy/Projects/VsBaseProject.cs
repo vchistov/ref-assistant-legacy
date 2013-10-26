@@ -43,7 +43,18 @@ namespace Lardite.RefAssistant.VsProxy.Projects
         public virtual string Name
         {
             get { return Project.Name; }
-        }       
+        }
+
+        public virtual string Configuration
+        {
+            get
+            {
+                var activeConfiguration = Project.ConfigurationManager.ActiveConfiguration;
+                return string.Format("{0} {1}",
+                    activeConfiguration.ConfigurationName,
+                    activeConfiguration.PlatformName);
+            }
+        }
 
         public virtual Guid Kind
         {

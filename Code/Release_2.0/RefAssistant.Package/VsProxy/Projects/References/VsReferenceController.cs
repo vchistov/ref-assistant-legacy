@@ -42,7 +42,6 @@ namespace Lardite.RefAssistant.VsProxy.Projects.References
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Requires(!string.IsNullOrWhiteSpace(location));
             Contract.Requires(!string.IsNullOrWhiteSpace(version));
-            Contract.Requires(!string.IsNullOrWhiteSpace(culture));
 
             return new VsProjectReference(
                     name,

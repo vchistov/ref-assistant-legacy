@@ -120,17 +120,29 @@
   <data name="ExtensionManager_AnalysisError" xml:space="preserve">
     <value>The error(s) occurred during analysis of the project. See InternalException for details.</value>
   </data>
+  <data name="ExtensionManager_Break_Cancelled" xml:space="preserve">
+    <value>user cancelled operation</value>
+  </data>
+  <data name="ExtensionManager_Break_EndProcess" xml:space="preserve">
+    <value>========== Remove: {0} ==========</value>
+  </data>
+  <data name="ExtensionManager_Break_IsNotCliAssembly" xml:space="preserve">
+    <value>project's output is not CLI assembly</value>
+  </data>
+  <data name="ExtensionManager_Break_NotFound" xml:space="preserve">
+    <value>unused references are not found</value>
+  </data>
   <data name="ExtensionManager_BuildError" xml:space="preserve">
-    <value>The error(s) occurred during project compilation. See Output for details.</value>
+    <value>The error(s) occurred during project compilation. See Build output for details.</value>
   </data>
-  <data name="ExtensionManager_IsNotClrAssembly" xml:space="preserve">
-    <value>The project's output is not CLR assembly. Reference Assistant cannot be  used for this project type.</value>
+  <data name="ExtensionManager_EndProcess" xml:space="preserve">
+    <value>========== Remove: succeeded, {0} reference(s) removed ==========</value>
   </data>
-  <data name="ExtensionManager_NotFound" xml:space="preserve">
-    <value>Unused references are not found.</value>
+  <data name="ExtensionManager_RemovingUnusedUsings" xml:space="preserve">
+    <value>Removing unused usings...</value>
   </data>
-  <data name="ExtensionManager_UserCancelledOperation" xml:space="preserve">
-    <value>User cancelled operation.</value>
+  <data name="ExtensionManager_StartProcess" xml:space="preserve">
+    <value>------ Remove Unused References started: Project: {0}, Configuration: {1} ------</value>
   </data>
   <data name="InvertBooleanConverter_InvalidOperation" xml:space="preserve">
     <value>The target must be a boolean.</value>

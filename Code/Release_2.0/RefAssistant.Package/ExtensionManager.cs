@@ -28,15 +28,26 @@ namespace Lardite.RefAssistant
 
             try
             {
-                IVsProjectExtended compiledProject = BuildProject(project);
+                var result = BuildProject(project);
+                if (!result.IsSuccessed)
+                {
+                    LogManager.OutputLog.Error(Resources.ExtensionManager_BuildError);
+                    return;
+                }
+
+                IVsProjectExtended compiledProject = result.Project;
+
+                LogManager.OutputLog.Information(string.Format(Resources.ExtensionManager_StartProcess, compiledProject.Name, compiledProject.Configuration));
+
                 IEnumerable<VsProjectReference> references = GetUnusedReferences(compiledProject);
-                RemoveProjectReferences(compiledProject, references);
+                int count = RemoveProjectReferences(compiledProject, references);
                 RemoveAndSortUsings(compiledProject);
+
+                LogManager.OutputLog.Information(string.Format(Resources.ExtensionManager_EndProcess, count));
             }
             catch (ActionInterruptedException ex)
             {
-                // TODO: update logging
-                LogManager.OutputLog.Information(ex.Message);
+                LogManager.OutputLog.Information(string.Format(Resources.ExtensionManager_Break_EndProcess, ex.Message));
             }
         }
 
@@ -45,8 +56,8 @@ namespace Lardite.RefAssistant
         [Serializable]
         private sealed class ActionInterruptedException : ApplicationException
         {
-            public ActionInterruptedException(string message = null, Exception innerException = null)
-                : base(message, innerException)
+            public ActionInterruptedException(string message)
+                : base(message)
             {
             }
         }

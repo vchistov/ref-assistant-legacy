@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using EnvDTE;
-using Lardite.RefAssistant.Model.Projects;
+
 using Lardite.RefAssistant.VsProxy.Building;
 using Lardite.RefAssistant.VsProxy.Projects;
 
@@ -34,6 +35,8 @@ namespace Lardite.RefAssistant.VsProxy
 
         public IVsProjectExtended GetProject(string projectName)
         {
+            ThrowUtils.ArgumentNullOrEmpty(() => projectName);
+
             var project = GetProjectByName(projectName);
             return VsProjectMapper.Map(project);
         }
@@ -49,6 +52,8 @@ namespace Lardite.RefAssistant.VsProxy
 
         public BuildResult Build(string projectName)
         {
+            ThrowUtils.ArgumentNullOrEmpty(() => projectName);
+
             string configuration = DTE.Solution.SolutionBuild.ActiveConfiguration.Name;
             Project project = GetProjectByName(projectName);
 
@@ -75,16 +80,15 @@ namespace Lardite.RefAssistant.VsProxy
         {
             Array activeProjects = (Array)DTE.ActiveSolutionProjects;
 
-#warning TODO: Use code contracts for validation
-            System.Diagnostics.Debug.Assert(activeProjects.Length != 1);
+            Contract.Assert(activeProjects != null);
+            Contract.Assert(activeProjects.Length == 1);
 
             return (Project)activeProjects.GetValue(0);
         }
 
         private Project GetProjectByName(string projectName)
         {
-#warning TODO: Use code contracts for validation
-            System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(projectName));
+            Contract.Requires(!string.IsNullOrWhiteSpace(projectName));
 
             // check if searched project is active
             Project activeProject = GetActiveSolutionProject();
