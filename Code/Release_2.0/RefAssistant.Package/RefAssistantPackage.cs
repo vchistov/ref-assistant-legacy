@@ -6,8 +6,6 @@
 
 using System;
 using System.ComponentModel.Design;
-using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 using Lardite.RefAssistant.UI;
@@ -42,11 +40,7 @@ namespace Lardite.RefAssistant
         {
             base.Initialize();
 
-            log4net.Config.XmlConfigurator.Configure(new FileInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "App.config")));
-
-            LogManager.ActivityLog = new ActivityLog();
-            LogManager.ErrorListLog = new ErrorListLog(this);
-            LogManager.OutputLog = new OutputLog(this);
+            LogManager.Instance.Initialize(this);
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;

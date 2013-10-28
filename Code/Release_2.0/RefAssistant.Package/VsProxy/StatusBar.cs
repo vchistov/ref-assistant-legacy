@@ -53,7 +53,7 @@ namespace Lardite.RefAssistant.VsProxy
             }
             catch (Exception ex)
             {
-                LogManager.ErrorListLog.Error(string.Empty, ex);
+                LogManager.Instance.Error(ex.Message, ex);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Lardite.RefAssistant.VsProxy
             }
             catch (Exception ex)
             {
-                LogManager.ErrorListLog.Error(string.Empty, ex);
+                LogManager.Instance.Error(ex.Message, ex);
             }
         }
 
@@ -84,7 +84,7 @@ namespace Lardite.RefAssistant.VsProxy
             }
             catch (Exception ex)
             {
-                LogManager.ErrorListLog.Error(string.Empty, ex);
+                LogManager.Instance.Error(ex.Message, ex);
             }
         }
 

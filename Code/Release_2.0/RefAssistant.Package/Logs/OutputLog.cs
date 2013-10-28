@@ -18,7 +18,7 @@ namespace Lardite.RefAssistant
     /// <summary>
     /// Writes information to visual studio output window.
     /// </summary>
-    internal sealed class OutputLog : ILog
+    internal sealed class OutputLog
     {
         private const string WindowPaneName = "Reference Assistant";
 
@@ -31,10 +31,11 @@ namespace Lardite.RefAssistant
         public OutputLog(IServiceProvider serviceProvider)
         {
             ThrowUtils.ArgumentNull(() => serviceProvider);
+
             _outputPane = new Lazy<OutputWindowPane>(() => GetOutputPane(serviceProvider));
         }
 
-        #region ILog Implementation
+        #region Public methods
 
         /// <summary>
         /// Writes information.
@@ -86,7 +87,7 @@ namespace Lardite.RefAssistant
             Error(sb.ToString());
         }
 
-        #endregion // ILog implementation
+        #endregion
 
         #region Private methods
 
@@ -97,7 +98,7 @@ namespace Lardite.RefAssistant
 
         private void LogMessage(string message, TaskErrorCategory errorCategory)
         {
-            if (string.IsNullOrWhiteSpace(message) || OutputPane == null)
+            if (string.IsNullOrWhiteSpace(message) || this.OutputPane == null)
                 return;
 
             StringBuilder sb = new StringBuilder();
@@ -111,8 +112,8 @@ namespace Lardite.RefAssistant
                     sb.Append(message).AppendLine(); break;
             }
 
-            OutputPane.OutputString(sb.ToString());
-            OutputPane.Activate();
+            this.OutputPane.OutputString(sb.ToString());
+            this.OutputPane.Activate();
         }
 
         private OutputWindowPane GetOutputPane(IServiceProvider serviceProvider)
@@ -132,6 +133,6 @@ namespace Lardite.RefAssistant
             return dte.ToolWindows.OutputWindow.OutputWindowPanes.Add(WindowPaneName);
         }
 
-        #endregion // Private methods
+        #endregion
     }
 }
