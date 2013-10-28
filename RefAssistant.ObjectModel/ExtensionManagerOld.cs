@@ -20,6 +20,7 @@ namespace Lardite.RefAssistant
     public sealed class ExtensionManagerOld : IDisposable
     {
         private IShellGateway _shellGateway;
+        private ILogManager _logManager;
         private EventHandlerList _eventList;
 
         #region Nested classes
@@ -36,12 +37,15 @@ namespace Lardite.RefAssistant
         /// Constructor.
         /// </summary>
         /// <param name="shellGateway">Shell gateway.</param>
-        public ExtensionManagerOld(IShellGateway shellGateway)
+        public ExtensionManagerOld(IShellGateway shellGateway, ILogManager logManager)
         {
             if (shellGateway == null)
                 throw Error.ArgumentNull("shellGateway");
+            if (logManager == null)
+                throw Error.ArgumentNull("logManager");
 
             _shellGateway = shellGateway;
+            _logManager = logManager;
             _eventList = new EventHandlerList();
         }
 
@@ -130,8 +134,9 @@ namespace Lardite.RefAssistant
                 return;
             }
 
-            LogManager.OutputLog.Information(Environment.NewLine + string.Format(Resources.ExtensionManager_StartProcess, projectInfo.Name,
-                projectInfo.ConfigurationName, projectInfo.PlatformName));
+            _logManager.Information(Environment.NewLine
+                + string.Format(Resources.ExtensionManager_StartProcess, projectInfo.Name, projectInfo.ConfigurationName, projectInfo.PlatformName));
+
             OnProgressChanged(new ProgressEventArgs(30, Resources.ExtensionManager_GettingUnusedReferences));
 
             var unusedProjectReferences = GetUnusedReferences(projectInfo);
@@ -159,7 +164,7 @@ namespace Lardite.RefAssistant
                 _shellGateway.RemoveUnusedUsings(projectInfo);
             }
 
-            LogManager.OutputLog.Information(string.Format(Resources.ExtensionManager_EndProcess, removedReferencesAmount));
+            _logManager.Information(string.Format(Resources.ExtensionManager_EndProcess, removedReferencesAmount));
             OnProgressChanged(new ProgressEventArgs(100, Resources.ExtensionManager_RemoveReady));
         }
 
@@ -189,7 +194,7 @@ namespace Lardite.RefAssistant
         {
             if (inspectResults == null || !inspectResults.HasUnusedReferences)
             {
-                LogManager.OutputLog.Information(Resources.ExtensionManager_EndProcessWithoutReferences);
+                _logManager.Information(Resources.ExtensionManager_EndProcessWithoutReferences);
                 return false;
             }
 
@@ -205,7 +210,7 @@ namespace Lardite.RefAssistant
         {
             if (!_shellGateway.ConfirmUnusedReferencesRemoving(inspectResults))
             {
-                LogManager.OutputLog.Information(Resources.ExtensionManager_UserCancelledOperation);
+                _logManager.Information(Resources.ExtensionManager_UserCancelledOperation);
                 return false;
             }
 
@@ -223,9 +228,7 @@ namespace Lardite.RefAssistant
                 var result = _shellGateway.BuildProject(null);
                 if (!result.IsClrAssembly && result.IsSuccessed)
                 {
-                    LogManager.ActivityLog.Warning(Resources.ExtensionManager_IsNotClrAssembly);
-                    LogManager.OutputLog.Warning(Resources.ExtensionManager_IsNotClrAssembly);
-                    LogManager.ErrorListLog.Warning(Resources.ExtensionManager_IsNotClrAssembly);
+                    _logManager.Warning(Resources.ExtensionManager_IsNotClrAssembly);
 
                     return null;
                 }
@@ -237,7 +240,7 @@ namespace Lardite.RefAssistant
             }
             catch (Exception ex)
             {
-                LogManager.ActivityLog.Error(Resources.ExtensionManager_CannotGetActiveProject, ex);
+                _logManager.Error(Resources.ExtensionManager_CannotGetActiveProject, ex);
             }
 
             return null;

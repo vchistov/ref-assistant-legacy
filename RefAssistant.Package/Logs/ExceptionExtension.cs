@@ -8,7 +8,7 @@ using System;
 using System.Collections;
 using System.Text;
 
-namespace Lardite.RefAssistant.Extensions
+namespace Lardite.RefAssistant
 {
     /// <summary>
     /// Extentions of the <see cref="System.Exception"/> class.
@@ -25,6 +25,7 @@ namespace Lardite.RefAssistant.Extensions
         public static string ToTraceString(this Exception exception)
         {
             var sb = new StringBuilder(exception.ToString());
+
             if (exception.Data.Count > 0)
             {
                 sb.AppendLine().AppendLine("Exception Data:");
@@ -33,6 +34,7 @@ namespace Lardite.RefAssistant.Extensions
                     sb.AppendFormat("  {0}:{1}", data.Key, data.Value).AppendLine();
                 }
             }
+
             return sb.ToString();
         }
 

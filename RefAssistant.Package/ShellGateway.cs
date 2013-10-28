@@ -193,7 +193,7 @@ namespace Lardite.RefAssistant
         public void RemoveUnusedUsings(ProjectInfo projectInfo)
         {
             var project = GetProjectWrapper(projectInfo);
-            LogManager.OutputLog.Information(string.Format("  {0} -> {1}", projectInfo.Name, Resources.RefAssistantPackage_RemoveUnusedUsings));
+            LogManager.Instance.Information(string.Format("  {0} -> {1}", projectInfo.Name, Resources.RefAssistantPackage_RemoveUnusedUsings));
             project.RemoveUnusedUsings(_serviceProvider);
         }
 
@@ -277,7 +277,7 @@ namespace Lardite.RefAssistant
                 builder.Append("  ").AppendLine(unusedReference.FullName);
             }
 
-            LogManager.OutputLog.Information(builder.ToString().TrimEnd());
+            LogManager.Instance.Information(builder.ToString().TrimEnd());
         }
 
         #endregion // Private methods

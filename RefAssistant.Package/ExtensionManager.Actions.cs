@@ -76,7 +76,7 @@ namespace Lardite.RefAssistant
 
             if (_options.IsRemoveUsingsAfterRemoving.GetValueOrDefault())
             {
-                LogManager.OutputLog.Information(Environment.NewLine + Resources.ExtensionManager_RemovingUnusedUsings);
+                LogManager.Instance.Information(Environment.NewLine + Resources.ExtensionManager_RemovingUnusedUsings);
                 project.RemoveAndSortUsings();
             }
         }
@@ -109,7 +109,7 @@ namespace Lardite.RefAssistant
                 builder.Append("  ").AppendLine(@ref.Name /* TODO: FullName */);
             }
 
-            LogManager.OutputLog.Information(builder.ToString().TrimEnd());
+            LogManager.Instance.Information(builder.ToString().TrimEnd());
         }
 
         #endregion

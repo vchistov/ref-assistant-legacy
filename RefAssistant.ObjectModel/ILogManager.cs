@@ -5,6 +5,8 @@
 //         Belikov Sergey (sbelikov@lardite.com)
 //
 
+using System;
+
 namespace Lardite.RefAssistant
 {
     /// <summary>
@@ -12,23 +14,33 @@ namespace Lardite.RefAssistant
     /// </summary>
     public interface ILogManager
     {
-        #region Properties
+        #region Methods
 
         /// <summary>
-        /// Activity log.
+        /// Writes information.
         /// </summary>
-        ILog ActivityLog { get; set; }
+        /// <param name="message">Message.</param>
+        void Information(string message);
 
         /// <summary>
-        /// Error list log.
+        /// Writes warning.
         /// </summary>
-        ILog ErrorListLog { get; set; }
+        /// <param name="message">Message.</param>
+        void Warning(string message);
 
         /// <summary>
-        /// Output log.
+        /// Writes error.
         /// </summary>
-        ILog OutputLog { get; set; }
+        /// <param name="message">Message.</param>
+        void Error(string message);
 
-        #endregion // Properties
+        /// <summary>
+        /// Writes error.
+        /// </summary>
+        /// <param name="message">Message.</param>
+        /// <param name="exception">Exception.</param>
+        void Error(string message, Exception exception);
+
+        #endregion
     }
 }

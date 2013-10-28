@@ -50,8 +50,7 @@ namespace Lardite.RefAssistant.VsProxy.Projects
                 catch (COMException e)
                 {
                     //Do nothing, go to the next item
-                    if (LogManager.ActivityLog != null)
-                        LogManager.ActivityLog.Error(null, e);
+                    LogManager.Instance.Error(Resources.CSharpProject_RemoveAndSortUsingsError, e);                    
                 }
 
                 if (alreadyOpenFiles.Contains(fileName))

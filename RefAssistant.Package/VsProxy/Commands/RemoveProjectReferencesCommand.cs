@@ -46,13 +46,7 @@ namespace Lardite.RefAssistant.VsProxy.Commands
             }
             catch (Exception ex)
             {
-#if DEBUG
-                LogManager.OutputLog.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured, ex);
-#else
-                LogManager.OutputLog.Information(Resources.RemoveUnusedReferencesCmd_EndProcessFailed);
-#endif
-                LogManager.ErrorListLog.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured);
-                LogManager.ActivityLog.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured, ex);
+                LogManager.Instance.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured, ex);
             }
             finally
             {
@@ -83,9 +77,9 @@ namespace Lardite.RefAssistant.VsProxy.Commands
             //manager.ProcessProject(facade.GetActiveProject());
 
             var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(_serviceProvider).Kind);
-            LogManager.ActivityLog.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));
+            LogManager.Instance.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));
 
-            using (var manager = new ExtensionManagerOld(_shellGateway))
+            using (var manager = new ExtensionManagerOld(_shellGateway, LogManager.Instance))
             {
                 manager.ProgressChanged += OnRemovingProgressChanged;
                 manager.StartProjectCleanup();

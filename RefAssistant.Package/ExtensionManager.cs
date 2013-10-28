@@ -31,23 +31,23 @@ namespace Lardite.RefAssistant
                 var result = BuildProject(project);
                 if (!result.IsSuccessed)
                 {
-                    LogManager.OutputLog.Error(Resources.ExtensionManager_BuildError);
+                    LogManager.Instance.Error(Resources.ExtensionManager_BuildError);
                     return;
                 }
 
                 IVsProjectExtended compiledProject = result.Project;
 
-                LogManager.OutputLog.Information(string.Format(Resources.ExtensionManager_StartProcess, compiledProject.Name, compiledProject.Configuration));
+                LogManager.Instance.Information(string.Format(Resources.ExtensionManager_StartProcess, compiledProject.Name, compiledProject.Configuration));
 
                 IEnumerable<VsProjectReference> references = GetUnusedReferences(compiledProject);
                 int count = RemoveProjectReferences(compiledProject, references);
                 RemoveAndSortUsings(compiledProject);
 
-                LogManager.OutputLog.Information(string.Format(Resources.ExtensionManager_EndProcess, count));
+                LogManager.Instance.Information(string.Format(Resources.ExtensionManager_EndProcess, count));
             }
             catch (ActionInterruptedException ex)
             {
-                LogManager.OutputLog.Information(string.Format(Resources.ExtensionManager_Break_EndProcess, ex.Message));
+                LogManager.Instance.Information(string.Format(Resources.ExtensionManager_Break_EndProcess, ex.Message));
             }
         }
 

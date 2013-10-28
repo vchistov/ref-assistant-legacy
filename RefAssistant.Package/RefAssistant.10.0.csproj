@@ -75,10 +75,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FSharp.ProjectSystem.Base, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="log4net, Version=1.2.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
@@ -137,9 +133,10 @@
     <Compile Include="ExtensionManager.Actions.cs">
       <DependentUpon>ExtensionManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logs\ActivityLog.cs" />
     <Compile Include="Logs\ErrorListLog.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="Logs\ExceptionExtension.cs" />
+    <Compile Include="Logs\LogManager.cs" />
     <Compile Include="Logs\OutputLog.cs" />
     <Compile Include="PkgCmdID.cs" />
     <Compile Include="ProjectNotFoundException.cs" />
@@ -214,9 +211,6 @@
     </Content>
     <Content Include="App.config">
       <IncludeInVSIX>true</IncludeInVSIX>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
     <None Include="VsixManifest.10.0\source.extension.vsixmanifest" />
