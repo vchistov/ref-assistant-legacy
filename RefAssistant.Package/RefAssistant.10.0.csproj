@@ -209,10 +209,6 @@
     <Content Include="Resources\Package.10.0.ico">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="App.config">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="VsixManifest.10.0\source.extension.vsixmanifest" />
     <None Include="..\_Shared\Key.snk">
       <Link>Key.snk</Link>

@@ -10,7 +10,6 @@ using System.Collections;
 using System.Text;
 using EnvDTE;
 using EnvDTE80;
-using Lardite.RefAssistant.Extensions;
 using Microsoft.VisualStudio.Shell;
 
 namespace Lardite.RefAssistant
@@ -50,18 +49,11 @@ namespace Lardite.RefAssistant
         /// Writes warning.
         /// </summary>
         /// <param name="message">Message.</param>
-        public void Warning(string message)
+        public void Warning(string message, Exception exception = null)
         {
-            LogMessage(message, TaskErrorCategory.Warning);
-        }
+            var msg = BuildMessage(message, exception);
 
-        /// <summary>
-        /// Writes error.
-        /// </summary>
-        /// <param name="message">Message.</param>
-        public void Error(string message)
-        {
-            LogMessage(message, TaskErrorCategory.Error);
+            LogMessage(msg, TaskErrorCategory.Warning);
         }
 
         /// <summary>
@@ -69,7 +61,23 @@ namespace Lardite.RefAssistant
         /// </summary>
         /// <param name="message">Message.</param>
         /// <param name="exception">Exception.</param>
-        public void Error(string message, Exception exception)
+        public void Error(string message, Exception exception = null)
+        {
+            string msg = BuildMessage(message, exception);
+
+            LogMessage(msg, TaskErrorCategory.Error);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private OutputWindowPane OutputPane
+        {
+            get { return _outputPane.Value; }
+        }
+
+        private string BuildMessage(string message, Exception exception)
         {
             var sb = new StringBuilder();
             if (!string.IsNullOrWhiteSpace(message))
@@ -84,16 +92,7 @@ namespace Lardite.RefAssistant
                 sb.Append(exception.ToTraceString());
             }
 
-            Error(sb.ToString());
-        }
-
-        #endregion
-
-        #region Private methods
-
-        private OutputWindowPane OutputPane
-        {
-            get { return _outputPane.Value; }
+            return sb.ToString();
         }
 
         private void LogMessage(string message, TaskErrorCategory errorCategory)
