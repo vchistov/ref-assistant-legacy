@@ -37,6 +37,7 @@ namespace Lardite.RefAssistant.VsProxy.Commands
             RemoveProjectReferencesCommand self = EnsureCommand(sender);
             try
             {
+                LogManager.Instance.Clear();
                 self._statusBar.StartStatusBarAnimation(Resources.RemoveProjectReferencesCommand_Searching);
 
                 var manager = new ExtensionManager(self._options, self._facade);

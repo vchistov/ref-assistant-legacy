@@ -6,13 +6,14 @@
 //
 
 using System;
+using System.Diagnostics.Contracts;
 
 namespace Lardite.RefAssistant
 {
     /// <summary>
     /// Log manager.
     /// </summary>
-    public sealed class LogManager : ILogManager
+    internal sealed class LogManager : ILogManager
     {
         private ErrorListLog _errorListLog;
         private OutputLog _outputLog;
@@ -57,13 +58,26 @@ namespace Lardite.RefAssistant
         }
 
         /// <summary>
+        /// Clear logs.
+        /// </summary>
+        public void Clear()
+        {
+            //Contract.Requires(_outputLog != null);
+            //Contract.Requires(_errorListLog != null);
+
+            _outputLog.Clear();
+            _errorListLog.Clear();
+        }
+
+
+        /// <summary>
         /// Writes information.
         /// </summary>
         /// <param name="message">Message.</param>
         public void Information(string message)
         {
-            if (_outputLog != null)
-                _outputLog.Information(message);
+            //Contract.Requires(_outputLog != null);
+            _outputLog.Information(message);
         }
 
         /// <summary>
@@ -72,8 +86,8 @@ namespace Lardite.RefAssistant
         /// <param name="message">Message.</param>
         public void Warning(string message)
         {
-            if (_outputLog != null)
-                _outputLog.Warning(message);
+            //Contract.Requires(_outputLog != null);
+            _outputLog.Warning(message);
         }
 
         /// <summary>
@@ -82,8 +96,8 @@ namespace Lardite.RefAssistant
         /// <param name="message">Message.</param>
         public void Warning(string message, Exception exception)
         {
-            if (_outputLog != null)
-                _outputLog.Warning(message, exception);
+            //Contract.Requires(_outputLog != null);
+            _outputLog.Warning(message, exception);
         }
 
         /// <summary>
@@ -92,10 +106,11 @@ namespace Lardite.RefAssistant
         /// <param name="message">Message.</param>
         public void Error(string message)
         {
-            if (_outputLog != null)
-                _outputLog.Error(message);
-            if (_errorListLog != null)
-                _errorListLog.Error(message);
+            //Contract.Requires(_outputLog != null);
+            //Contract.Requires(_errorListLog != null);
+
+            _outputLog.Error(message);
+            _errorListLog.Error(message);
         }
 
         /// <summary>
@@ -105,10 +120,11 @@ namespace Lardite.RefAssistant
         /// <param name="exception">Exception.</param>
         public void Error(string message, Exception exception)
         {
-            if (_outputLog != null)
-                _outputLog.Error(message, exception);
-            if (_errorListLog != null)
-                _errorListLog.Error(message);            
+            //Contract.Requires(_outputLog != null);
+            //Contract.Requires(_errorListLog != null);
+
+            _outputLog.Error(message, exception);
+            _errorListLog.Error(message);
         }
 
         #endregion
