@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.Diagnostics.Contracts;
 using Microsoft.VisualStudio.Shell;
 
 namespace Lardite.RefAssistant
@@ -15,7 +16,7 @@ namespace Lardite.RefAssistant
     /// </summary>
     internal sealed class ErrorListLog
     {
-        private ErrorListProvider _errorListProvider;
+        private readonly ErrorListProvider _errorListProvider;
 
         /// <summary>
         /// Initialize a new instance of the <see cref="ErrorListLog"/> class.
@@ -28,6 +29,16 @@ namespace Lardite.RefAssistant
             _errorListProvider = new ErrorListProvider(serviceProvider);
         }
 
+        /// <summary>
+        /// Clear error window.
+        /// </summary>
+        public void Clear()
+        {
+            //Contract.Requires(_errorListProvider != null);
+
+            _errorListProvider.Tasks.Clear();
+        }
+        
         /// <summary>
         /// Writes error.
         /// </summary>

@@ -11,6 +11,7 @@ using System.Text;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
+using System.Diagnostics.Contracts;
 
 namespace Lardite.RefAssistant
 {
@@ -35,6 +36,17 @@ namespace Lardite.RefAssistant
         }
 
         #region Public methods
+
+        /// <summary>
+        /// Clear output window.
+        /// </summary>
+        public void Clear()
+        {
+            if (_outputPane.IsValueCreated)
+            {
+                _outputPane.Value.Clear();
+            }
+        }
 
         /// <summary>
         /// Writes information.
