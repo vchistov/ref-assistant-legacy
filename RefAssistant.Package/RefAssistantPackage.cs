@@ -28,6 +28,7 @@ namespace Lardite.RefAssistant
 #elif VS11
     [Guid(GuidList.guidRefAssistant110PkgString)]    
 #endif    
+    [ProvideAutoLoad(Microsoft.VisualStudio.Shell.Interop.UIContextGuids80.SolutionExists)]
     public sealed class RefAssistantPackage : Package
     {
         #region Overriden Package Implementation
@@ -47,10 +48,9 @@ namespace Lardite.RefAssistant
             if (null != mcs)
             {
                 IExtensionOptions options = (IExtensionOptions)GetDialogPage(typeof(GeneralOptionsPage));
-                var shellGateway = new ShellGateway(this, options);
-
+                
                 // Create the command for the menu item.
-                mcs.AddCommand(new RemoveProjectReferencesCommand(this, shellGateway, options));
+                mcs.AddCommand(new RemoveProjectReferencesCommand(this, options));
             }
         }
 

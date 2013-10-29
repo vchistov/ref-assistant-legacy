@@ -76,14 +76,14 @@ namespace Lardite.RefAssistant
 
             if (_options.IsRemoveUsingsAfterRemoving.GetValueOrDefault())
             {
-                LogManager.Instance.Information(Environment.NewLine + Resources.ExtensionManager_RemovingUnusedUsings);
+                LogManager.Instance.Information(Environment.NewLine + "  " + Resources.ExtensionManager_RemovingUnusedUsings);
                 project.RemoveAndSortUsings();
             }
         }
 
         #region Helpers
 
-        public IEnumerable<VsProjectReference> ConfirmUnusedReferencesRemoving(IEnumerable<VsProjectReference> references)
+        private IEnumerable<VsProjectReference> ConfirmUnusedReferencesRemoving(IEnumerable<VsProjectReference> references)
         {
             var window = new UnusedReferencesWindow(references)
                 {
