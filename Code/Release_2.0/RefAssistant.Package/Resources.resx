@@ -145,7 +145,7 @@
     <value>Removing unused usings...</value>
   </data>
   <data name="ExtensionManager_StartProcess" xml:space="preserve">
-    <value>------ Remove Unused References started: Project: {0}, Configuration: {1} ------</value>
+    <value>------ Remove Unused References started: Project: {0} ({2}), Configuration: {1} ------</value>
   </data>
   <data name="InvertBooleanConverter_InvalidOperation" xml:space="preserve">
     <value>The target must be a boolean.</value>
@@ -180,14 +180,11 @@
   <data name="RefAssistantPackage_UnusedReferencesAreNotDefined" xml:space="preserve">
     <value>Need to specify the unused references list before show the window.</value>
   </data>
-  <data name="RemoveProjectReferencesCmd_StartRemoving" xml:space="preserve">
-    <value>Start removing unused references from a project. The project kind is '{0}'.</value>
+  <data name="RemoveProjectReferencesCommand_ErrorOccured" xml:space="preserve">
+    <value>An error has occurred while deleting unused references. See Reference Assistant output window  for details.</value>
   </data>
-  <data name="RemoveUnusedReferencesCmd_EndProcessFailed" xml:space="preserve">
-    <value>========== Remove: failed ==========</value>
-  </data>
-  <data name="RemoveUnusedReferencesCmd_ErrorOccured" xml:space="preserve">
-    <value>An error has occurred while deleting unused references.</value>
+  <data name="RemoveProjectReferencesCommand_Searching" xml:space="preserve">
+    <value>Searching unused references...</value>
   </data>
   <data name="ShellGateway_CannotGetActiveProject" xml:space="preserve">
     <value>Cannot get an active project.</value>

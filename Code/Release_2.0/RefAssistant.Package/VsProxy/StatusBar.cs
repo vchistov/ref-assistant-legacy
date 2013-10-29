@@ -9,52 +9,28 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Lardite.RefAssistant.VsProxy
 {
-    internal class StatusBar
+    internal sealed class StatusBar
     {
-        #region Fields
-
-        private object StatusBarIconID = (short)Microsoft.VisualStudio.Shell.Interop.Constants.SBAI_General;
-
-        private readonly IServiceProvider _serviceProvider;
+        private object StatusBarIconID = (short)Microsoft.VisualStudio.Shell.Interop.Constants.SBAI_Find;
         private readonly Lazy<IVsStatusbar> _statusBar;
 
-        #endregion // Fields
-
-        #region .ctor
-        
         /// <summary>
         /// Initialize a new instance of the <see cref="StatusBar"/>.
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         public StatusBar(IServiceProvider serviceProvider)
         {
-            if (serviceProvider == null)
-            {
-                throw Error.ArgumentNull("serviceProvider");
-            }
+            ThrowUtils.ArgumentNull(() => serviceProvider);
 
-            _serviceProvider = serviceProvider;
-            _statusBar = new Lazy<IVsStatusbar>(() => (IVsStatusbar)_serviceProvider.GetService(typeof(SVsStatusbar)));
+            _statusBar = new Lazy<IVsStatusbar>(() => (IVsStatusbar)serviceProvider.GetService(typeof(SVsStatusbar)));
         }
-
-        #endregion // ctor
-                
-        #region Public methods
 
         /// <summary>
         /// Starts status bar animation.
         /// </summary>
-        public void StartStatusBarAnimation()
+        public void StartStatusBarAnimation(string message)
         {
-            try
-            {
-                _statusBar.Value.SetText(string.Empty);
-                _statusBar.Value.Animation(1, ref StatusBarIconID);
-            }
-            catch (Exception ex)
-            {
-                LogManager.Instance.Warning(ex.Message, ex);
-            }
+            DoAnimation(AnimationState.Start, message);
         }
 
         /// <summary>
@@ -62,25 +38,17 @@ namespace Lardite.RefAssistant.VsProxy
         /// </summary>
         public void StopStatusBarAnimation()
         {
-            try
-            {
-                _statusBar.Value.Animation(0, ref StatusBarIconID);
-            }
-            catch (Exception ex)
-            {
-                LogManager.Instance.Warning(ex.Message, ex);
-            }
+            DoAnimation(AnimationState.Stop, string.Empty);
         }
 
-        /// <summary>
-        /// Sets status bar text.
-        /// </summary>
-        /// <param name="text">Text.</param>
-        public void SetStatusBarText(string text)
+        #region Private methods
+
+        private void DoAnimation(AnimationState state, string message)
         {
             try
             {
-                _statusBar.Value.SetText(text);
+                _statusBar.Value.SetText(message);
+                _statusBar.Value.Animation((int)state, ref StatusBarIconID);
             }
             catch (Exception ex)
             {
@@ -88,6 +56,12 @@ namespace Lardite.RefAssistant.VsProxy
             }
         }
 
-        #endregion // Public methods
+        enum AnimationState
+        {
+            Stop = 0,
+            Start = 1
+        }
+
+        #endregion
     }
 }

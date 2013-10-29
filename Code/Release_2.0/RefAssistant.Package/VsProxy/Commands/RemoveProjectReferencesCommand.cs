@@ -6,92 +6,81 @@
 
 using System;
 using System.ComponentModel.Design;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Lardite.RefAssistant.VsProxy.Projects;
 
 namespace Lardite.RefAssistant.VsProxy.Commands
 {
     [GuidAttribute(GuidList.guidRefAssistantCmdSetString)]
     internal sealed class RemoveProjectReferencesCommand : OleMenuCommand
     {
-        public const int ID = 0x100;
+        private const int ID = 0x100;
 
-        private DTE _dte;
         private readonly StatusBar _statusBar;
-        private IServiceProvider _serviceProvider;
-        private IShellGateway _shellGateway;
         private readonly IExtensionOptions _options;
+        private readonly VsFacade _facade;
 
-        public RemoveProjectReferencesCommand(IServiceProvider serviceProvider, IShellGateway shellGateway, IExtensionOptions options)
+        public RemoveProjectReferencesCommand(IServiceProvider serviceProvider, IExtensionOptions options)
             : base(OnExecuteRemoving, null, OnBeforeQueryStatus, new CommandID(typeof(RemoveProjectReferencesCommand).GUID, ID))
         {
-            _serviceProvider = serviceProvider;
-            _shellGateway = shellGateway;
-            _statusBar = new StatusBar(serviceProvider);
-            _options = options;
-        }
+            ThrowUtils.ArgumentNull(() => serviceProvider);
+            ThrowUtils.ArgumentNull(() => options);
 
-        #region Methods
+            _options = options;
+            _statusBar = new StatusBar(serviceProvider);
+            _facade = new VsFacade(serviceProvider);
+        }
 
         private static void OnExecuteRemoving(object sender, EventArgs e)
         {
-            var self = sender as RemoveProjectReferencesCommand;
-
+            RemoveProjectReferencesCommand self = EnsureCommand(sender);
             try
             {
-                self._statusBar.StartStatusBarAnimation();
-                self.OnExecuteRemoving();
+                self._statusBar.StartStatusBarAnimation(Resources.RemoveProjectReferencesCommand_Searching);
+
+                var manager = new ExtensionManager(self._options, self._facade);
+                manager.ProcessProject(self._facade.GetActiveProject());
             }
             catch (Exception ex)
             {
-                LogManager.Instance.Error(Resources.RemoveUnusedReferencesCmd_ErrorOccured, ex);
+                LogManager.Instance.Error(Resources.RemoveProjectReferencesCommand_ErrorOccured, ex);
             }
             finally
             {
                 if (self != null)
                 {
                     self._statusBar.StopStatusBarAnimation();
-                    self._statusBar.SetStatusBarText(string.Empty);
                 }
             }
         }
 
         private static void OnBeforeQueryStatus(object sender, EventArgs e)
         {
-            var self = sender as RemoveProjectReferencesCommand;
+            RemoveProjectReferencesCommand self = EnsureCommand(sender);
 
-            self.Enabled = self.Visible = self.Supported = self.CanExecuteRemoving();
+            self.Enabled = self.Visible = self.CanExecuteRemoving();
         }
 
         private bool CanExecuteRemoving()
         {
-            return _shellGateway.CanRemoveUnusedReferences(null);
-        }
-
-        private void OnExecuteRemoving()
-        {
-            //var facade = new VsFacade(_serviceProvider);
-            //var manager = new ExtensionManager(_options,  facade);
-            //manager.ProcessProject(facade.GetActiveProject());
-
-            var activeProjectGuid = Guid.Parse(DTEHelper.GetActiveProject(_serviceProvider).Kind);
-            LogManager.Instance.Information(string.Format(Resources.RemoveProjectReferencesCmd_StartRemoving, activeProjectGuid.ToString("D")));
-
-            using (var manager = new ExtensionManagerOld(_shellGateway, LogManager.Instance))
+            try
             {
-                manager.ProgressChanged += OnRemovingProgressChanged;
-                manager.StartProjectCleanup();
+#warning TODO: replace by more 'transparent' code
+                return !_facade.IsBuildInProgress() 
+                    && (_facade.GetActiveProject() != null);
             }
-        }                
+            catch (NotSupportedException)
+            {
+                return false;
+            }
+        }               
 
-        private void OnRemovingProgressChanged(object sender, ProgressEventArgs e)
+        private static RemoveProjectReferencesCommand EnsureCommand(object cmd)
         {
-            string text = e.Progress == 100 ? e.Text : string.Format("[{1}%] {0}", e.Text, e.Progress.ToString());
-            _statusBar.SetStatusBarText(text);
-        }
+            Contract.Requires(cmd is RemoveProjectReferencesCommand);
 
-        #endregion    
+            return (cmd as RemoveProjectReferencesCommand);
+        }
     }
 }
