@@ -78,6 +78,16 @@ namespace Lardite.RefAssistant
         }
 
         /// <summary>
+        /// Writes warning.
+        /// </summary>
+        /// <param name="message">Message.</param>
+        public void Warning(string message, Exception exception)
+        {
+            if (_outputLog != null)
+                _outputLog.Warning(message, exception);
+        }
+
+        /// <summary>
         /// Writes error.
         /// </summary>
         /// <param name="message">Message.</param>

@@ -29,6 +29,13 @@ namespace Lardite.RefAssistant
         void Warning(string message);
 
         /// <summary>
+        /// Writes warning.
+        /// </summary>
+        /// <param name="message">Message.</param>
+        /// <param name="exception">Exception.</param>
+        void Warning(string message, Exception exception);
+
+        /// <summary>
         /// Writes error.
         /// </summary>
         /// <param name="message">Message.</param>
