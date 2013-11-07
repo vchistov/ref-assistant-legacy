@@ -14,9 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8438E7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Model", "RefAssistant.Model\RefAssistant.Model.csproj", "{FEA922F4-F099-498E-93B1-71B3ED035067}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Algorithms.Data", "RefAssistant.Algorithms.Data\RefAssistant.Algorithms.Data.csproj", "{B18DB044-5CD1-425C-B932-750A93F553F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Algorithms", "RefAssistant.Algorithms\RefAssistant.Algorithms.csproj", "{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
 		SccLocalPath0 = .
@@ -29,6 +33,12 @@ Global
 		SccProjectUniqueName3 = RefAssistant.Model\\RefAssistant.Model.csproj
 		SccProjectName3 = RefAssistant.Model
 		SccLocalPath3 = RefAssistant.Model
+		SccProjectUniqueName4 = RefAssistant.Algorithms.Data\\RefAssistant.Algorithms.Data.csproj
+		SccProjectName4 = RefAssistant.Algorithms.Data
+		SccLocalPath4 = RefAssistant.Algorithms.Data
+		SccProjectUniqueName5 = RefAssistant.Algorithms\\RefAssistant.Algorithms.csproj
+		SccProjectName5 = RefAssistant.Algorithms
+		SccLocalPath5 = RefAssistant.Algorithms
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +57,14 @@ Global
 		{FEA922F4-F099-498E-93B1-71B3ED035067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEA922F4-F099-498E-93B1-71B3ED035067}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEA922F4-F099-498E-93B1-71B3ED035067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B18DB044-5CD1-425C-B932-750A93F553F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B18DB044-5CD1-425C-B932-750A93F553F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B18DB044-5CD1-425C-B932-750A93F553F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B18DB044-5CD1-425C-B932-750A93F553F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
