@@ -5,19 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FEA922F4-F099-498E-93B1-71B3ED035067}</ProjectGuid>
+    <ProjectGuid>{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lardite.RefAssistant.Model</RootNamespace>
-    <AssemblyName>Lardite.RefAssistant.Model</AssemblyName>
+    <RootNamespace>Lardite.RefAssistant.Algorithms</RootNamespace>
+    <AssemblyName>Lardite.RefAssistant.Algorithms</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,25 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\_Shared\Key.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,33 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine.cs" />
+    <Compile Include="IAlgorithm.cs" />
+    <Compile Include="IAlgorithmResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Projects\IVsProject.cs" />
-    <Compile Include="Projects\VsProjectReference.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\_Shared\Key.snk">
-      <Link>Key.snk</Link>
-    </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RefAssistant.Algorithms.Data\RefAssistant.Algorithms.Data.csproj">
       <Project>{B18DB044-5CD1-425C-B932-750A93F553F2}</Project>
       <Name>RefAssistant.Algorithms.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RefAssistant.Algorithms\RefAssistant.Algorithms.csproj">
-      <Project>{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}</Project>
-      <Name>RefAssistant.Algorithms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RefAssistant.ObjectModel\RefAssistant.ObjectModel.csproj">
-      <Project>{27667DD0-A302-4D10-9D5F-694F31B1F354}</Project>
-      <Name>RefAssistant.ObjectModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
