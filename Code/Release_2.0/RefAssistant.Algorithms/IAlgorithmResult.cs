@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Lardite.RefAssistant.Algorithms.Data;
 
 namespace Lardite.RefAssistant.Algorithms
@@ -10,8 +7,6 @@ namespace Lardite.RefAssistant.Algorithms
     {
         string AlgorithmAdvice { get; }
 
-        IProject Project { get; }
-
-        IEnumerable<IProjectReference> RequiredFor { get; }
+        IEnumerable<IAssembly> RequiredFor { get; }
     }
 }
