@@ -31,7 +31,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers.Helpers
                     return;
 
                 var baseType = type.BaseType;
-                if (baseType == null || sharedData.UsedTypes.Contains(baseType.AssemblyQualifiedName()))
+                if (baseType == null || sharedData.IsUsedTypeExists(baseType.AssemblyQualifiedName()))
                 {
                     sharedData.AddToUsedTypes(type.AssemblyQualifiedName());
                     return;

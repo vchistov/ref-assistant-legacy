@@ -77,7 +77,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
 
             foreach (TypeDefinition referencedType in referencedAssemblyTypes)
             {
-                if (checkerData.UsedTypes.Contains(referencedType.AssemblyQualifiedName()))
+                if (checkerData.IsUsedTypeExists(referencedType.AssemblyQualifiedName()))
                 {
                     _memberRefsCheckHelper.Check(referencedType, checkerData, evaluator);
                     if (!checkerData.HasCandidateReferences)

@@ -93,23 +93,9 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
         #region Properties
 
         /// <summary>
-        /// Get assemblies' used types.
-        /// </summary>
-        public IList<string> UsedTypes
-        {
-            get
-            {
-                if (_usedTypes == null)
-                    throw Error.ObjectDisposed(this);
-
-                return _usedTypes;
-            }
-        }
-
-        /// <summary>
         /// Get list of assemblies the candidates to remove.
         /// </summary>
-        public IList<ProjectReference> CandidateReferences
+        public IEnumerable<ProjectReference> CandidateReferences
         {
             get
             {
@@ -193,7 +179,7 @@ namespace Lardite.RefAssistant.ObjectModel.Checkers
 
             if (reference != null)
             {
-                CandidateReferences.Remove(reference);
+                _candidateReferences.Remove(reference);
             }
         }
 
