@@ -39,7 +39,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\_Shared\Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xaml.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -112,7 +112,7 @@
     <Compile Include="SimpleCache.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\_Shared\Key.snk">
+    <None Include="..\Key.snk">
       <Link>Key.snk</Link>
     </None>
   </ItemGroup>
