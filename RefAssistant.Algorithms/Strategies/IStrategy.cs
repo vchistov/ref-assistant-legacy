@@ -3,8 +3,8 @@ using Lardite.RefAssistant.Algorithms.Data;
 
 namespace Lardite.RefAssistant.Algorithms.Strategies
 {
-    internal interface IStrategy
+    internal interface IStrategy<T> where T : IType
     {
-        IEnumerable<IAssembly> DoAnalysis(IType type);
+        IEnumerable<IAssembly> DoAnalysis(T inputType);
     }
 }
