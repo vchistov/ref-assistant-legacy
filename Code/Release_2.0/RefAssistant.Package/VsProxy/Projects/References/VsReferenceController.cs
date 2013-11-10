@@ -37,7 +37,7 @@ namespace Lardite.RefAssistant.VsProxy.Projects.References
 
         #region Helpers
 
-        protected VsProjectReference BuildReference(string name, string location, string version, string culture, string publicKeyToken, bool isSpecificVersion)
+        protected VsProjectReference BuildReference(string name, string location, string version, string culture, string publicKeyToken, bool isSpecificVersion, prjReferenceType refType)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Requires(!string.IsNullOrWhiteSpace(location));
@@ -48,7 +48,7 @@ namespace Lardite.RefAssistant.VsProxy.Projects.References
                     location,
                     Version.Parse(version),
                     string.Equals(culture, "0", StringComparison.Ordinal) ? string.Empty : culture,
-                    isSpecificVersion) { PublicKeyToken = publicKeyToken };
+                    isSpecificVersion) { PublicKeyToken = publicKeyToken, IsActiveX = refType == prjReferenceType.prjReferenceTypeActiveX };
         }
 
         #endregion
