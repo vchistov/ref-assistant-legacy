@@ -23,7 +23,8 @@ namespace Lardite.RefAssistant.VsProxy.Projects.References
                         projectRef.Version,
                         projectRef.Culture,
                         projectRef.PublicKeyToken,
-                        false);
+                        false,
+                        projectRef.Type);
                 }
             }
         }

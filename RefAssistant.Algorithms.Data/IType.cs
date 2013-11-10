@@ -16,5 +16,7 @@ namespace Lardite.RefAssistant.Algorithms.Data
         IAssembly ForwardedFrom { get; }
 
         bool IsInterface { get; }
+
+        bool IsImport { get; }
     }
 }

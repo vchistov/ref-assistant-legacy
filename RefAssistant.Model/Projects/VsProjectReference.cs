@@ -29,6 +29,8 @@ namespace Lardite.RefAssistant.Model.Projects
 
         public bool IsSpecificVersion { get; private set; }
 
+        public bool IsActiveX { get; set; }
+
         [Obsolete]
         public string PublicKeyToken { get; set; }
 
