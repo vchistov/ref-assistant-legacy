@@ -10,9 +10,6 @@ namespace Lardite.RefAssistant.Algorithms.Cache
         private readonly ReaderWriterLockSlim _locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         private readonly HashSet<IType> _usedTypes = new HashSet<IType>();
 
-        private UsedTypesCache()
-        { }
-
         public bool IsCached(IType typeInfo)
         {
             _locker.EnterReadLock();
