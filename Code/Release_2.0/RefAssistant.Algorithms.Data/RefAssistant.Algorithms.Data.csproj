@@ -52,7 +52,7 @@
     <Compile Include="ICustomAttribute.cs" />
     <Compile Include="ICustomAttributeProvider.cs" />
     <Compile Include="IDefinedType.cs" />
-    <Compile Include="IImportedType.cs" />
+    <Compile Include="ITypeImport.cs" />
     <Compile Include="IMember.cs" />
     <Compile Include="IMethod.cs" />
     <Compile Include="IMethodParameter.cs" />

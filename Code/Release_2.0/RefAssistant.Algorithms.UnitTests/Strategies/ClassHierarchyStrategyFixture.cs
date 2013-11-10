@@ -48,7 +48,7 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         }
 
         [Test]
-        public void DoAnalysis_NoBaseClassAndPassedClassIsCached_EmptyResult()
+        public void DoAnalysis_InputClassIsCached_EmptyResult()
         {
             IType inputClassObj = CreateTypeMock("Class_A", CreateAssemblyMock("Assembly_I").Object).Object;
 

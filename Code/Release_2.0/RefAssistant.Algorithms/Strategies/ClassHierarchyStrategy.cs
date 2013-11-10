@@ -8,7 +8,7 @@ using Lardite.RefAssistant.Algorithms.Data;
 
 namespace Lardite.RefAssistant.Algorithms.Strategies
 {
-    internal sealed class ClassHierarchyStrategy : IStrategy
+    internal sealed class ClassHierarchyStrategy : IStrategy<IType>
     {
         private readonly IUsedTypesCache _typesCache;
 
