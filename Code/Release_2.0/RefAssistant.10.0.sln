@@ -18,9 +18,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Algorithms.Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Algorithms", "RefAssistant.Algorithms\RefAssistant.Algorithms.csproj", "{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E595D6F0-BCE5-461B-ACC7-A6F91B8BBC4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Algorithms.UnitTests", "RefAssistant.Algorithms.UnitTests\RefAssistant.Algorithms.UnitTests.csproj", "{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
 		SccLocalPath0 = .
@@ -39,6 +43,10 @@ Global
 		SccProjectUniqueName5 = RefAssistant.Algorithms\\RefAssistant.Algorithms.csproj
 		SccProjectName5 = RefAssistant.Algorithms
 		SccLocalPath5 = RefAssistant.Algorithms
+		SccProjectUniqueName6 = RefAssistant.Algorithms.UnitTests\\RefAssistant.Algorithms.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName6 = RefAssistant.10.0.sln
+		SccProjectName6 = RefAssistant.Algorithms.UnitTests
+		SccLocalPath6 = RefAssistant.Algorithms.UnitTests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,8 +73,15 @@ Global
 		{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40BC86F3-2CB9-4420-8B86-FA0FBDA4B8FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94} = {E595D6F0-BCE5-461B-ACC7-A6F91B8BBC4C}
 	EndGlobalSection
 EndGlobal
