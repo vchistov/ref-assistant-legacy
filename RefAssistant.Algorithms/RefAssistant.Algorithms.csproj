@@ -94,6 +94,7 @@
     <Compile Include="Strategies\ClassHierarchyStrategy.cs" />
     <Compile Include="Strategies\ImportedTypeStrategy.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
+    <Compile Include="Strategies\TypeInterfacesStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RefAssistant.Algorithms.Data\RefAssistant.Algorithms.Data.csproj">
