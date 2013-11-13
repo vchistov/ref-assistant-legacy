@@ -4,6 +4,6 @@ namespace Lardite.RefAssistant.Algorithms
 {
     internal interface IAlgorithm<TInput>
     {
-        IAlgorithmResult Process(TInput input);
+        AlgorithmResult Process(TInput input);
     }
 }

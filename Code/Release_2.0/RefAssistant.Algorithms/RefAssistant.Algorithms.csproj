@@ -85,10 +85,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyManifestAlgorithm.cs" />
     <Compile Include="Cache\IUsedTypesCache.cs" />
     <Compile Include="Cache\UsedTypesCache.cs" />
     <Compile Include="IAlgorithm.cs" />
-    <Compile Include="IAlgorithmResult.cs" />
+    <Compile Include="AlgorithmResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Strategies\ClassHierarchyStrategy.cs" />
