@@ -5,7 +5,7 @@ namespace Lardite.RefAssistant.Algorithms.Data
 {
     public interface ICustomAttribute : IEquatable<ICustomAttribute>
     {
-        IType AttributeType { get; }
+        ITypeDefinition AttributeType { get; }
 
         IEnumerable<ICustomAttributeArgument> ConstructorArguments { get; }
 

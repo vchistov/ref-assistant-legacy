@@ -5,7 +5,7 @@ namespace Lardite.RefAssistant.Algorithms.Data
 {
     public interface IMethod : IMember, IEquatable<IMethod>
     {
-        IType ReturnType { get; }
+        ITypeDefinition ReturnType { get; }
 
         IEnumerable<IMethodParameter> Parameters { get; }
     }

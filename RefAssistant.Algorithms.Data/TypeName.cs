@@ -6,9 +6,9 @@ namespace Lardite.RefAssistant.Algorithms.Data
     [Serializable]
     public sealed class TypeName : IEquatable<TypeName>
     {
-        private readonly IType _typeInfo;
+        private readonly ITypeDefinition _typeInfo;
 
-        public TypeName(IType typeInfo)
+        public TypeName(ITypeDefinition typeInfo)
         {
             _typeInfo = typeInfo;
         }

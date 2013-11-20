@@ -80,8 +80,8 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         {
             var type = new Mock<ITypeImport>();
 
-            type.SetupGet<TypeName>(p => p.Name).Returns(new TypeName(It.IsAny<IType>()) { FullName = fullName });
-            type.Setup(m => m.Equals(It.IsAny<IType>())).Returns<IType>((other) => string.Equals(other.Name.FullName, fullName));
+            type.SetupGet<TypeName>(p => p.Name).Returns(new TypeName(It.IsAny<ITypeDefinition>()) { FullName = fullName });
+            type.Setup(m => m.Equals(It.IsAny<ITypeDefinition>())).Returns<ITypeDefinition>((other) => string.Equals(other.Name.FullName, fullName));
             type.SetupGet<IAssembly>(p => p.ImportedFrom).Returns(importedFrom);
 
             return type;

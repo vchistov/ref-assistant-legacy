@@ -8,7 +8,7 @@ using Lardite.RefAssistant.Algorithms.Data;
 
 namespace Lardite.RefAssistant.Algorithms.Strategies
 {
-    internal sealed class ClassHierarchyStrategy : IStrategy<IType>
+    internal sealed class ClassHierarchyStrategy : IStrategy<ITypeDefinition>
     {
         private readonly IUsedTypesCache _typesCache;
 
@@ -18,7 +18,7 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
             _typesCache = typesCache;
         }
 
-        public IEnumerable<IAssembly> DoAnalysis(IType inputType)
+        public IEnumerable<IAssembly> DoAnalysis(ITypeDefinition inputType)
         {
             if (inputType == null)
             {
@@ -41,9 +41,9 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
         /// <summary>
         /// Enumerates all hierarchy, includes the input class.
         /// </summary>
-        private IEnumerable<IType> EnumerateHierarchy(IType inputType)
+        private IEnumerable<ITypeDefinition> EnumerateHierarchy(ITypeDefinition inputType)
         {
-            IType baseType = null;
+            ITypeDefinition baseType = null;
             if (inputType != null)
             {
                 baseType = inputType.BaseType;
@@ -61,7 +61,7 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
         /// <summary>
         /// Takes the assemblies of the type. The first one is the assembly where the type is defined, another one is from which the type is forwarded.
         /// </summary>
-        private IEnumerable<IAssembly> TakeTypeAssemblies(IType inputType)
+        private IEnumerable<IAssembly> TakeTypeAssemblies(ITypeDefinition inputType)
         {
             yield return inputType.Assembly;
 

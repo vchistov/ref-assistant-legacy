@@ -5,8 +5,8 @@ namespace Lardite.RefAssistant.Algorithms.Cache
 {
     internal interface IUsedTypesCache
     {
-        bool IsCached(IType typeInfo);
+        bool IsCached(ITypeDefinition typeInfo);
 
-        void AddType(IType typeInfo);
+        void AddType(ITypeDefinition typeInfo);
     }
 }
