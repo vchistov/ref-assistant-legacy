@@ -2,7 +2,7 @@
 
 namespace Lardite.RefAssistant.Algorithms.Data
 {
-    public interface ITypeImport : IType, IEquatable<ITypeImport>
+    public interface ITypeImport : ITypeDefinition, IEquatable<ITypeImport>
     {
         IAssembly ImportedFrom { get; }
     }

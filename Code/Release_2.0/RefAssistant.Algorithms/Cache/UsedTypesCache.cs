@@ -8,9 +8,9 @@ namespace Lardite.RefAssistant.Algorithms.Cache
     internal sealed class UsedTypesCache : Singleton<UsedTypesCache>, IUsedTypesCache
     {
         private readonly ReaderWriterLockSlim _locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        private readonly HashSet<IType> _usedTypes = new HashSet<IType>();
+        private readonly HashSet<ITypeDefinition> _usedTypes = new HashSet<ITypeDefinition>();
 
-        public bool IsCached(IType typeInfo)
+        public bool IsCached(ITypeDefinition typeInfo)
         {
             _locker.EnterReadLock();
             try
@@ -23,7 +23,7 @@ namespace Lardite.RefAssistant.Algorithms.Cache
             }            
         }
 
-        public void AddType(IType typeInfo)
+        public void AddType(ITypeDefinition typeInfo)
         {
             _locker.EnterWriteLock();
             try

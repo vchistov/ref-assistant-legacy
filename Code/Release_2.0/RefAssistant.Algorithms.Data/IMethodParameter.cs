@@ -7,6 +7,6 @@ namespace Lardite.RefAssistant.Algorithms.Data
 {
     public interface IMethodParameter : ICustomAttributeProvider, IEquatable<IMethodParameter>
     {
-        IType Type { get; }
+        ITypeDefinition Type { get; }
     }
 }
