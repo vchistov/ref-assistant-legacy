@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.Model.Contracts;
 using VSLangProj;
 
 namespace Lardite.RefAssistant.VsProxy.Projects.References

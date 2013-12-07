@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EnvDTE;
-using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.Model.Contracts;
 using Lardite.RefAssistant.VsProxy.Projects.References;
 using VSLangProj;
 

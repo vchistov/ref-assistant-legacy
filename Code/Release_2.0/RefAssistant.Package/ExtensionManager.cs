@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.Model.Contracts;
 using Lardite.RefAssistant.VsProxy;
 using Lardite.RefAssistant.VsProxy.Projects;
 

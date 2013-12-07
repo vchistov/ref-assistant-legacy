@@ -22,9 +22,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E595D6F0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Algorithms.UnitTests", "RefAssistant.Algorithms.UnitTests\RefAssistant.Algorithms.UnitTests.csproj", "{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Model.Contracts", "RefAssistant.Model.Contracts\RefAssistant.Model.Contracts.csproj", "{3DB3EAF6-FF9B-4C82-8022-58034161BD82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.ReflectionServices", "RefAssistant.ReflectionServices\RefAssistant.ReflectionServices.csproj", "{1BEC384B-04EA-429D-AB56-E9D54EF476D5}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
 		SccLocalPath0 = .
@@ -47,6 +51,12 @@ Global
 		SccProjectTopLevelParentUniqueName6 = RefAssistant.10.0.sln
 		SccProjectName6 = RefAssistant.Algorithms.UnitTests
 		SccLocalPath6 = RefAssistant.Algorithms.UnitTests
+		SccProjectUniqueName7 = RefAssistant.Model.Contracts\\RefAssistant.Model.Contracts.csproj
+		SccProjectName7 = RefAssistant.Model.Contracts
+		SccLocalPath7 = RefAssistant.Model.Contracts
+		SccProjectUniqueName8 = RefAssistant.ReflectionServices\\RefAssistant.ReflectionServices.csproj
+		SccProjectName8 = RefAssistant.ReflectionServices
+		SccLocalPath8 = RefAssistant.ReflectionServices
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +87,14 @@ Global
 		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BEC384B-04EA-429D-AB56-E9D54EF476D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BEC384B-04EA-429D-AB56-E9D54EF476D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BEC384B-04EA-429D-AB56-E9D54EF476D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BEC384B-04EA-429D-AB56-E9D54EF476D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

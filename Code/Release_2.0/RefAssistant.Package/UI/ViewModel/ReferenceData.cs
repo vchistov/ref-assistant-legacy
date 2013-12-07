@@ -5,7 +5,7 @@
 //
 
 using System.Windows;
-using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.Model.Contracts;
 using Lardite.RefAssistant.ObjectModel;
 
 namespace Lardite.RefAssistant.UI.ViewModel
