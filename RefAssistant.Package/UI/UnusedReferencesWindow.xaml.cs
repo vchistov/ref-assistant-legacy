@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 using System.Windows;
-using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.Model.Contracts;
 using Lardite.RefAssistant.UI.ViewModel;
 using Microsoft.VisualStudio.PlatformUI;
 

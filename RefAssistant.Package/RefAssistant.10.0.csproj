@@ -235,6 +235,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RefAssistant.Model.Contracts\RefAssistant.Model.Contracts.csproj">
+      <Project>{3DB3EAF6-FF9B-4C82-8022-58034161BD82}</Project>
+      <Name>RefAssistant.Model.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RefAssistant.Model\RefAssistant.Model.csproj">
       <Project>{FEA922F4-F099-498E-93B1-71B3ED035067}</Project>
       <Name>RefAssistant.Model</Name>

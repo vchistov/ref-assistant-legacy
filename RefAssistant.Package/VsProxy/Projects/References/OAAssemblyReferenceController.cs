@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Lardite.RefAssistant.Model.Projects;
+using Lardite.RefAssistant.Model.Contracts;
 using Microsoft.VisualStudio.FSharp.ProjectSystem.Automation;
 using VSLangProj;
 
