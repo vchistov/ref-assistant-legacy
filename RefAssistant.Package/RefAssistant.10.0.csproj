@@ -134,7 +134,6 @@
     <Compile Include="Logs\LogManager.cs" />
     <Compile Include="Logs\OutputLog.cs" />
     <Compile Include="ProjectNotFoundException.cs" />
-    <Compile Include="ThrowUtils.cs" />
     <Compile Include="UI\GeneralOptionsControl.xaml.cs">
       <DependentUpon>GeneralOptionsControl.xaml</DependentUpon>
     </Compile>
@@ -235,6 +234,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RefAssistant.General\RefAssistant.General.csproj">
+      <Project>{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}</Project>
+      <Name>RefAssistant.General</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RefAssistant.Model.Contracts\RefAssistant.Model.Contracts.csproj">
       <Project>{3DB3EAF6-FF9B-4C82-8022-58034161BD82}</Project>
       <Name>RefAssistant.Model.Contracts</Name>

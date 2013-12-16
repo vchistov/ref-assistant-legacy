@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lardite.RefAssistant.Model.Contracts;
 using Lardite.RefAssistant.ObjectModel;
+//using Lardite.RefAssistant.ReflectionServices;
 
 namespace Lardite.RefAssistant.Model
 {
@@ -11,6 +12,18 @@ namespace Lardite.RefAssistant.Model
     {
         public Task<IEnumerable<VsProjectReference>> FindUnusedReferences(IVsProject project)
         {
+            //var configurator = ServiceConfigurator.GetConfigurator(project);
+            //var assemblyService = configurator.AssemblyService;
+
+            //var primaryAssembly = assemblyService.GetProjectAssembly();
+            //var manifestAssemblies = assemblyService.GetManifestAssemblies(primaryAssembly.Id).ToList();
+
+            //foreach (var id in manifestAssemblies)
+            //{
+            //    var asm = assemblyService.GetAssembly(id);
+            //    var innerAsm = assemblyService.GetManifestAssemblies(asm.Id).ToList();
+            //}
+
             return Task<IEnumerable<VsProjectReference>>.Factory.StartNew(() => DoWork(project));
         }
 
