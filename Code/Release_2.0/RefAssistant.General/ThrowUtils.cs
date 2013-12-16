@@ -8,7 +8,7 @@ namespace Lardite.RefAssistant
     /// <summary>
     /// Utility for throwing exceptions. This class is shared between projects.
     /// </summary>
-    internal static class ThrowUtils
+    public static class ThrowUtils
     {
         [DebuggerStepThrough]
         public static void ArgumentNull<T>(Expression<Func<T>> param) where T : class

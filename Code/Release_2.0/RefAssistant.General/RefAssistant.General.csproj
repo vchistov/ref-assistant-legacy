@@ -5,19 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1BEC384B-04EA-429D-AB56-E9D54EF476D5}</ProjectGuid>
+    <ProjectGuid>{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lardite.RefAssistant.ReflectionServices</RootNamespace>
-    <AssemblyName>Lardite.RefAssistant.ReflectionServices</AssemblyName>
+    <RootNamespace>Lardite.RefAssistant</RootNamespace>
+    <AssemblyName>Lardite.RefAssistant.General</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -78,18 +76,6 @@
     <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,44 +85,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyService.cs" />
-    <Compile Include="DataAccess\Containers\AssemblyContainer.cs" />
-    <Compile Include="DataAccess\IAssemblyIdProvider.cs" />
-    <Compile Include="DataAccess\Loaders\AssemblyLoader.cs" />
-    <Compile Include="DataAccess\ProjectAssemblyIdProvider.cs" />
-    <Compile Include="DataAccess\ProjectSpecificAssemblyResolver.cs" />
-    <Compile Include="DataAccess\Readers\AssemblyDefinitionReader.cs" />
-    <Compile Include="DataAccess\Readers\IAssemblyDefinitionReader.cs" />
-    <Compile Include="Data\Assembly\AssemblyId.cs" />
-    <Compile Include="Data\Assembly\AssemblyInfo.cs" />
-    <Compile Include="Data\Assembly\PublicKeyToken.cs" />
-    <Compile Include="IAssemblyService.cs" />
-    <Compile Include="IServiceConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceConfigurator.cs" />
+    <Compile Include="RelayEqualityComparer.cs" />
+    <Compile Include="ThrowUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Key.snk">
       <Link>Key.snk</Link>
     </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\Member\" />
-    <Folder Include="Data\Type\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RefAssistant.General\RefAssistant.General.csproj">
-      <Project>{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}</Project>
-      <Name>RefAssistant.General</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RefAssistant.Model.Contracts\RefAssistant.Model.Contracts.csproj">
-      <Project>{3DB3EAF6-FF9B-4C82-8022-58034161BD82}</Project>
-      <Name>RefAssistant.Model.Contracts</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
