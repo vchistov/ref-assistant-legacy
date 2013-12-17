@@ -1,6 +1,6 @@
-﻿using Lardite.RefAssistant.ReflectionServices.Data.Assembly;
+﻿using System.Diagnostics.Contracts;
+using Lardite.RefAssistant.ReflectionServices.Data.Assembly;
 using Mono.Cecil;
-using System.Diagnostics.Contracts;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Loaders
 {
@@ -10,27 +10,18 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Loaders
 
         public AssemblyLoader(IAssemblyResolver assemblyResolver)
         {
-            ThrowUtils.ArgumentNull(() => assemblyResolver);
+            Contract.Requires(assemblyResolver != null);
             _assemblyResolver = assemblyResolver;
         }
 
         public AssemblyDefinition Load(AssemblyId assemblyId)
         {
-            ThrowUtils.ArgumentNull(() => assemblyId);
+            Contract.Requires(assemblyId != null);
+            Contract.Ensures(Contract.Result<AssemblyDefinition>() != null);
+            Contract.Assert(_assemblyResolver != null);
 
             var assemblyName = AssemblyNameReference.Parse(assemblyId.FullName);
-            return _assemblyResolver.Resolve(assemblyName, GetReaderParameters());
-        }
-
-        private ReaderParameters GetReaderParameters()
-        {
-            Contract.Requires(_assemblyResolver != null);
-
-            return new ReaderParameters
-            {
-                AssemblyResolver = _assemblyResolver,
-                ReadingMode = ReadingMode.Deferred
-            };
+            return _assemblyResolver.Resolve(assemblyName);
         }
     }
 }

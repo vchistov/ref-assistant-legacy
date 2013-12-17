@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using Lardite.RefAssistant.Model.Contracts;
 using Mono.Cecil;
-using System.IO;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess
 {
@@ -15,6 +15,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
         public ProjectSpecificAssemblyResolver(IVsProject project)
         {
             Contract.Requires(project != null);
+            Contract.Ensures(_references != null);
 
             var outputAssemblyDir = Path.GetDirectoryName(project.OutputAssemblyPath);
             AddSearchDirectory(outputAssemblyDir);
@@ -24,15 +25,17 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
                 new RelayEqualityComparer<AssemblyNameReference>(AreEqual));
         }
 
-        public override AssemblyDefinition Resolve(AssemblyNameReference name)
+        public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
         {
             Contract.Requires(name != null);
             Contract.Ensures(Contract.Result<AssemblyDefinition>() != null);
 
+            var readerParams = TweakReaderParameters(parameters);
+
             var projectRef = _references.GetOrDefault(name);
             var assemblyDefinition = projectRef != null
-                ? ReadAssembly(projectRef)
-                : base.Resolve(name);
+                ? ReadAssembly(projectRef, readerParams)
+                : base.Resolve(name, readerParams);
 
             return assemblyDefinition;
         }
@@ -45,10 +48,22 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
             return string.Equals(assemblyName1.Name, assemblyName2.Name, StringComparison.OrdinalIgnoreCase);
         }
 
-        private AssemblyDefinition ReadAssembly(VsProjectReference projectRef)
+        private AssemblyDefinition ReadAssembly(VsProjectReference projectRef, ReaderParameters parameters)
         {
-            var parameters = new ReaderParameters(ReadingMode.Deferred) { AssemblyResolver = this };
+            Contract.Requires(projectRef != null);
+            Contract.Requires(parameters != null);
+
             return AssemblyDefinition.ReadAssembly(projectRef.Location, parameters);
+        }
+
+        private ReaderParameters TweakReaderParameters(ReaderParameters parameters)
+        {
+            var result = parameters ?? new ReaderParameters();
+
+            result.ReadingMode = ReadingMode.Deferred;
+            result.AssemblyResolver = result.AssemblyResolver ?? this;
+
+            return result;
         }
 
         private class ProjectReferenceCache
