@@ -29,6 +29,8 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         AssemblyInfo IAssemblyService.GetAssembly(AssemblyId assemblyId)
         {
+            ThrowUtils.ArgumentNull(() => assemblyId);
+
             var reader = _container.Get(assemblyId);
             return new AssemblyInfo(reader);
         }
