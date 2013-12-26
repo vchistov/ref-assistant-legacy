@@ -250,6 +250,10 @@
       <Project>{27667DD0-A302-4D10-9D5F-694F31B1F354}</Project>
       <Name>RefAssistant.ObjectModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RefAssistant.ReflectionServices\RefAssistant.ReflectionServices.csproj">
+      <Project>{1BEC384B-04EA-429D-AB56-E9D54EF476D5}</Project>
+      <Name>RefAssistant.ReflectionServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

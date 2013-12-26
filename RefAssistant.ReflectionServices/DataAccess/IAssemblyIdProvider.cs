@@ -1,4 +1,4 @@
-﻿using Lardite.RefAssistant.ReflectionServices.Data.Assembly;
+﻿using Lardite.RefAssistant.ReflectionServices.Data;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess
 {

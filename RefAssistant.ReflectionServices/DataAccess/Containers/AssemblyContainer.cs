@@ -1,44 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Lardite.RefAssistant.ReflectionServices.Data.Assembly;
-using Lardite.RefAssistant.ReflectionServices.DataAccess.Loaders;
+using Lardite.RefAssistant.ReflectionServices.Data;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Readers;
+using Mono.Cecil;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Containers
 {
-    internal sealed class AssemblyContainer
+    using AssemblyCache = Lardite.RefAssistant.GenericCache<AssemblyId, AssemblyDefinition>;
+
+    internal sealed class AssemblyContainer : IAssemblyContainer
     {
-        private readonly AssemblyLoader _loader;
+        private readonly IAssemblyResolver _assemblyResolver;
         private readonly AssemblyCache _cache = new AssemblyCache();
 
-        public AssemblyContainer(AssemblyLoader loader)
+        public AssemblyContainer(IAssemblyResolver assemblyResolver)
         {
-            Contract.Requires(loader != null);
-            _loader = loader;
+            Contract.Requires(assemblyResolver != null);
+            _assemblyResolver = assemblyResolver;
         }
 
-        public IAssemblyDefinitionReader Get(AssemblyId assemblyId)
+        AssemblyDefinition IAssemblyContainer.Get(AssemblyId assemblyId)
         {
-            return _cache.Get(
-                assemblyId,
-                (id) => new AssemblyDefinitionReader(_loader.Load(id)));
+            return _cache.Get(assemblyId, (id) => LoadAssembly(id));
         }
 
-        private class AssemblyCache
+        private AssemblyDefinition LoadAssembly(AssemblyId assemblyId)
         {
-            private readonly IDictionary<AssemblyId, IAssemblyDefinitionReader> _cache = new Dictionary<AssemblyId, IAssemblyDefinitionReader>();
+            Contract.Requires(assemblyId != null);
+            Contract.Ensures(Contract.Result<AssemblyDefinition>() != null);
+            Contract.Assert(_assemblyResolver != null);
 
-            public IAssemblyDefinitionReader Get(AssemblyId assemblyId, Func<AssemblyId, IAssemblyDefinitionReader> valueResolver)
-            {
-                IAssemblyDefinitionReader assemblyDefinition = null;
-                if (!_cache.TryGetValue(assemblyId, out assemblyDefinition))
-                {
-                    assemblyDefinition = valueResolver(assemblyId);
-                    _cache.Add(assemblyId, assemblyDefinition);
-                }
-                return assemblyDefinition;
-            }
+            var assemblyName = AssemblyNameReference.Parse(assemblyId.FullName);
+            return _assemblyResolver.Resolve(assemblyName);
         }
     }
 }

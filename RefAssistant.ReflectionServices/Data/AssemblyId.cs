@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace Lardite.RefAssistant.ReflectionServices.Data.Assembly
+namespace Lardite.RefAssistant.ReflectionServices.Data
 {
     [Serializable]
     public sealed class AssemblyId : IEquatable<AssemblyId>

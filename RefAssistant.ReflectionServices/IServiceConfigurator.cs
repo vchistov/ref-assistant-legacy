@@ -8,5 +8,7 @@ namespace Lardite.RefAssistant.ReflectionServices
     public interface IServiceConfigurator
     {
         IAssemblyService AssemblyService { get; }
+
+        ICustomAttributeService CustomAttributeService { get; }
     }
 }
