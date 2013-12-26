@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
-namespace Lardite.RefAssistant.ReflectionServices.Data.Assembly
+namespace Lardite.RefAssistant.ReflectionServices.Data
 {
     [Serializable]
     public sealed class PublicKeyToken : IEquatable<PublicKeyToken>

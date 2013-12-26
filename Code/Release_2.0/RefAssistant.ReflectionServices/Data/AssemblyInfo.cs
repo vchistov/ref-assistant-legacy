@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Readers;
 
-namespace Lardite.RefAssistant.ReflectionServices.Data.Assembly
+namespace Lardite.RefAssistant.ReflectionServices.Data
 {
     public sealed class AssemblyInfo
     {

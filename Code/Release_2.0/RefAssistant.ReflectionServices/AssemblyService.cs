@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lardite.RefAssistant.ReflectionServices.Data.Assembly;
+using Lardite.RefAssistant.ReflectionServices.Data;
 using Lardite.RefAssistant.ReflectionServices.DataAccess;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Containers;
+using Lardite.RefAssistant.ReflectionServices.DataAccess.Readers;
+using Mono.Cecil;
 
 namespace Lardite.RefAssistant.ReflectionServices
 {
-    internal class AssemblyService : IAssemblyService
+    internal sealed class AssemblyService : IAssemblyService
     {
         private readonly Lazy<AssemblyId> _projectAssemblyId;
-        private readonly AssemblyContainer _container;
+        private readonly IAssemblyContainer _container;
 
-        public AssemblyService(IAssemblyIdProvider projectAssemblyIdProvider, AssemblyContainer container)
+        internal AssemblyService(IAssemblyIdProvider projectAssemblyIdProvider, IAssemblyContainer container)
         {
             ThrowUtils.ArgumentNull(() => projectAssemblyIdProvider);
             ThrowUtils.ArgumentNull(() => container);
@@ -23,7 +25,7 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         AssemblyInfo IAssemblyService.GetProjectAssembly()
         {
-            var reader = _container.Get(_projectAssemblyId.Value);
+            var reader = CreateReader(_container.Get(_projectAssemblyId.Value));
             return new AssemblyInfo(reader);
         }
 
@@ -31,7 +33,7 @@ namespace Lardite.RefAssistant.ReflectionServices
         {
             ThrowUtils.ArgumentNull(() => assemblyId);
 
-            var reader = _container.Get(assemblyId);
+            var reader = CreateReader(_container.Get(assemblyId));
             return new AssemblyInfo(reader);
         }
 
@@ -39,10 +41,15 @@ namespace Lardite.RefAssistant.ReflectionServices
         {
             ThrowUtils.ArgumentNull(() => assemblyId);
 
-            var reader = _container.Get(assemblyId);
+            var reader = CreateReader(_container.Get(assemblyId));
             return reader
                 .GetManifestAssemblies()
                 .Select(a => AssemblyId.GetId(a));
+        }
+
+        private IAssemblyDefinitionReader CreateReader(AssemblyDefinition assemblyDefinition)
+        {
+            return new AssemblyDefinitionReader(assemblyDefinition);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Mono.Cecil;
-using System.Diagnostics.Contracts;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
 {
