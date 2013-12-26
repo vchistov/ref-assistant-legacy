@@ -127,11 +127,7 @@
       <Link>Key.snk</Link>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\Assembly\" />
-    <Folder Include="Data\Member\" />
-  </ItemGroup>
+  </ItemGroup>  
   <ItemGroup>
     <ProjectReference Include="..\RefAssistant.General\RefAssistant.General.csproj">
       <Project>{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}</Project>
