@@ -101,10 +101,13 @@
   <ItemGroup>
     <Compile Include="AssemblyService.cs" />
     <Compile Include="CecilExtensions\MetadataScopeExtensions.cs" />
+    <Compile Include="CecilExtensions\TypeDefinitionExtensions.cs" />
     <Compile Include="CustomAttributeService.cs" />
     <Compile Include="DataAccess\Containers\AssemblyContainer.cs" />
     <Compile Include="DataAccess\Containers\IAssemblyContainer.cs" />
     <Compile Include="DataAccess\IAssemblyIdProvider.cs" />
+    <Compile Include="DataAccess\Lookups\ITypeLookup.cs" />
+    <Compile Include="DataAccess\Lookups\TypeLookup.cs" />
     <Compile Include="DataAccess\ProjectAssemblyIdProvider.cs" />
     <Compile Include="DataAccess\ProjectSpecificAssemblyResolver.cs" />
     <Compile Include="DataAccess\Readers\AssemblyDefinitionReader.cs" />
@@ -127,7 +130,7 @@
       <Link>Key.snk</Link>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>  
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RefAssistant.General\RefAssistant.General.csproj">
       <Project>{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}</Project>
