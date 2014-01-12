@@ -3,10 +3,10 @@ using Mono.Cecil;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess
 {
-    internal interface ITypeIdResolver
+    internal interface ITypeIdProvider
     {
-        TypeId GetTypeId(TypeReference typeRef);
+        TypeId GetId(TypeReference typeRef);
 
-        TypeId GetTypeId(TypeDefinition typeDef);
+        TypeId GetId(TypeDefinition typeDef);
     }
 }

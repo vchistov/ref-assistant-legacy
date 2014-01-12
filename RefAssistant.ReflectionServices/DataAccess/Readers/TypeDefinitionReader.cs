@@ -9,26 +9,26 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
     internal sealed class TypeDefinitionReader : ITypeDefinitionReader
     {
         private readonly TypeDefinition _typeDef;
-        private readonly ITypeIdResolver _typeIdResolver;
+        private readonly ITypeIdProvider _typeIdProvider;
 
-        internal TypeDefinitionReader(TypeDefinition typeDef, ITypeIdResolver typeIdResolver)
+        internal TypeDefinitionReader(TypeDefinition typeDef, ITypeIdProvider typeIdProvider)
         {
             Contract.Requires(typeDef != null);
-            Contract.Requires(typeIdResolver != null);
+            Contract.Requires(typeIdProvider != null);
 
             _typeDef = typeDef;
-            _typeIdResolver = typeIdResolver;
+            _typeIdProvider = typeIdProvider;
         }
 
         TypeId ITypeDefinitionReader.GetId()
         {
-            return _typeIdResolver.GetTypeId(_typeDef);
+            return _typeIdProvider.GetId(_typeDef);
         }
 
         TypeId ITypeDefinitionReader.GetBaseType()
         {
             return _typeDef.BaseType != null
-                ? _typeIdResolver.GetTypeId(_typeDef.BaseType)
+                ? _typeIdProvider.GetId(_typeDef.BaseType)
                 : null;
         }
 
@@ -36,7 +36,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
         {
             return _typeDef
                 .GetInterfaces()
-                .Select(@interface => _typeIdResolver.GetTypeId(@interface))
+                .Select(@interface => _typeIdProvider.GetId(@interface))
                 .Distinct();
         }
 

@@ -10,15 +10,15 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
     internal sealed class AssemblyDefinitionReader : IAssemblyDefinitionReader
     {
         private readonly AssemblyDefinition _assemblyDef;
-        private readonly ITypeIdResolver _typeIdResolver;
+        private readonly ITypeIdProvider _typeIdProvider;
 
-        internal AssemblyDefinitionReader(AssemblyDefinition assemblyDef, ITypeIdResolver typeIdResolver)
+        internal AssemblyDefinitionReader(AssemblyDefinition assemblyDef, ITypeIdProvider typeIdProvider)
         {
             Contract.Requires(assemblyDef != null);
-            Contract.Requires(typeIdResolver != null);
+            Contract.Requires(typeIdProvider != null);
 
             _assemblyDef = assemblyDef;
-            _typeIdResolver = typeIdResolver;
+            _typeIdProvider = typeIdProvider;
         }
 
         AssemblyId IAssemblyDefinitionReader.GetId()
@@ -77,7 +77,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
             return _assemblyDef
                 .Modules
                 .GetTypeDefinitions()
-                .Select(typeDef => _typeIdResolver.GetTypeId(typeDef));
+                .Select(typeDef => _typeIdProvider.GetId(typeDef));
         }
 
         IEnumerable<TypeId> IAssemblyDefinitionReader.GetTypeReferences()
@@ -87,7 +87,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
             return _assemblyDef
                 .Modules
                 .GetTypeReferences()
-                .Select(typeDef => _typeIdResolver.GetTypeId(typeDef));
+                .Select(typeDef => _typeIdProvider.GetId(typeDef));
         }
     }
 }

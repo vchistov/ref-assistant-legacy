@@ -4,11 +4,11 @@ using Mono.Cecil;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess
 {
-    internal sealed class TypeIdResolver : Singleton<TypeIdResolver>, ITypeIdResolver
+    internal sealed class TypeIdProvider : Singleton<TypeIdProvider>, ITypeIdProvider
     {
-        private TypeIdResolver() { }
+        private TypeIdProvider() { }
 
-        public TypeId GetTypeId(TypeReference typeRef)
+        public TypeId GetId(TypeReference typeRef)
         {
             IMetadataScope forwardedFromScope;
             var typeDef = typeRef.Resolve(out forwardedFromScope);
@@ -17,17 +17,17 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
                 ? (AssemblyId)null
                 : AssemblyId.GetId(forwardedFromScope.GetAssemblyNameReference().FullName);
 
-            return GetTypeId(typeDef, forwardedFromId);
+            return GetId(typeDef, forwardedFromId);
         }
 
-        public TypeId GetTypeId(TypeDefinition typeDef)
+        public TypeId GetId(TypeDefinition typeDef)
         {
-            return GetTypeId(typeDef, null);
+            return GetId(typeDef, null);
         }
 
         #region Helpers
 
-        private static TypeId GetTypeId(TypeDefinition typeDef, AssemblyId forwardedFromId)
+        private static TypeId GetId(TypeDefinition typeDef, AssemblyId forwardedFromId)
         {
             Contract.Requires(typeDef != null);
             Contract.Ensures(Contract.Result<TypeId>() != null);
