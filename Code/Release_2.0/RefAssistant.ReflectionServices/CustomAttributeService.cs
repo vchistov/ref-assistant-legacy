@@ -50,7 +50,7 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         private ICustomAttributeReader CreateReader(CustomAttribute attribute)
         {
-            return new CustomAttributeReader(attribute, TypeIdResolver.Instance);
+            return new CustomAttributeReader(attribute, TypeIdProvider.Instance);
         }
 
         #endregion

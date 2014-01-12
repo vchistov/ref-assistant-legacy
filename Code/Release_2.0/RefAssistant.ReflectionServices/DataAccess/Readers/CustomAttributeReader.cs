@@ -9,20 +9,20 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
     internal class CustomAttributeReader : ICustomAttributeReader
     {
         private readonly CustomAttribute _customAttribute;
-        private readonly ITypeIdResolver _typeIdResolver;
+        private readonly ITypeIdProvider _typeIdProvider;
 
-        internal CustomAttributeReader(CustomAttribute customAttribute, ITypeIdResolver typeIdResolver)
+        internal CustomAttributeReader(CustomAttribute customAttribute, ITypeIdProvider typeIdProvider)
         {
             Contract.Requires(customAttribute != null);
-            Contract.Requires(typeIdResolver != null);
+            Contract.Requires(typeIdProvider != null);
 
             _customAttribute = customAttribute;
-            _typeIdResolver = typeIdResolver;
+            _typeIdProvider = typeIdProvider;
         }
 
         TypeId ICustomAttributeReader.GetAttributeType()
         {
-            return _typeIdResolver.GetTypeId(_customAttribute.AttributeType);
+            return _typeIdProvider.GetId(_customAttribute.AttributeType);
         }
 
         IEnumerable<TypeId> ICustomAttributeReader.GetConstructorArguments()
@@ -50,7 +50,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
                     ? (TypeReference)arg.Value
                     : arg.Type;
 
-                yield return _typeIdResolver.GetTypeId(typeRef);
+                yield return _typeIdProvider.GetId(typeRef);
             }
         }
 

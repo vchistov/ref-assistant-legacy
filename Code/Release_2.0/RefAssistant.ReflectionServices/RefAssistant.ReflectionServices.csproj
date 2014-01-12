@@ -107,7 +107,7 @@
     <Compile Include="DataAccess\Containers\AssemblyContainer.cs" />
     <Compile Include="DataAccess\Containers\IAssemblyContainer.cs" />
     <Compile Include="DataAccess\IAssemblyIdProvider.cs" />
-    <Compile Include="DataAccess\ITypeIdResolver.cs" />
+    <Compile Include="DataAccess\ITypeIdProvider.cs" />
     <Compile Include="DataAccess\Lookups\ITypeLookup.cs" />
     <Compile Include="DataAccess\Lookups\TypeLookup.cs" />
     <Compile Include="DataAccess\ProjectAssemblyIdProvider.cs" />
@@ -118,7 +118,7 @@
     <Compile Include="DataAccess\Readers\ICustomAttributeReader.cs" />
     <Compile Include="DataAccess\Readers\ITypeDefinitionReader.cs" />
     <Compile Include="DataAccess\Readers\TypeDefinitionReader.cs" />
-    <Compile Include="DataAccess\TypeIdResolver.cs" />
+    <Compile Include="DataAccess\TypeIdProvider.cs" />
     <Compile Include="Data\AssemblyId.cs" />
     <Compile Include="Data\AssemblyInfo.cs" />
     <Compile Include="Data\PublicKeyToken.cs" />

@@ -58,7 +58,7 @@ namespace Lardite.RefAssistant.ReflectionServices
             Contract.Requires(typeDef != null);
             Contract.Ensures(Contract.Result<ITypeDefinitionReader>() != null);
 
-            return new TypeDefinitionReader(typeDef, TypeIdResolver.Instance);
+            return new TypeDefinitionReader(typeDef, TypeIdProvider.Instance);
         }
 
         #endregion

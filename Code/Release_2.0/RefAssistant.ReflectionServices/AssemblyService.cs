@@ -65,7 +65,7 @@ namespace Lardite.RefAssistant.ReflectionServices
         
         private IAssemblyDefinitionReader CreateReader(AssemblyDefinition assemblyDef)
         {
-            return new AssemblyDefinitionReader(assemblyDef, TypeIdResolver.Instance);
+            return new AssemblyDefinitionReader(assemblyDef, TypeIdProvider.Instance);
         }
 
         #endregion
