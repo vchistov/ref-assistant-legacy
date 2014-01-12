@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Lardite.RefAssistant.Algorithms
+namespace Lardite.RefAssistant
 {
     /// <summary>
     /// Thread safe, generic singleton.
@@ -8,7 +8,7 @@ namespace Lardite.RefAssistant.Algorithms
     /// <remarks>
     /// http://www.codeproject.com/Articles/33770/Static-constructors-and-way-forward-NET-optimized
     /// </remarks>
-    internal class Singleton<T> where T : class
+    public class Singleton<T> where T : class
     {
         public static T Instance
         {

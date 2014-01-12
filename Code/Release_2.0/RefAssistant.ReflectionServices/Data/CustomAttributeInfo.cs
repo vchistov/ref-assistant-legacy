@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.Contracts;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Readers;
 
 namespace Lardite.RefAssistant.ReflectionServices.Data
 {
+    [Serializable]
     public sealed class CustomAttributeInfo
     {
         internal CustomAttributeInfo(ICustomAttributeReader reader)
         {
-            ThrowUtils.ArgumentNull(() => reader);
+            Contract.Requires(reader != null);
 
             this.AttributeType = reader.GetAttributeType();
             this.ConstructorArguments = reader.GetConstructorArguments();

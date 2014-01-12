@@ -13,12 +13,12 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Lookups
 
         internal TypeLookup(IAssemblyContainer container)
         {
-            ThrowUtils.ArgumentNull(() => container);
+            Contract.Requires(container != null);
 
             _container = container;
         }
 
-        public TypeDefinition Get(TypeId typeId)
+        TypeDefinition ITypeLookup.Get(TypeId typeId)
         {
             Contract.Requires(typeId != null);
             Contract.Ensures(Contract.Result<TypeDefinition>() != null);
@@ -28,7 +28,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Lookups
             Contract.Assert(assembly != null);
 
             return assembly.Modules
-                .GetTypesDefinitions()
+                .GetTypeDefinitions()
                 .Single(t => string.Equals(t.FullName, typeId.FullName, StringComparison.Ordinal));
         }        
     }
