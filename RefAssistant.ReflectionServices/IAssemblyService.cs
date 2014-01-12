@@ -10,5 +10,9 @@ namespace Lardite.RefAssistant.ReflectionServices
         AssemblyInfo GetAssembly(AssemblyId assemblyId);
 
         IEnumerable<AssemblyId> GetManifestAssemblies(AssemblyId assemblyId);
+
+        IEnumerable<TypeId> GetDefinedTypes(AssemblyId assemblyId);
+
+        IEnumerable<TypeId> GetReferencedTypes(AssemblyId assemblyId);
     }
 }

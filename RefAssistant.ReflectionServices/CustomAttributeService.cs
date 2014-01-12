@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Lardite.RefAssistant.ReflectionServices.Data;
+using Lardite.RefAssistant.ReflectionServices.DataAccess;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Containers;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Lookups;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Readers;
@@ -15,7 +16,7 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         internal CustomAttributeService(IAssemblyContainer container)
         {
-            ThrowUtils.ArgumentNull(() => container);
+            Contract.Requires(container != null);
 
             _container = container;
             _typeLookup = new TypeLookup(container);
@@ -49,7 +50,7 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         private ICustomAttributeReader CreateReader(CustomAttribute attribute)
         {
-            return new CustomAttributeReader(attribute);
+            return new CustomAttributeReader(attribute, TypeIdResolver.Instance);
         }
 
         #endregion

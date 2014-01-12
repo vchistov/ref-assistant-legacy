@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.Contracts;
 using Lardite.RefAssistant.ReflectionServices.Data;
 using Lardite.RefAssistant.ReflectionServices.DataAccess;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Containers;
@@ -16,8 +16,8 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         internal AssemblyService(IAssemblyIdProvider projectAssemblyIdProvider, IAssemblyContainer container)
         {
-            ThrowUtils.ArgumentNull(() => projectAssemblyIdProvider);
-            ThrowUtils.ArgumentNull(() => container);
+            Contract.Requires(projectAssemblyIdProvider != null);
+            Contract.Requires(container != null);
 
             _projectAssemblyId = new Lazy<AssemblyId>(projectAssemblyIdProvider.GetId);
             _container = container;
@@ -42,14 +42,32 @@ namespace Lardite.RefAssistant.ReflectionServices
             ThrowUtils.ArgumentNull(() => assemblyId);
 
             var reader = CreateReader(_container.Get(assemblyId));
-            return reader
-                .GetManifestAssemblies()
-                .Select(a => AssemblyId.GetId(a));
+            return reader.GetManifestAssemblies();
         }
 
-        private IAssemblyDefinitionReader CreateReader(AssemblyDefinition assemblyDefinition)
+        IEnumerable<TypeId> IAssemblyService.GetDefinedTypes(AssemblyId assemblyId)
         {
-            return new AssemblyDefinitionReader(assemblyDefinition);
+            ThrowUtils.ArgumentNull(() => assemblyId);
+
+            var reader = CreateReader(_container.Get(assemblyId));
+            return reader.GetTypeDefinitions();
         }
+
+        IEnumerable<TypeId> IAssemblyService.GetReferencedTypes(AssemblyId assemblyId)
+        {
+            ThrowUtils.ArgumentNull(() => assemblyId);
+
+            var reader = CreateReader(_container.Get(assemblyId));
+            return reader.GetTypeReferences();
+        }
+
+        #region Helpers
+        
+        private IAssemblyDefinitionReader CreateReader(AssemblyDefinition assemblyDef)
+        {
+            return new AssemblyDefinitionReader(assemblyDef, TypeIdResolver.Instance);
+        }
+
+        #endregion
     }
 }

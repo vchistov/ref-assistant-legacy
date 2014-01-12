@@ -10,6 +10,7 @@ namespace Lardite.RefAssistant.ReflectionServices
     {
         private readonly IVsProject _project;
         private readonly Lazy<IAssemblyService> _assemblyService;
+        private readonly Lazy<ITypeService> _typeService;
         private readonly Lazy<ICustomAttributeService> _customAttributeService;
         private readonly Lazy<IAssemblyContainer> _assemblyContainer;
 
@@ -20,6 +21,7 @@ namespace Lardite.RefAssistant.ReflectionServices
             _project = project;
             _assemblyContainer = new Lazy<IAssemblyContainer>(CreateAssemblyContainer);
             _assemblyService = new Lazy<IAssemblyService>(InitAssemblyService);
+            _typeService = new Lazy<ITypeService>(InitTypeService);
             _customAttributeService = new Lazy<ICustomAttributeService>(InitCustomAttributeService);            
         }
 
@@ -33,11 +35,18 @@ namespace Lardite.RefAssistant.ReflectionServices
             get { return _assemblyService.Value; }
         }
 
+        ITypeService IServiceConfigurator.TypeService
+        {
+            get { return _typeService.Value; }
+        }
+
         ICustomAttributeService IServiceConfigurator.CustomAttributeService
         {
             get { return _customAttributeService.Value; }
         }
 
+        #region Helpers
+        
         private IAssemblyContainer AssemblyContainer
         {
             get { return _assemblyContainer.Value; }
@@ -50,12 +59,17 @@ namespace Lardite.RefAssistant.ReflectionServices
 
             var projectAssemblyIdProvider = new ProjectAssemblyIdProvider(_project.OutputAssemblyPath);
 
-            return new AssemblyService(projectAssemblyIdProvider, AssemblyContainer);
+            return new AssemblyService(projectAssemblyIdProvider, this.AssemblyContainer);
+        }
+
+        private ITypeService InitTypeService()
+        {
+            return new TypeService(this.AssemblyContainer);
         }
 
         private ICustomAttributeService InitCustomAttributeService()
         {
-            return new CustomAttributeService(AssemblyContainer);
+            return new CustomAttributeService(this.AssemblyContainer);
         }
 
         private IAssemblyContainer CreateAssemblyContainer()
@@ -66,5 +80,7 @@ namespace Lardite.RefAssistant.ReflectionServices
             var resolver = new ProjectSpecificAssemblyResolver(_project);
             return new AssemblyContainer(resolver);
         }
+
+        #endregion
     }
 }

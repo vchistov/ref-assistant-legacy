@@ -2,68 +2,92 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Lardite.RefAssistant.ReflectionServices.Data;
 using Mono.Cecil;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
 {
     internal sealed class AssemblyDefinitionReader : IAssemblyDefinitionReader
     {
-        private readonly AssemblyDefinition _assemblyDefinition;
+        private readonly AssemblyDefinition _assemblyDef;
+        private readonly ITypeIdResolver _typeIdResolver;
 
-        internal AssemblyDefinitionReader(AssemblyDefinition assemblyDefinition)
+        internal AssemblyDefinitionReader(AssemblyDefinition assemblyDef, ITypeIdResolver typeIdResolver)
         {
-            Contract.Requires(assemblyDefinition != null);
+            Contract.Requires(assemblyDef != null);
+            Contract.Requires(typeIdResolver != null);
 
-            _assemblyDefinition = assemblyDefinition;
+            _assemblyDef = assemblyDef;
+            _typeIdResolver = typeIdResolver;
+        }
+
+        AssemblyId IAssemblyDefinitionReader.GetId()
+        {
+            Contract.Ensures(Contract.Result<AssemblyId>() != null);
+
+            return AssemblyId.GetId(_assemblyDef.FullName);
         }
 
         string IAssemblyDefinitionReader.GetName()
         {
             Contract.Ensures(!string.IsNullOrWhiteSpace(Contract.Result<string>()));
 
-            return _assemblyDefinition.Name.Name;
+            return _assemblyDef.Name.Name;
         }
 
         Version IAssemblyDefinitionReader.GetVersion()
         {
             Contract.Ensures(Contract.Result<Version>() != null);
 
-            return _assemblyDefinition.Name.Version;
+            return _assemblyDef.Name.Version;
         }
 
         string IAssemblyDefinitionReader.GetCulture()
         {
             Contract.Ensures(!string.IsNullOrWhiteSpace(Contract.Result<string>()));
 
-            return string.IsNullOrWhiteSpace(_assemblyDefinition.Name.Culture)
+            return string.IsNullOrWhiteSpace(_assemblyDef.Name.Culture)
                 ? "neutral"
-                : _assemblyDefinition.Name.Culture;
+                : _assemblyDef.Name.Culture;
         }
 
         byte[] IAssemblyDefinitionReader.GetPublicKeyToken()
         {
             Contract.Ensures(Contract.Result<byte[]>() != null);
 
-            return _assemblyDefinition.Name.HasPublicKey
-                ? _assemblyDefinition.Name.PublicKeyToken
+            return _assemblyDef.Name.HasPublicKey
+                ? _assemblyDef.Name.PublicKeyToken
                 : new byte[0];
         }
 
-        string IAssemblyDefinitionReader.GetFullName()
+        IEnumerable<AssemblyId> IAssemblyDefinitionReader.GetManifestAssemblies()
         {
-            Contract.Ensures(!string.IsNullOrWhiteSpace(Contract.Result<string>()));
+            Contract.Ensures(Contract.Result<IEnumerable<AssemblyId>>() != null);
 
-            return _assemblyDefinition.FullName;
-        }
-
-        IEnumerable<string> IAssemblyDefinitionReader.GetManifestAssemblies()
-        {
-            Contract.Ensures(Contract.Result<IEnumerable<string>>() != null);
-
-            return _assemblyDefinition
+            return _assemblyDef
                 .Modules
                 .SelectMany(m => m.AssemblyReferences)
-                .Select(name => name.FullName);
+                .Select(name => AssemblyId.GetId(name.FullName));
+        }
+
+        IEnumerable<TypeId> IAssemblyDefinitionReader.GetTypeDefinitions()
+        {
+            Contract.Ensures(Contract.Result<IEnumerable<TypeId>>() != null);
+
+            return _assemblyDef
+                .Modules
+                .GetTypeDefinitions()
+                .Select(typeDef => _typeIdResolver.GetTypeId(typeDef));
+        }
+
+        IEnumerable<TypeId> IAssemblyDefinitionReader.GetTypeReferences()
+        {
+            Contract.Ensures(Contract.Result<IEnumerable<TypeId>>() != null);
+
+            return _assemblyDef
+                .Modules
+                .GetTypeReferences()
+                .Select(typeDef => _typeIdResolver.GetTypeId(typeDef));
         }
     }
 }

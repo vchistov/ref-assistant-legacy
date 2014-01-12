@@ -9,43 +9,39 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
     internal class CustomAttributeReader : ICustomAttributeReader
     {
         private readonly CustomAttribute _customAttribute;
+        private readonly ITypeIdResolver _typeIdResolver;
 
-        internal CustomAttributeReader(CustomAttribute customAttribute)
+        internal CustomAttributeReader(CustomAttribute customAttribute, ITypeIdResolver typeIdResolver)
         {
             Contract.Requires(customAttribute != null);
+            Contract.Requires(typeIdResolver != null);
+
             _customAttribute = customAttribute;
+            _typeIdResolver = typeIdResolver;
         }
 
-        public TypeId GetAttributeType()
+        TypeId ICustomAttributeReader.GetAttributeType()
         {
-            return GetTypeId(_customAttribute.AttributeType);
+            return _typeIdResolver.GetTypeId(_customAttribute.AttributeType);
         }
 
-        public IEnumerable<TypeId> GetConstructorArguments()
+        IEnumerable<TypeId> ICustomAttributeReader.GetConstructorArguments()
         {
             return EnumerateArgments(_customAttribute.ConstructorArguments);
         }
 
-        public IEnumerable<TypeId> GetFields()
+        IEnumerable<TypeId> ICustomAttributeReader.GetFields()
         {
             return EnumerateArgments(_customAttribute.Fields.Select(f => f.Argument));
         }
 
-        public IEnumerable<TypeId> GetProperties()
+        IEnumerable<TypeId> ICustomAttributeReader.GetProperties()
         {
             return EnumerateArgments(_customAttribute.Properties.Select(p => p.Argument));
         }
 
-        #region Private methods
+        #region Helpers
         
-        private TypeId GetTypeId(TypeReference typeRef)
-        {
-            var assemblyId = AssemblyId.GetId(typeRef.Scope.GetAssemblyNameReference().FullName);
-            var typeId = TypeId.GetId(typeRef.FullName, assemblyId);
-
-            return typeId;
-        }
-
         private IEnumerable<TypeId> EnumerateArgments(IEnumerable<CustomAttributeArgument> args)
         {
             foreach (var arg in args)
@@ -54,7 +50,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
                     ? (TypeReference)arg.Value
                     : arg.Type;
 
-                yield return GetTypeId(typeRef);
+                yield return _typeIdResolver.GetTypeId(typeRef);
             }
         }
 

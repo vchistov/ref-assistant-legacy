@@ -88,6 +88,7 @@
     <Compile Include="GenericCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelayEqualityComparer.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="ThrowUtils.cs" />
   </ItemGroup>
   <ItemGroup>
