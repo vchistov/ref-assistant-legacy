@@ -73,11 +73,5 @@ namespace Lardite.RefAssistant.ReflectionServices.Data
         {
             return _fullName;
         }
-
-        [ContractInvariantMethod]
-        private void ObjectInvariant()
-        {
-            Contract.Invariant(!string.IsNullOrWhiteSpace(_fullName));
-        }
     }
 }

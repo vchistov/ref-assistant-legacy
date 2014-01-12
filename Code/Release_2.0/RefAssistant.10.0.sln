@@ -28,9 +28,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.ReflectionServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.General", "RefAssistant.General\RefAssistant.General.csproj", "{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.ReflectionServices.UnitTests", "RefAssistant.ReflectionServices.UnitTests\RefAssistant.ReflectionServices.UnitTests.csproj", "{1329AAFD-CA8B-47E5-BC9F-42FCF5D7FAB4}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
 		SccLocalPath0 = .
@@ -62,6 +64,10 @@ Global
 		SccProjectUniqueName9 = RefAssistant.General\\RefAssistant.General.csproj
 		SccProjectName9 = RefAssistant.General
 		SccLocalPath9 = RefAssistant.General
+		SccProjectUniqueName10 = RefAssistant.ReflectionServices.UnitTests\\RefAssistant.ReflectionServices.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName10 = RefAssistant.10.0.sln
+		SccProjectName10 = RefAssistant.ReflectionServices.UnitTests
+		SccLocalPath10 = RefAssistant.ReflectionServices.UnitTests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,11 +110,16 @@ Global
 		{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1329AAFD-CA8B-47E5-BC9F-42FCF5D7FAB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1329AAFD-CA8B-47E5-BC9F-42FCF5D7FAB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1329AAFD-CA8B-47E5-BC9F-42FCF5D7FAB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1329AAFD-CA8B-47E5-BC9F-42FCF5D7FAB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94} = {E595D6F0-BCE5-461B-ACC7-A6F91B8BBC4C}
+		{1329AAFD-CA8B-47E5-BC9F-42FCF5D7FAB4} = {E595D6F0-BCE5-461B-ACC7-A6F91B8BBC4C}
 	EndGlobalSection
 EndGlobal

@@ -41,7 +41,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
         private TypeId GetTypeId(TypeReference typeRef)
         {
             var assemblyId = AssemblyId.GetId(typeRef.Scope.GetAssemblyNameReference().FullName);
-            var typeId = TypeId.GetId(assemblyId, typeRef.FullName);
+            var typeId = TypeId.GetId(typeRef.FullName, assemblyId);
 
             return typeId;
         }
