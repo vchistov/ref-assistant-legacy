@@ -8,19 +8,21 @@ namespace Lardite.RefAssistant.ReflectionServices.Data
     {
         private readonly string _fullName;
         private readonly AssemblyId _assemblyId;
+        private readonly AssemblyId _forwardedFromId;
 
-        private TypeId(AssemblyId assemblyId, string fullName)
+        private TypeId(string fullName, AssemblyId assemblyId, AssemblyId forwardedFromId)
         {
-            ThrowUtils.ArgumentNull(() => assemblyId);
             ThrowUtils.ArgumentNullOrEmpty(() => fullName);
+            ThrowUtils.ArgumentNull(() => assemblyId);
 
             _assemblyId = assemblyId;
             _fullName = fullName;
+            _forwardedFromId = forwardedFromId;
         }
 
-        internal static TypeId GetId(AssemblyId assemblyId, string fullName)
+        internal static TypeId GetId(string fullName, AssemblyId assemblyId, AssemblyId forwardedFromId = null)
         {
-            return new TypeId(assemblyId, fullName);
+            return new TypeId(fullName, assemblyId, forwardedFromId);
         }
 
         internal string FullName
@@ -33,6 +35,11 @@ namespace Lardite.RefAssistant.ReflectionServices.Data
             get { return _assemblyId; }
         }
 
+        internal AssemblyId ForwardedFromId
+        {
+            get { return _forwardedFromId; }
+        }
+
         public bool Equals(TypeId other)
         {
             if (other == null)
@@ -41,7 +48,8 @@ namespace Lardite.RefAssistant.ReflectionServices.Data
             }
 
             return string.Equals(this._fullName, other._fullName, StringComparison.Ordinal)
-                && this.AssemblyId.Equals(other.AssemblyId);
+                && AssemblyId.Equals(this.AssemblyId, other.AssemblyId)
+                && AssemblyId.Equals(this.ForwardedFromId, other.ForwardedFromId);
         }
 
         public override bool Equals(object obj)
@@ -82,13 +90,6 @@ namespace Lardite.RefAssistant.ReflectionServices.Data
         public override string ToString()
         {
             return string.Format("{0}, {1}", _fullName, _assemblyId.FullName);
-        }
-
-        [ContractInvariantMethod]
-        private void ObjectInvariant()
-        {
-            Contract.Invariant(!string.IsNullOrWhiteSpace(_fullName));
-            Contract.Invariant(_assemblyId != null);
         }
     }
 }
