@@ -1,5 +1,6 @@
 ﻿using System;
 using Lardite.RefAssistant.ReflectionServices.Data;
+using Moq;
 using NUnit.Framework;
 
 namespace Lardite.RefAssistant.ReflectionServices.UnitTests.Data
@@ -25,6 +26,17 @@ namespace Lardite.RefAssistant.ReflectionServices.UnitTests.Data
         {
             var assemblyId1 = AssemblyId.GetId(fullName1);
             var assemblyId2 = fullName2 == null ? null : AssemblyId.GetId(fullName2);
+
+            return assemblyId1.Equals(assemblyId2);
+        }
+
+        [TestCase(MsCorLib4, MsCorLib4, ExpectedResult = true)]
+        [TestCase(MsCorLib2, MsCorLib4, ExpectedResult = false)]
+        [TestCase(MsCorLib2, null, ExpectedResult = false)]
+        public bool ObjectEquals_CompareIds_TrueFalse(string fullName1, string fullName2)
+        {
+            object assemblyId1 = AssemblyId.GetId(fullName1);
+            object assemblyId2 = fullName2 == null ? null : AssemblyId.GetId(fullName2);
 
             return assemblyId1.Equals(assemblyId2);
         }
@@ -66,6 +78,33 @@ namespace Lardite.RefAssistant.ReflectionServices.UnitTests.Data
             AssemblyId assemblyId2 = fullName2 == null ? null : AssemblyId.GetId(fullName2);
 
             return AssemblyId.Equals(assemblyId1, assemblyId2);
+        }
+
+        [Test]
+        public void Equals_ComprateWithSelf_True()
+        {
+            AssemblyId assemblyId1 = AssemblyId.GetId(MsCorLib2);
+            AssemblyId assemblyId2 = assemblyId1;
+
+            Assert.IsTrue(assemblyId1.Equals(assemblyId2));
+        }
+
+        [TestCase(MsCorLib2)]
+        public void Equals_ComprateWithWrongType_False(string fullName)
+        {
+            var someId = new Mock<BaseNamedId>(fullName);
+            AssemblyId assemblyId = AssemblyId.GetId(fullName);
+
+            Assert.IsFalse(assemblyId.Equals(someId.Object));
+        }
+
+        [TestCase(MsCorLib4)]
+        public void OperatorEquals_ComprateWithWrongType_False(string fullName)
+        {
+            var someId = new Mock<BaseNamedId>(fullName);
+            AssemblyId assemblyId = AssemblyId.GetId(fullName);
+
+            Assert.IsFalse(assemblyId == someId.Object);
         }
     }
 }
