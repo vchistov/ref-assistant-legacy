@@ -1,6 +1,7 @@
 ﻿using System;
 using Lardite.RefAssistant.ReflectionServices.Data;
 using NUnit.Framework;
+using Moq;
 
 namespace Lardite.RefAssistant.ReflectionServices.UnitTests.Data
 {
@@ -32,6 +33,20 @@ namespace Lardite.RefAssistant.ReflectionServices.UnitTests.Data
         {
             var typeId1 = TypeId.GetId(fullName1, GetAssembly(asmFullName1), GetAssembly(frwdFullName1));
             var typeId2 = fullName2 == null ? null : TypeId.GetId(fullName2, GetAssembly(asmFullName2), GetAssembly(frwdFullName2));
+
+            return typeId1.Equals(typeId2);
+        }
+
+        [TestCase(Int32, MsCorLib2, null, Int32, MsCorLib2, null, ExpectedResult = true)]
+        [TestCase(Int32, MsCorLib2, null, Int64, MsCorLib2, null, ExpectedResult = false)]
+        [TestCase(Int32, MsCorLib2, null, Int32, MsCorLib4, null, ExpectedResult = false)]
+        [TestCase(Int32, MsCorLib2, MsCorLib4, Int32, MsCorLib2, null, ExpectedResult = false)]
+        [TestCase(Int32, MsCorLib2, MsCorLib4, Int32, MsCorLib2, MsCorLib4, ExpectedResult = true)]
+        [TestCase(Int32, MsCorLib2, null, null, null, null, ExpectedResult = false)]
+        public bool ObjectEquals_CompareIds_TrueFalse(string fullName1, string asmFullName1, string frwdFullName1, string fullName2, string asmFullName2, string frwdFullName2)
+        {
+            object typeId1 = TypeId.GetId(fullName1, GetAssembly(asmFullName1), GetAssembly(frwdFullName1));
+            object typeId2 = fullName2 == null ? null : TypeId.GetId(fullName2, GetAssembly(asmFullName2), GetAssembly(frwdFullName2));
 
             return typeId1.Equals(typeId2);
         }
@@ -82,7 +97,7 @@ namespace Lardite.RefAssistant.ReflectionServices.UnitTests.Data
             var typeId2 = fullName2 == null ? null : TypeId.GetId(fullName2, GetAssembly(asmFullName2), GetAssembly(frwdFullName2));
 
             return typeId1 != typeId2;
-        }        
+        }
 
         #region Helpers
 

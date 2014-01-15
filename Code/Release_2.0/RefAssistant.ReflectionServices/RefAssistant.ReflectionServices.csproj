@@ -121,6 +121,8 @@
     <Compile Include="DataAccess\TypeIdProvider.cs" />
     <Compile Include="Data\AssemblyId.cs" />
     <Compile Include="Data\AssemblyInfo.cs" />
+    <Compile Include="Data\BaseNamedId.cs" />
+    <Compile Include="Data\MemberId.cs" />
     <Compile Include="Data\PublicKeyToken.cs" />
     <Compile Include="Data\CustomAttributeInfo.cs" />
     <Compile Include="Data\TypeId.cs" />

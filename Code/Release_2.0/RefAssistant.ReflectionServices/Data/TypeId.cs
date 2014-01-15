@@ -4,19 +4,17 @@ using System.Diagnostics.Contracts;
 namespace Lardite.RefAssistant.ReflectionServices.Data
 {
     [Serializable]
-    public sealed class TypeId : IEquatable<TypeId>
+    public sealed class TypeId : BaseNamedId, IEquatable<TypeId>
     {
-        private readonly string _fullName;
         private readonly AssemblyId _assemblyId;
         private readonly AssemblyId _forwardedFromId;
 
         private TypeId(string fullName, AssemblyId assemblyId, AssemblyId forwardedFromId)
+            : base(fullName)
         {
-            ThrowUtils.ArgumentNullOrEmpty(() => fullName);
             ThrowUtils.ArgumentNull(() => assemblyId);
 
             _assemblyId = assemblyId;
-            _fullName = fullName;
             _forwardedFromId = forwardedFromId;
         }
 
@@ -27,7 +25,7 @@ namespace Lardite.RefAssistant.ReflectionServices.Data
 
         internal string FullName
         {
-            get { return _fullName; }
+            get { return _name; }
         }
 
         internal AssemblyId AssemblyId
@@ -42,54 +40,28 @@ namespace Lardite.RefAssistant.ReflectionServices.Data
 
         public bool Equals(TypeId other)
         {
-            if (other == null)
-            {
+            if (!base.Equals(other))
                 return false;
-            }
 
-            return string.Equals(this._fullName, other._fullName, StringComparison.Ordinal)
-                && AssemblyId.Equals(this.AssemblyId, other.AssemblyId)
+            return AssemblyId.Equals(this.AssemblyId, other.AssemblyId)
                 && AssemblyId.Equals(this.ForwardedFromId, other.ForwardedFromId);
-        }
+        }        
 
         public override bool Equals(object obj)
         {
-            if (obj == null || this.GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return ((IEquatable<TypeId>)this).Equals(obj as TypeId);
-        }
-
-        public static bool operator ==(TypeId a, TypeId b)
-        {
-            if (ReferenceEquals(a, b))
-            {
-                return true;
-            }
-
-            if (((object)a == null) || ((object)b == null))
-            {
-                return false;
-            }
-
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(TypeId a, TypeId b)
-        {
-            return !(a == b);
+            return this.Equals(obj as TypeId);
         }
 
         public override int GetHashCode()
         {
-            return _fullName.GetHashCode() ^ _assemblyId.GetHashCode();
+            return base.GetHashCode() 
+                ^ _assemblyId.GetHashCode() 
+                ^ (_forwardedFromId == null ? 0 : _forwardedFromId.GetHashCode());
         }
 
         public override string ToString()
         {
-            return string.Format("{0}, {1}", _fullName, _assemblyId.FullName);
+            return string.Format("{0}, {1}", this.FullName, _assemblyId.FullName);
         }
     }
 }
