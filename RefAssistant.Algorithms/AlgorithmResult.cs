@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
 
 using Lardite.RefAssistant.Algorithms.Data;
+using Lardite.RefAssistant.Collections;
 
 namespace Lardite.RefAssistant.Algorithms
 {
-    internal sealed class AlgorithmResult
+    public sealed class AlgorithmResult
     {
-        public string AlgorithmAdvice
+        public AlgorithmResult(ISet<IAssembly> requiredFor, string advice = null)
         {
-            get;
-            set;
+            ThrowUtils.ArgumentNull(() => requiredFor);
+
+            this.RequiredFor = requiredFor.AsReadOnly();
+            this.AlgorithmAdvice = advice;
         }
 
-        public List<IAssembly> RequiredFor
-        {
-            get;
-            set;
-        }
+        public string AlgorithmAdvice { get; private set; }
+
+        public  IReadOnlyHashSet<IAssembly> RequiredFor { get; private set; }
     }
 }

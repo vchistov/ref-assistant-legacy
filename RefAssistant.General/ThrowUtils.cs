@@ -36,6 +36,12 @@ namespace Lardite.RefAssistant
             throw new InvalidOperationException(message);
         }
 
+        [DebuggerStepThrough]
+        public static void NotSupported(string message)
+        {
+            throw new NotSupportedException(message);
+        }
+
         #region Helpers
 
         private static string GetParameterName<T>(Expression<Func<T>> expression)

@@ -1,17 +1,16 @@
-﻿using Lardite.RefAssistant.Algorithms.Data;
+﻿using System.Collections.Generic;
+
+using Lardite.RefAssistant.Algorithms.Data;
 
 namespace Lardite.RefAssistant.Algorithms
 {
-    internal sealed class AssemblyManifestAlgorithm : IAlgorithm<IProject>
+    public sealed class AssemblyManifestAlgorithm : IAlgorithm<IProject>
     {
-        public AlgorithmResult Process(IProject project)
+        AlgorithmResult IAlgorithm<IProject>.Process(IProject project)
         {
-            AlgorithmResult result = new AlgorithmResult();
-
-            //add all manifest assemblies
-            result.RequiredFor.AddRange(project.Assembly.References);
-
-            return result;
+            return new AlgorithmResult(
+                new HashSet<IAssembly>(project.Assembly.References),
+                this.GetType().FullName);
         }
     }
 }
