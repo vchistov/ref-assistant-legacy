@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using EnvDTE;
+using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.VsProxy.Projects.References;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
+    [ProjectKind(ProjectKinds.VBNet, "f184b08f-c81c-45f6-a57f-5abd9991f28f")]
     internal sealed class VBNetProject : VsBaseProject
     {
         public VBNetProject(Project project)

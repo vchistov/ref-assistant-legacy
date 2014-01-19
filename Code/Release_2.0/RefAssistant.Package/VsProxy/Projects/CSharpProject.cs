@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using EnvDTE;
+using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.VsProxy.Projects.References;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
+    [ProjectKind(ProjectKinds.CSharp, "fae04ec0-301f-11d3-bf4b-00c04f79efbc")]
     internal sealed class CSharpProject : VsBaseProject
     {
         public CSharpProject(Project project)

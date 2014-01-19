@@ -1,9 +1,11 @@
 ﻿using System;
 using EnvDTE;
+using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.VsProxy.Projects.References;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
+    [ProjectKind(ProjectKinds.VisualCpp, "8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942")]
     internal sealed class VisualCppCliProject : VsBaseProject
     {
         public VisualCppCliProject(Project project)

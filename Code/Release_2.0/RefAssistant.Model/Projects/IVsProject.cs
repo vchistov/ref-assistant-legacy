@@ -12,6 +12,6 @@ namespace Lardite.RefAssistant.Model.Projects
         IEnumerable<VsProjectReference> References { get; }
 
         [Obsolete]
-        Guid Kind { get; }
+        Guid KindGuid { get; }
     }
 }
