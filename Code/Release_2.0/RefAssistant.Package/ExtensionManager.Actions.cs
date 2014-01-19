@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 using Lardite.RefAssistant.Model;
-using Lardite.RefAssistant.Model.Contracts;
+using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.UI;
 using Lardite.RefAssistant.VsProxy;
 using Lardite.RefAssistant.VsProxy.Building;

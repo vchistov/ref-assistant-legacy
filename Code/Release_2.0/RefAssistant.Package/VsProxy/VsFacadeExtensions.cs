@@ -1,4 +1,4 @@
-﻿using Lardite.RefAssistant.Model.Contracts;
+﻿using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.VsProxy.Building;
 
 namespace Lardite.RefAssistant.VsProxy

@@ -1,32 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+
 using Lardite.RefAssistant.ReflectionServices.Data;
 using Lardite.RefAssistant.ReflectionServices.DataAccess;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Containers;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Readers;
+
 using Mono.Cecil;
 
 namespace Lardite.RefAssistant.ReflectionServices
 {
     internal sealed class AssemblyService : IAssemblyService
     {
-        private readonly Lazy<AssemblyId> _projectAssemblyId;
         private readonly IAssemblyContainer _container;
 
-        internal AssemblyService(IAssemblyIdProvider projectAssemblyIdProvider, IAssemblyContainer container)
+        internal AssemblyService(IAssemblyContainer container)
         {
-            Contract.Requires(projectAssemblyIdProvider != null);
             Contract.Requires(container != null);
 
-            _projectAssemblyId = new Lazy<AssemblyId>(projectAssemblyIdProvider.GetId);
             _container = container;
         }
 
-        AssemblyInfo IAssemblyService.GetProjectAssembly()
+        AssemblyInfo IAssemblyService.GetAssembly(string fileName)
         {
-            var reader = CreateReader(_container.Get(_projectAssemblyId.Value));
-            return new AssemblyInfo(reader);
+            ThrowUtils.ArgumentNullOrEmpty(() => fileName);
+
+            var assemblyId = FileAssemblyIdProvider.GetId(fileName);
+            return ((IAssemblyService)this).GetAssembly(assemblyId);
         }
 
         AssemblyInfo IAssemblyService.GetAssembly(AssemblyId assemblyId)
