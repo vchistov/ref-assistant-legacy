@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using EnvDTE;
+using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.VsProxy.Projects.References;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
+    [ProjectKind(ProjectKinds.FSharp, "f2a71f9b-5d33-465a-a702-920d77279786")]
     internal sealed class FSharpProject : VsBaseProject
     {
         public FSharpProject(Project project)

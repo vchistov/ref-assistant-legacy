@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
+using System.Linq;
 using EnvDTE;
+using Lardite.RefAssistant.Model.Projects;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
@@ -9,24 +12,24 @@ namespace Lardite.RefAssistant.VsProxy.Projects
         {
             Guid kind = Guid.Parse(project.Kind);
 
-            if (kind == ProjectKinds.CSharp)
+            var interfaceType = typeof(IVsProjectExtended);
+            var wrapperTypes = typeof(VsProjectMapper)
+                .Assembly
+                .GetTypes()
+                .Where(t => !t.IsInterface && !t.IsAbstract && interfaceType.IsAssignableFrom(t));
+
+            foreach (var type in wrapperTypes)
             {
-                return new CSharpProject(project);
-            }
-            else if (kind == ProjectKinds.FSharp)
-            {
-                return new FSharpProject(project);
-            }
-            else if (kind == ProjectKinds.VisualCppCli)
-            {
-                return new VisualCppCliProject(project);
-            }
-            else if (kind == ProjectKinds.VisualBasic)
-            {
-                return new VBNetProject(project);
+                var projectKind = type.GetCustomAttribute<ProjectKindAttribute>();
+                Contract.Assert(projectKind != null);
+                if (projectKind.Guid == kind)
+                {
+                    return (IVsProjectExtended)Activator.CreateInstance(type, project);
+                }
             }
 
-            throw new NotSupportedException(string.Format(Resources.VsProjectMapper_NotSupported, kind));
+            ThrowUtils.NotSupported(string.Format(Resources.VsProjectMapper_NotSupported, kind));
+            return null;
         }
     }
 }

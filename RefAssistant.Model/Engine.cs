@@ -32,7 +32,7 @@ namespace Lardite.RefAssistant.Model
             var projectInfo = new ProjectInfo
                 {
                     Name = project.Name,
-                    Type = project.Kind,
+                    Type = project.KindGuid,
                     AssemblyPath = project.OutputAssemblyPath,
                     ConfigurationName = "NEW",
                     PlatformName = "RA.2.0",

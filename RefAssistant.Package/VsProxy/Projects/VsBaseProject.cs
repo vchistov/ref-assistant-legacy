@@ -56,7 +56,7 @@ namespace Lardite.RefAssistant.VsProxy.Projects
             }
         }
 
-        public virtual Guid Kind
+        public virtual Guid KindGuid
         {
             get
             {

@@ -38,7 +38,7 @@ namespace Lardite.RefAssistant
                 IVsProjectExtended compiledProject = result.Project;
 
                 LogManager.Instance.Information(
-                    string.Format(Resources.ExtensionManager_StartProcess, compiledProject.Name, compiledProject.Configuration, compiledProject.Kind.ToString("D")));
+                    string.Format(Resources.ExtensionManager_StartProcess, compiledProject.Name, compiledProject.Configuration, compiledProject.KindGuid.ToString("D")));
 
                 IEnumerable<VsProjectReference> references = GetUnusedReferences(compiledProject);
                 int count = RemoveProjectReferences(compiledProject, references);

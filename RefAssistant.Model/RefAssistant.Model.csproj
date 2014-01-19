@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="Engine.cs" />
     <Compile Include="Projects\IVsProject.cs" />
+    <Compile Include="Projects\ProjectKindAttribute.cs" />
+    <Compile Include="Projects\ProjectKinds.cs" />
     <Compile Include="Projects\VsProjectReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
