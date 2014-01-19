@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Lardite.RefAssistant.Model.Contracts;
+using Lardite.RefAssistant.Model.Projects;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {

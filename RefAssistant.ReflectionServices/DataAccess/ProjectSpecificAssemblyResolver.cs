@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.IO;
 using System.Linq;
-using Lardite.RefAssistant.Model.Contracts;
 using Mono.Cecil;
 
 namespace Lardite.RefAssistant.ReflectionServices.DataAccess
@@ -12,16 +10,18 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
     {
         private readonly ProjectReferenceCache _references;
 
-        public ProjectSpecificAssemblyResolver(IVsProject project)
+        public ProjectSpecificAssemblyResolver(IEnumerable<string> projectReferences, string projectOutputDir)
         {
-            Contract.Requires(project != null);
+            Contract.Requires(projectReferences != null);
             Contract.Ensures(_references != null);
 
-            var outputAssemblyDir = Path.GetDirectoryName(project.OutputAssemblyPath);
-            AddSearchDirectory(outputAssemblyDir);
+            if (!string.IsNullOrWhiteSpace(projectOutputDir))
+            {
+                AddSearchDirectory(projectOutputDir);
+            }
 
             _references = new ProjectReferenceCache(
-                project.References, 
+                projectReferences, 
                 new RelayEqualityComparer<AssemblyNameReference>(AreEqual));
         }
 
@@ -32,9 +32,9 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
 
             var readerParams = TweakReaderParameters(parameters);
 
-            var projectRef = _references.GetOrDefault(name);
-            var assemblyDefinition = projectRef != null
-                ? ReadAssembly(projectRef, readerParams)
+            var fileName = _references.GetOrDefault(name);
+            var assemblyDefinition = fileName != null
+                ? ReadAssembly(fileName, readerParams)
                 : base.Resolve(name, readerParams);
 
             return assemblyDefinition;
@@ -48,12 +48,12 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
             return string.Equals(assemblyName1.Name, assemblyName2.Name, StringComparison.OrdinalIgnoreCase);
         }
 
-        private AssemblyDefinition ReadAssembly(VsProjectReference projectRef, ReaderParameters parameters)
+        private AssemblyDefinition ReadAssembly(string fileName, ReaderParameters parameters)
         {
-            Contract.Requires(projectRef != null);
+            Contract.Requires(fileName != null);
             Contract.Requires(parameters != null);
 
-            return AssemblyDefinition.ReadAssembly(projectRef.Location, parameters);
+            return AssemblyDefinition.ReadAssembly(fileName, parameters);
         }
 
         private ReaderParameters TweakReaderParameters(ReaderParameters parameters)
@@ -68,21 +68,21 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
 
         private class ProjectReferenceCache
         {
-            private readonly Lazy<IList<Tuple<AssemblyNameReference, VsProjectReference>>> _references;
+            private readonly Lazy<IList<Tuple<AssemblyNameReference, string>>> _references;
             private readonly IEqualityComparer<AssemblyNameReference> _comparer;
 
             public ProjectReferenceCache(
-                IEnumerable<VsProjectReference> references,
+                IEnumerable<string> references,
                 IEqualityComparer<AssemblyNameReference> comparer)
             {
                 Contract.Requires(references != null);
                 Contract.Requires(comparer != null);
 
-                _references = new Lazy<IList<Tuple<AssemblyNameReference, VsProjectReference>>>(() => Load(references));
+                _references = new Lazy<IList<Tuple<AssemblyNameReference, string>>>(() => Load(references));
                 _comparer = comparer;
             }
 
-            public VsProjectReference GetOrDefault(AssemblyNameReference assemblyName)
+            public string GetOrDefault(AssemblyNameReference assemblyName)
             {
                 var result = _references
                     .Value
@@ -91,15 +91,14 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
                 return result != null ? result.Item2 : null;
             }
 
-            private IList<Tuple<AssemblyNameReference, VsProjectReference>> Load(IEnumerable<VsProjectReference> references)
+            private IList<Tuple<AssemblyNameReference, string>> Load(IEnumerable<string> references)
             {
-                Func<VsProjectReference, string> getFullName =
-                    (@ref) => new ProjectAssemblyIdProvider(@ref.Location).GetId().FullName;
+                Func<string, string> getFullName =
+                    (fileName) => FileAssemblyIdProvider.GetId(fileName).FullName;
 
                 return references
-                    .Select(r => new Tuple<AssemblyNameReference, VsProjectReference>(
-                        AssemblyNameReference.Parse(getFullName(r)),
-                        r))
+                    .Select(fileName => 
+                        new Tuple<AssemblyNameReference, string>(AssemblyNameReference.Parse(getFullName(fileName)), fileName))
                     .ToList();
             }
         }

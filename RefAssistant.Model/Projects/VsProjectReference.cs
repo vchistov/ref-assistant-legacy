@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lardite.RefAssistant.Model.Contracts
+namespace Lardite.RefAssistant.Model.Projects
 {
     public class VsProjectReference : IEquatable<VsProjectReference>
     {

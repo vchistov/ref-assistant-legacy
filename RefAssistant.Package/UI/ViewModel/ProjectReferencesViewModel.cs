@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
-using Lardite.RefAssistant.Model.Contracts;
+using Lardite.RefAssistant.Model.Projects;
 
 namespace Lardite.RefAssistant.UI.ViewModel
 {

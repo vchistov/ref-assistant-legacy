@@ -22,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E595D6F0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Algorithms.UnitTests", "RefAssistant.Algorithms.UnitTests\RefAssistant.Algorithms.UnitTests.csproj", "{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.Model.Contracts", "RefAssistant.Model.Contracts\RefAssistant.Model.Contracts.csproj", "{3DB3EAF6-FF9B-4C82-8022-58034161BD82}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.ReflectionServices", "RefAssistant.ReflectionServices\RefAssistant.ReflectionServices.csproj", "{1BEC384B-04EA-429D-AB56-E9D54EF476D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.General", "RefAssistant.General\RefAssistant.General.csproj", "{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}"
@@ -32,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefAssistant.ReflectionServ
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
 		SccLocalPath0 = .
@@ -55,19 +53,16 @@ Global
 		SccProjectTopLevelParentUniqueName6 = RefAssistant.10.0.sln
 		SccProjectName6 = RefAssistant.Algorithms.UnitTests
 		SccLocalPath6 = RefAssistant.Algorithms.UnitTests
-		SccProjectUniqueName7 = RefAssistant.Model.Contracts\\RefAssistant.Model.Contracts.csproj
-		SccProjectName7 = RefAssistant.Model.Contracts
-		SccLocalPath7 = RefAssistant.Model.Contracts
-		SccProjectUniqueName8 = RefAssistant.ReflectionServices\\RefAssistant.ReflectionServices.csproj
-		SccProjectName8 = RefAssistant.ReflectionServices
-		SccLocalPath8 = RefAssistant.ReflectionServices
-		SccProjectUniqueName9 = RefAssistant.General\\RefAssistant.General.csproj
-		SccProjectName9 = RefAssistant.General
-		SccLocalPath9 = RefAssistant.General
-		SccProjectUniqueName10 = RefAssistant.ReflectionServices.UnitTests\\RefAssistant.ReflectionServices.UnitTests.csproj
-		SccProjectTopLevelParentUniqueName10 = RefAssistant.10.0.sln
-		SccProjectName10 = RefAssistant.ReflectionServices.UnitTests
-		SccLocalPath10 = RefAssistant.ReflectionServices.UnitTests
+		SccProjectUniqueName7 = RefAssistant.ReflectionServices\\RefAssistant.ReflectionServices.csproj
+		SccProjectName7 = RefAssistant.ReflectionServices
+		SccLocalPath7 = RefAssistant.ReflectionServices
+		SccProjectUniqueName8 = RefAssistant.General\\RefAssistant.General.csproj
+		SccProjectName8 = RefAssistant.General
+		SccLocalPath8 = RefAssistant.General
+		SccProjectUniqueName9 = RefAssistant.ReflectionServices.UnitTests\\RefAssistant.ReflectionServices.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName9 = RefAssistant.10.0.sln
+		SccProjectName9 = RefAssistant.ReflectionServices.UnitTests
+		SccLocalPath9 = RefAssistant.ReflectionServices.UnitTests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,10 +93,6 @@ Global
 		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7B1652C-C7BB-40B1-AF0D-D83A7B782C94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3DB3EAF6-FF9B-4C82-8022-58034161BD82}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BEC384B-04EA-429D-AB56-E9D54EF476D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BEC384B-04EA-429D-AB56-E9D54EF476D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BEC384B-04EA-429D-AB56-E9D54EF476D5}.Release|Any CPU.ActiveCfg = Release|Any CPU

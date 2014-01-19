@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using Lardite.RefAssistant.Model.Contracts;
+using System.Linq;
 using Lardite.RefAssistant.ReflectionServices.DataAccess;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Containers;
 
@@ -8,26 +8,26 @@ namespace Lardite.RefAssistant.ReflectionServices
 {
     public sealed class ServiceConfigurator : IServiceConfigurator
     {
-        private readonly IVsProject _project;
+        private readonly ServiceConfiguratorOptions _options;
         private readonly Lazy<IAssemblyService> _assemblyService;
         private readonly Lazy<ITypeService> _typeService;
         private readonly Lazy<ICustomAttributeService> _customAttributeService;
         private readonly Lazy<IAssemblyContainer> _assemblyContainer;
 
-        private ServiceConfigurator(IVsProject project)
+        private ServiceConfigurator(ServiceConfiguratorOptions options)
         {
-            ThrowUtils.ArgumentNull(() => project);
+            ThrowUtils.ArgumentNull(() => options);
 
-            _project = project;
+            _options = options;
             _assemblyContainer = new Lazy<IAssemblyContainer>(CreateAssemblyContainer);
             _assemblyService = new Lazy<IAssemblyService>(InitAssemblyService);
             _typeService = new Lazy<ITypeService>(InitTypeService);
             _customAttributeService = new Lazy<ICustomAttributeService>(InitCustomAttributeService);            
         }
 
-        public static IServiceConfigurator GetConfigurator(IVsProject project)
+        public static IServiceConfigurator GetConfigurator(ServiceConfiguratorOptions options)
         {
-            return new ServiceConfigurator(project);
+            return new ServiceConfigurator(options);
         }
 
         IAssemblyService IServiceConfigurator.AssemblyService
@@ -54,12 +54,7 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         private IAssemblyService InitAssemblyService()
         {
-            Contract.Assert(_project != null);
-            Contract.Assert(!string.IsNullOrWhiteSpace(_project.OutputAssemblyPath));
-
-            var projectAssemblyIdProvider = new ProjectAssemblyIdProvider(_project.OutputAssemblyPath);
-
-            return new AssemblyService(projectAssemblyIdProvider, this.AssemblyContainer);
+            return new AssemblyService(this.AssemblyContainer);
         }
 
         private ITypeService InitTypeService()
@@ -75,9 +70,12 @@ namespace Lardite.RefAssistant.ReflectionServices
         private IAssemblyContainer CreateAssemblyContainer()
         {
             Contract.Ensures(Contract.Result<IAssemblyContainer>() != null);
-            Contract.Assert(_project != null);
+            Contract.Assert(_options != null);
 
-            var resolver = new ProjectSpecificAssemblyResolver(_project);
+            var resolver = new ProjectSpecificAssemblyResolver(
+                _options.ProjectReferenceFiles ?? Enumerable.Empty<string>(),
+                _options.ProjectOutputDir);
+
             return new AssemblyContainer(resolver);
         }
 

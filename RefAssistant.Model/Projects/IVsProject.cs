@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lardite.RefAssistant.Model.Contracts
+namespace Lardite.RefAssistant.Model.Projects
 {
     public interface IVsProject
     {

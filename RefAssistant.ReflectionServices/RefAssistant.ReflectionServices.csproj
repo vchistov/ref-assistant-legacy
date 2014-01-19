@@ -106,11 +106,10 @@
     <Compile Include="CustomAttributeService.cs" />
     <Compile Include="DataAccess\Containers\AssemblyContainer.cs" />
     <Compile Include="DataAccess\Containers\IAssemblyContainer.cs" />
-    <Compile Include="DataAccess\IAssemblyIdProvider.cs" />
     <Compile Include="DataAccess\ITypeIdProvider.cs" />
     <Compile Include="DataAccess\Lookups\ITypeLookup.cs" />
     <Compile Include="DataAccess\Lookups\TypeLookup.cs" />
-    <Compile Include="DataAccess\ProjectAssemblyIdProvider.cs" />
+    <Compile Include="DataAccess\FileAssemblyIdProvider.cs" />
     <Compile Include="DataAccess\ProjectSpecificAssemblyResolver.cs" />
     <Compile Include="DataAccess\Readers\AssemblyDefinitionReader.cs" />
     <Compile Include="DataAccess\Readers\CustomAttributeReader.cs" />
@@ -133,6 +132,7 @@
     <Compile Include="ITypeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceConfigurator.cs" />
+    <Compile Include="ServiceConfiguratorOptions.cs" />
     <Compile Include="TypeService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -145,10 +145,6 @@
     <ProjectReference Include="..\RefAssistant.General\RefAssistant.General.csproj">
       <Project>{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}</Project>
       <Name>RefAssistant.General</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RefAssistant.Model.Contracts\RefAssistant.Model.Contracts.csproj">
-      <Project>{3DB3EAF6-FF9B-4C82-8022-58034161BD82}</Project>
-      <Name>RefAssistant.Model.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
