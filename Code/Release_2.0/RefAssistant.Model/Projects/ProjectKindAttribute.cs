@@ -5,13 +5,13 @@ namespace Lardite.RefAssistant.Model.Projects
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class ProjectKindAttribute : Attribute
     {
-        public ProjectKindAttribute(ProjectKinds kind, string guid)
+        public ProjectKindAttribute(VsProjectKinds kind, string guid="")
         {
-            this.ProjectKind = kind;
-            this.Guid = Guid.Parse(guid);
+            this.Kind = kind;
+            this.Guid = string.IsNullOrWhiteSpace(guid) ? Guid.Empty : Guid.Parse(guid);
         }
 
-        public ProjectKinds ProjectKind { get; private set; }
+        public VsProjectKinds Kind { get; private set; }
 
         public Guid Guid { get; private set; }
     }
