@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using EnvDTE;
 using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.VsProxy.Projects.References;
@@ -11,6 +12,7 @@ namespace Lardite.RefAssistant.VsProxy.Projects
     {
         protected readonly Project Project;
         private readonly Lazy<VsReferenceController> _refController;
+        private readonly Lazy<ProjectKindAttribute> _projectKindAttribute;
 
         protected VsBaseProject(Project project, Func<VSProject, VsReferenceController> refControllerFactory)
         {
@@ -19,6 +21,7 @@ namespace Lardite.RefAssistant.VsProxy.Projects
 
             Project = project;
             _refController = new Lazy<VsReferenceController>(() => refControllerFactory((VSProject)Project.Object));
+            _projectKindAttribute = new Lazy<ProjectKindAttribute>(() => this.GetType().GetCustomAttribute<ProjectKindAttribute>());
         }
 
         public abstract string OutputAssemblyPath { get; }
@@ -56,14 +59,14 @@ namespace Lardite.RefAssistant.VsProxy.Projects
             }
         }
 
-        public virtual Guid KindGuid
+        public VsProjectKinds Kind
         {
-            get
-            {
-                Guid kind;
-                Guid.TryParse(Project.Kind, out kind);
-                return kind;
-            }
+            get { return this.ProjectKindAttribute.Kind; }
+        }
+
+        public Guid KindGuid
+        {
+            get { return this.ProjectKindAttribute.Guid; }
         }
 
         #region Helpers
@@ -71,6 +74,15 @@ namespace Lardite.RefAssistant.VsProxy.Projects
         protected DTE DTE
         {
             get { return Project.DTE; }
+        }
+
+        private ProjectKindAttribute ProjectKindAttribute
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<ProjectKindAttribute>() != null);
+                return _projectKindAttribute.Value;
+            }
         }
 
         #endregion

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Lardite.RefAssistant.Model.Processing;
+using Lardite.RefAssistant.Model.Processing.Data;
 using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.ObjectModel;
-//using Lardite.RefAssistant.ReflectionServices;
+using Lardite.RefAssistant.ReflectionServices;
 
 namespace Lardite.RefAssistant.Model
 {
@@ -12,22 +15,32 @@ namespace Lardite.RefAssistant.Model
     {
         public Task<IEnumerable<VsProjectReference>> FindUnusedReferences(IVsProject project)
         {
-            //var configurator = ServiceConfigurator.GetConfigurator(project);
-            //var assemblyService = configurator.AssemblyService;
-
-            //var primaryAssembly = assemblyService.GetProjectAssembly();
-            //var manifestAssemblies = assemblyService.GetManifestAssemblies(primaryAssembly.Id).ToList();
-
-            //foreach (var id in manifestAssemblies)
-            //{
-            //    var asm = assemblyService.GetAssembly(id);
-            //    var innerAsm = assemblyService.GetManifestAssemblies(asm.Id).ToList();
-            //}
-
-            return Task<IEnumerable<VsProjectReference>>.Factory.StartNew(() => DoWork(project));
+            return Task<IEnumerable<VsProjectReference>>.Factory.StartNew(() => DoWorkOld(project));
         }
 
         private IEnumerable<VsProjectReference> DoWork(IVsProject project)
+        {
+            var configurator = ServiceConfigurator.GetConfigurator(
+                new ServiceConfiguratorOptions
+                {
+                    ProjectOutputDir = Path.GetDirectoryName(project.OutputAssemblyPath),
+                    ProjectReferenceFiles = project.References.Select(@ref => @ref.Location).ToArray()
+                });
+
+            var innerProject = new Project(project, configurator);
+            var projectAgent = ProjectAgentFactory.Create(innerProject, configurator);
+
+            var unusedReferences = projectAgent.DoAnalysis();
+
+            return project.References.Join(
+                unusedReferences,
+                r => r.Name,
+                ur => ur.Name,
+                (r, ur) => r).ToList();
+        }
+
+        [Obsolete("Use DoWork instead of.")]
+        private IEnumerable<VsProjectReference> DoWorkOld(IVsProject project)
         {
             var projectInfo = new ProjectInfo
                 {

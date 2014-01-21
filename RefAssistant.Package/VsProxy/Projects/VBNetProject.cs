@@ -5,7 +5,7 @@ using Lardite.RefAssistant.VsProxy.Projects.References;
 
 namespace Lardite.RefAssistant.VsProxy.Projects
 {
-    [ProjectKind(ProjectKinds.VBNet, "f184b08f-c81c-45f6-a57f-5abd9991f28f")]
+    [ProjectKind(VsProjectKinds.VBNet, "f184b08f-c81c-45f6-a57f-5abd9991f28f")]
     internal sealed class VBNetProject : VsBaseProject
     {
         public VBNetProject(Project project)

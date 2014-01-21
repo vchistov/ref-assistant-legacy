@@ -1,6 +1,6 @@
 ﻿namespace Lardite.RefAssistant.Model.Projects
 {
-    public enum ProjectKinds
+    public enum VsProjectKinds
     {
         CSharp,
 
