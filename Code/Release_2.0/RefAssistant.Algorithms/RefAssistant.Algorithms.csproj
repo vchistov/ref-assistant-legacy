@@ -90,7 +90,6 @@
     <Compile Include="Cache\UsedTypesCache.cs" />
     <Compile Include="Contracts\IAssembly.cs" />
     <Compile Include="Contracts\ICustomAttribute.cs" />
-    <Compile Include="Contracts\ICustomAttributeArgument.cs" />
     <Compile Include="Contracts\ICustomAttributeProvider.cs" />
     <Compile Include="Contracts\IMember.cs" />
     <Compile Include="Contracts\IMethod.cs" />

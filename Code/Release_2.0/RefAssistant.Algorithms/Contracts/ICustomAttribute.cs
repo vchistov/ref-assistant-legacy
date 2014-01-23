@@ -7,10 +7,10 @@ namespace Lardite.RefAssistant.Algorithms.Contracts
     {
         ITypeDefinition AttributeType { get; }
 
-        IEnumerable<ICustomAttributeArgument> ConstructorArguments { get; }
+        IEnumerable<ITypeDefinition> ConstructorArguments { get; }
 
-        IEnumerable<ICustomAttributeArgument> Fields { get; }
+        IEnumerable<ITypeDefinition> Fields { get; }
 
-        IEnumerable<ICustomAttributeArgument> Properties { get; }
+        IEnumerable<ITypeDefinition> Properties { get; }
     }
 }
