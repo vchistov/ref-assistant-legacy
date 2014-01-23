@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lardite.RefAssistant.Algorithms.Data
+namespace Lardite.RefAssistant.Algorithms.Contracts
 {
-    public interface IAssembly : ICustomAttributeProvider, IEquatable<IAssembly>
+    public interface IAssembly : ICustomAttributeProvider
     {
         string Name { get; }
 
@@ -11,7 +11,7 @@ namespace Lardite.RefAssistant.Algorithms.Data
 
         string Culture { get; }
 
-        IPublicKeyToken PublicKeyToken { get; }
+        IEnumerable<byte> PublicKeyToken { get; }
 
         IEnumerable<IAssembly> References { get; }
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lardite.RefAssistant.Algorithms.Data
+namespace Lardite.RefAssistant.Algorithms.Contracts
 {
-    public interface IProject : IEquatable<IProject>
+    public interface IProject
     {
         string Name { get; }
 

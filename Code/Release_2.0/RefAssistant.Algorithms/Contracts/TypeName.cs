@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Lardite.RefAssistant.Algorithms.Data
+namespace Lardite.RefAssistant.Algorithms.Contracts
 {
     [Serializable]
     public sealed class TypeName : IEquatable<TypeName>

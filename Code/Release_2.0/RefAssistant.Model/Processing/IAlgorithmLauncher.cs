@@ -1,5 +1,5 @@
 ﻿using Lardite.RefAssistant.Algorithms;
-using Lardite.RefAssistant.Algorithms.Data;
+using Lardite.RefAssistant.Algorithms.Contracts;
 
 namespace Lardite.RefAssistant.Model.Processing
 {

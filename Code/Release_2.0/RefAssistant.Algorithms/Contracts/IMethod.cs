@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lardite.RefAssistant.Algorithms.Data
+namespace Lardite.RefAssistant.Algorithms.Contracts
 {
-    public interface IMethod : IMember, IEquatable<IMethod>
+    public interface IMethod : IMember
     {
         ITypeDefinition ReturnType { get; }
 

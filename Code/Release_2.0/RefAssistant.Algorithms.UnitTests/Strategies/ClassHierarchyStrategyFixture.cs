@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Lardite.RefAssistant.Algorithms.Cache;
-using Lardite.RefAssistant.Algorithms.Data;
+using Lardite.RefAssistant.Algorithms.Contracts;
 using Lardite.RefAssistant.Algorithms.Strategies;
 using Moq;
 using NUnit.Framework;
