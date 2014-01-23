@@ -31,11 +31,13 @@ namespace Lardite.RefAssistant.Model.Processing.ProjectAgents
 
                 var algorithmResult = algorithm.Process(_project);
 
-                var requiredReferences = candidates.Join(
-                    algorithmResult.RequiredFor,
-                    outer => outer.Assembly, 
-                    inner => inner,
-                    (outer, inner) => outer);
+                var requiredReferences = candidates
+                    .Join(
+                        algorithmResult.RequiredFor,
+                        outer => outer.Assembly,
+                        inner => inner,
+                        (outer, inner) => outer)
+                    .ToList();
 
                 foreach(var reference in requiredReferences)
                 {

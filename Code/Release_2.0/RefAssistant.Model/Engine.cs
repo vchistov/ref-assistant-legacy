@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Lardite.RefAssistant.Model.Processing;
 using Lardite.RefAssistant.Model.Processing.Data;
 using Lardite.RefAssistant.Model.Projects;
-using Lardite.RefAssistant.ObjectModel;
 using Lardite.RefAssistant.ReflectionServices;
 
 namespace Lardite.RefAssistant.Model
@@ -27,7 +26,12 @@ namespace Lardite.RefAssistant.Model
                     ProjectReferenceFiles = project.References.Select(@ref => @ref.Location).ToArray()
                 });
 
-            var innerProject = new Project(project, configurator);
+            var innerProject = new Project(
+                configurator.AssemblyService,
+                configurator.TypeService,
+                configurator.CustomAttributeService,
+                project);
+
             var projectAgent = ProjectAgentFactory.Create(innerProject, configurator);
 
             var unusedReferences = projectAgent.DoAnalysis();
@@ -42,14 +46,14 @@ namespace Lardite.RefAssistant.Model
         [Obsolete("Use DoWork instead of.")]
         private IEnumerable<VsProjectReference> DoWorkOld(IVsProject project)
         {
-            var projectInfo = new ProjectInfo
+            var projectInfo = new Lardite.RefAssistant.ObjectModel.ProjectInfo
                 {
                     Name = project.Name,
                     Type = project.KindGuid,
                     AssemblyPath = project.OutputAssemblyPath,
                     ConfigurationName = "NEW",
                     PlatformName = "RA.2.0",
-                    References = project.References.Select(r => new ProjectReference
+                    References = project.References.Select(r => new Lardite.RefAssistant.ObjectModel.ProjectReference
                         {
                             Name = r.Name,
                             Identity = r.Name,
@@ -60,9 +64,11 @@ namespace Lardite.RefAssistant.Model
                         }).ToList()
                 };
 
-            using (ReferenceInspector referenceResolver = new ReferenceInspector())
+            using (var referenceResolver = new Lardite.RefAssistant.ObjectModel.ReferenceInspector())
             {
-                var result = new InspectResult(referenceResolver.Inspect(new ProjectEvaluator(projectInfo)));
+                var result = new Lardite.RefAssistant.ObjectModel.InspectResult(
+                    referenceResolver.Inspect(
+                        new Lardite.RefAssistant.ObjectModel.ProjectEvaluator(projectInfo)));
 
                 if (result != null && result.Result != null && !result.Result.IsSuccess)
                 {

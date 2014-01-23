@@ -6,14 +6,12 @@ using Lardite.RefAssistant.Model.Processing.Data;
 using Lardite.RefAssistant.Model.Processing.ProjectAgents;
 using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.ReflectionServices;
-using System.Reflection;
-using System.Globalization;
 
 namespace Lardite.RefAssistant.Model.Processing
 {
     internal sealed class ProjectAgentFactory
     {
-        public static ProjectAgentBase Create(Project project, IServiceConfigurator serviceConfigurator)
+        public static ProjectAgentBase Create(Project project, IServiceConfigurator services)
         {
             foreach (var type in LookupServiceAgents())
             {
@@ -21,7 +19,7 @@ namespace Lardite.RefAssistant.Model.Processing
                 Contract.Assert(projectKind != null);
                 if (projectKind.Kind == project.Kind)
                 {
-                    return (ProjectAgentBase)Activator.CreateInstance(type, project, serviceConfigurator);
+                    return (ProjectAgentBase)Activator.CreateInstance(type, project, services);
                 }
             }
 
