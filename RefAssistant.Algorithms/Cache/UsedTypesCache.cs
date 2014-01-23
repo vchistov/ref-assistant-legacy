@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-using Lardite.RefAssistant.Algorithms.Data;
+using Lardite.RefAssistant.Algorithms.Contracts;
 
 namespace Lardite.RefAssistant.Algorithms.Cache
 {

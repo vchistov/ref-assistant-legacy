@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using Lardite.RefAssistant.Algorithms.Data;
+using Lardite.RefAssistant.Algorithms.Contracts;
 using Lardite.RefAssistant.ReflectionServices;
 
 namespace Lardite.RefAssistant.Model.Processing.ProjectAgents

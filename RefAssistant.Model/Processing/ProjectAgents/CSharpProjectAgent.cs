@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Lardite.RefAssistant.Algorithms;
-using Lardite.RefAssistant.Algorithms.Data;
+using Lardite.RefAssistant.Algorithms.Contracts;
 using Lardite.RefAssistant.Model.Processing.Data.Loaders;
 using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.ReflectionServices;

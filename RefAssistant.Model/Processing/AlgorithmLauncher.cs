@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using Lardite.RefAssistant.Algorithms;
-using Lardite.RefAssistant.Algorithms.Data;
+using Lardite.RefAssistant.Algorithms.Contracts;
 using Lardite.RefAssistant.Model.Processing.Data.Loaders;
 
 namespace Lardite.RefAssistant.Model.Processing

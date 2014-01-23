@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Lardite.RefAssistant.Algorithms.Data
+namespace Lardite.RefAssistant.Algorithms.Contracts
 {
-    public interface IProjectReference : IEquatable<IProjectReference>
+    public interface IProjectReference
     {
         string Name { get; }
 

@@ -88,6 +88,19 @@
     <Compile Include="AssemblyManifestAlgorithm.cs" />
     <Compile Include="Cache\IUsedTypesCache.cs" />
     <Compile Include="Cache\UsedTypesCache.cs" />
+    <Compile Include="Contracts\IAssembly.cs" />
+    <Compile Include="Contracts\ICustomAttribute.cs" />
+    <Compile Include="Contracts\ICustomAttributeArgument.cs" />
+    <Compile Include="Contracts\ICustomAttributeProvider.cs" />
+    <Compile Include="Contracts\IMember.cs" />
+    <Compile Include="Contracts\IMethod.cs" />
+    <Compile Include="Contracts\IMethodParameter.cs" />
+    <Compile Include="Contracts\IProject.cs" />
+    <Compile Include="Contracts\IProjectReference.cs" />
+    <Compile Include="Contracts\ITypeDefinition.cs" />
+    <Compile Include="Contracts\ITypeImport.cs" />
+    <Compile Include="Contracts\ITypeReference.cs" />
+    <Compile Include="Contracts\TypeName.cs" />
     <Compile Include="IAlgorithm.cs" />
     <Compile Include="AlgorithmResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,10 +110,6 @@
     <Compile Include="Strategies\TypeInterfacesStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RefAssistant.Algorithms.Data\RefAssistant.Algorithms.Data.csproj">
-      <Project>{B18DB044-5CD1-425C-B932-750A93F553F2}</Project>
-      <Name>RefAssistant.Algorithms.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RefAssistant.General\RefAssistant.General.csproj">
       <Project>{6C359BBF-69BF-442A-A39D-6A88EB8B02B5}</Project>
       <Name>RefAssistant.General</Name>
