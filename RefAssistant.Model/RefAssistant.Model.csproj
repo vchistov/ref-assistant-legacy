@@ -63,6 +63,7 @@
     <Compile Include="Processing\Data\Loaders\ProjectInputLoader.cs" />
     <Compile Include="Processing\Data\Project.cs" />
     <Compile Include="Processing\Data\ProjectReference.cs" />
+    <Compile Include="Processing\Data\TypeDefinition.cs" />
     <Compile Include="Processing\IAlgorithmLauncher.cs">
       <SubType>Code</SubType>
     </Compile>
