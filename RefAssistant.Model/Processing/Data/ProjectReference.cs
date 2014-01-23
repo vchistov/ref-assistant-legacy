@@ -1,47 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using Lardite.RefAssistant.Algorithms.Contracts;
 using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.ReflectionServices;
 
 namespace Lardite.RefAssistant.Model.Processing.Data
 {
-    internal sealed class Project : IProject, IEquatable<Project>
+    internal sealed class ProjectReference : IProjectReference, IEquatable<ProjectReference>
     {
         private readonly Lazy<IAssembly> _assembly;
-        private readonly Lazy<IList<IProjectReference>> _projectRefs;
 
-        internal Project(
+        internal ProjectReference(
             IAssemblyService assemblyService,
             ITypeService typeService,
             ICustomAttributeService customAttributeService,
-            IVsProject project)
+            VsProjectReference projectReference)
         {
             Contract.Requires(assemblyService != null);
             Contract.Requires(typeService != null);
             Contract.Requires(customAttributeService != null);
-            Contract.Requires(project != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(project.OutputAssemblyPath));
+            Contract.Requires(projectReference != null);
+            Contract.Requires(!string.IsNullOrWhiteSpace(projectReference.Location));
+
+            this.Name = projectReference.Name;
 
             _assembly = new Lazy<IAssembly>(() => new Assembly(
                 assemblyService, 
                 typeService, 
                 customAttributeService, 
-                project.OutputAssemblyPath));
-
-            _projectRefs = new Lazy<IList<IProjectReference>>(() => LoadProjectReferences(
-                assemblyService,
-                typeService,
-                customAttributeService,
-                project));
-
-            this.Name = project.Name;
-            this.Kind = project.Kind;
+                projectReference.Location));
         }
-
-        public VsProjectKinds Kind { get; private set; }
 
         public string Name { get; private set; }
 
@@ -50,14 +38,9 @@ namespace Lardite.RefAssistant.Model.Processing.Data
             get { return _assembly.Value; }
         }
 
-        public IEnumerable<IProjectReference> ProjectRefs
-        {
-            get { return _projectRefs.Value; }
-        }
-
         #region Object overrides
 
-        public bool Equals(Project other)
+        public bool Equals(ProjectReference other)
         {
             if (ReferenceEquals(other, null))
                 return false;
@@ -70,7 +53,7 @@ namespace Lardite.RefAssistant.Model.Processing.Data
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Project);
+            return Equals(obj as ProjectReference);
         }
 
         public override int GetHashCode()
@@ -81,23 +64,6 @@ namespace Lardite.RefAssistant.Model.Processing.Data
         public override string ToString()
         {
             return this.Name;
-        }
-
-        #endregion
-
-        #region Helpers
-
-        private IList<IProjectReference> LoadProjectReferences(
-            IAssemblyService assemblyService,
-            ITypeService typeService,
-            ICustomAttributeService customAttributeService,
-            IVsProject project)
-        {
-            return project
-                .References
-                .Select(@ref => new ProjectReference(assemblyService, typeService, customAttributeService, @ref))
-                .Cast<IProjectReference>()
-                .ToList();
         }
 
         #endregion

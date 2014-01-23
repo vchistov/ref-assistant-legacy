@@ -22,14 +22,14 @@ namespace Lardite.RefAssistant.ReflectionServices
             _typeLookup = new TypeLookup(container);
         }
 
-        IEnumerable<CustomAttributeInfo> ICustomAttributeService.GetAssemblyAttributes(AssemblyId assemblyId)
+        IEnumerable<CustomAttributeInfo> ICustomAttributeService.GetAttributes(AssemblyId assemblyId)
         {
             ThrowUtils.ArgumentNull(() => assemblyId);
 
             return this.GetCustomAttributes(_container.Get(assemblyId));
         }
 
-        IEnumerable<CustomAttributeInfo> ICustomAttributeService.GetTypeAttributes(TypeId typeId)
+        IEnumerable<CustomAttributeInfo> ICustomAttributeService.GetAttributes(TypeId typeId)
         {
             ThrowUtils.ArgumentNull(() => typeId);
 

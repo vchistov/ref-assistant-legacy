@@ -5,8 +5,8 @@ namespace Lardite.RefAssistant.ReflectionServices
 {
     public interface ICustomAttributeService
     {
-        IEnumerable<CustomAttributeInfo> GetAssemblyAttributes(AssemblyId assemblyId);
+        IEnumerable<CustomAttributeInfo> GetAttributes(AssemblyId assemblyId);
 
-        IEnumerable<CustomAttributeInfo> GetTypeAttributes(TypeId typeId);
+        IEnumerable<CustomAttributeInfo> GetAttributes(TypeId typeId);
     }
 }
