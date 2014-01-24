@@ -1,58 +1,102 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
 using Lardite.RefAssistant.Algorithms.Contracts;
 using Lardite.RefAssistant.ReflectionServices;
 using Lardite.RefAssistant.ReflectionServices.Data;
-using System.Diagnostics.Contracts;
 
 namespace Lardite.RefAssistant.Model.Processing.Data
 {
     internal sealed class TypeDefinition : CustomAttributeProvider, ITypeDefinition, IEquatable<TypeDefinition>
     {
         private readonly TypeId _typeId;
+        private readonly Lazy<TypeInfo> _typeInfo;
+        private readonly Lazy<TypeName> _typeName;
+        private readonly Lazy<IAssembly> _assembly;
+        private readonly Lazy<IAssembly> _forwardedFrom;
+        private readonly Lazy<ITypeDefinition> _baseType;
+        private readonly Lazy<IList<ITypeDefinition>> _interfaces;
 
+        #region .ctor
+        
         internal TypeDefinition(
             IAssemblyService assemblyService,
             ITypeService typeService,
             ICustomAttributeService customAttributeService,
             TypeId typeId)
+            : this(assemblyService, typeService, customAttributeService, typeId, () => typeService.GetType(typeId))
+        {            
+        }
+
+        internal TypeDefinition(
+            IAssemblyService assemblyService,
+            ITypeService typeService,
+            ICustomAttributeService customAttributeService,
+            TypeInfo typeInfo)
+            : this(assemblyService, typeService, customAttributeService, typeInfo.Id, () => typeInfo)
+        {
+        }
+
+        private TypeDefinition(
+            IAssemblyService assemblyService,
+            ITypeService typeService,
+            ICustomAttributeService customAttributeService,
+            TypeId typeId,
+            Func<TypeInfo> typeInfoFactory)
             : base(assemblyService, typeService, customAttributeService)
         {
             Contract.Requires(typeId != null);
+            Contract.Requires(typeInfoFactory != null);
 
             _typeId = typeId;
+
+            _typeInfo = new Lazy<TypeInfo>(typeInfoFactory);
+
+            _typeName = new Lazy<TypeName>(() => new TypeName(this)
+            {
+                FullName = this.TypeInfo.FullName
+            });
+
+            _assembly = new Lazy<IAssembly>(() => CreateAssembly(this.TypeInfo.Assembly));
+
+            _forwardedFrom = new Lazy<IAssembly>(() => CreateAssembly(this.TypeInfo.ForwardedFrom));
+
+            _baseType = new Lazy<ITypeDefinition>(() => CreateTypeDefinition(this.TypeInfo.BaseType));
+
+            _interfaces = new Lazy<IList<ITypeDefinition>>(LoadInterfaces);
         }
+
+        #endregion
 
         public TypeName Name
         {
-            get { throw new NotImplementedException(); }
+            get { return _typeName.Value; }
         }
 
         public ITypeDefinition BaseType
         {
-            get { throw new NotImplementedException(); }
+            get { return _baseType.Value; }
         }
 
         public IEnumerable<ITypeDefinition> Interfaces
         {
-            get { throw new NotImplementedException(); }
+            get { return _interfaces.Value; }
         }
 
         public IAssembly Assembly
         {
-            get { throw new NotImplementedException(); }
+            get { return _assembly.Value; }
         }
 
         public IAssembly ForwardedFrom
         {
-            get { throw new NotImplementedException(); }
+            get { return _forwardedFrom.Value; }
         }
 
         public bool IsInterface
         {
-            get { throw new NotImplementedException(); }
+            get { return this.TypeInfo.IsInterface; }
         }
 
         public IEnumerable<IMethod> Methods
@@ -106,6 +150,56 @@ namespace Lardite.RefAssistant.Model.Processing.Data
         public override string ToString()
         {
             return _typeId.ToString();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private TypeInfo TypeInfo
+        {
+            get { return _typeInfo.Value; }
+        }
+        
+        private ITypeDefinition CreateTypeDefinition(TypeId typeId)
+        {
+            return typeId == null
+                ? null
+                : new TypeDefinition(
+                    this.AssemblyService,
+                    this.TypeService,
+                    this.CustomAttributeService,
+                    typeId);
+        }
+
+        private ITypeDefinition CreateTypeDefinition(TypeInfo typeInfo)
+        {
+            Contract.Requires(typeInfo != null);
+
+            return new TypeDefinition(
+                    this.AssemblyService,
+                    this.TypeService,
+                    this.CustomAttributeService,
+                    typeInfo);
+        }
+
+        private IAssembly CreateAssembly(AssemblyId assemblyId)
+        {
+            return assemblyId == null
+                ? null
+                : new Assembly(
+                    this.AssemblyService,
+                    this.TypeService,
+                    this.CustomAttributeService,
+                    assemblyId);
+        }
+
+        private IList<ITypeDefinition> LoadInterfaces()
+        {
+            return this.TypeService
+                .GetInterfaces(_typeId)
+                .Select(info => this.CreateTypeDefinition(info))
+                .ToList();
         }
 
         #endregion

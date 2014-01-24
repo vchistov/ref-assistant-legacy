@@ -3,6 +3,7 @@ using System.Text;
 
 namespace Lardite.RefAssistant.Algorithms.Contracts
 {
+    // TODO: possible useless
     [Serializable]
     public sealed class TypeName : IEquatable<TypeName>
     {
