@@ -60,7 +60,7 @@
     <Compile Include="Processing\Data\CustomAttribute.cs" />
     <Compile Include="Processing\Data\CustomAttributeProvider.cs" />
     <Compile Include="Processing\Data\Loaders\IAlgorithmInputLoader.cs" />
-    <Compile Include="Processing\Data\Loaders\ProjectInputLoader.cs" />
+    <Compile Include="Processing\Data\Loaders\ProjectAssemblyInputLoader.cs" />
     <Compile Include="Processing\Data\Loaders\TypeDefinitionsInputLoader.cs" />
     <Compile Include="Processing\Data\Project.cs" />
     <Compile Include="Processing\Data\ProjectReference.cs" />

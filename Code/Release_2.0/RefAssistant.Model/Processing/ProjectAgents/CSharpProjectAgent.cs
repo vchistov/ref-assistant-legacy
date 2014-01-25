@@ -19,8 +19,8 @@ namespace Lardite.RefAssistant.Model.Processing.ProjectAgents
         {
             get 
             {
-                yield return new AlgorithmLauncher<AssemblyManifestAlgorithm, IProject>(
-                    new ProjectInputLoader());
+                yield return new AlgorithmLauncher<AssemblyManifestAlgorithm, IAssembly>(
+                    new ProjectAssemblyInputLoader());
 
                 yield return new AlgorithmLauncher<TypeInheritanceAlgorithm, IEnumerable<ITypeDefinition>>(
                     new TypeDefinitionsInputLoader());

@@ -7,12 +7,15 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests
 {
     internal static class MockUtils
     {
-        public static Mock<IAssembly> CreateAssemblyMock(string name)
+        public static Mock<IAssembly> CreateAssemblyMock(
+            string name,
+            IEnumerable<IAssembly> manifestAssemblies = null)
         {
             var assembly = new Mock<IAssembly>();
 
             assembly.SetupGet<string>(p => p.Name).Returns(name);
             assembly.Setup(m => m.Equals(It.IsAny<IAssembly>())).Returns<IAssembly>((other) => string.Equals(other.Name, name));
+            assembly.SetupGet(m => m.References).Returns(manifestAssemblies);
 
             return assembly;
         }
