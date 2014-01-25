@@ -107,6 +107,7 @@
     <Compile Include="Strategies\ImportedTypeStrategy.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\TypeInterfacesStrategy.cs" />
+    <Compile Include="TypeInheritanceAlgorithm.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RefAssistant.General\RefAssistant.General.csproj">

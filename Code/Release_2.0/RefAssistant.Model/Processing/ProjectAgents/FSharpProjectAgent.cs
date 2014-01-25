@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Lardite.RefAssistant.Algorithms;
 using Lardite.RefAssistant.Algorithms.Contracts;
+using Lardite.RefAssistant.Model.Processing.Data.Loaders;
 using Lardite.RefAssistant.Model.Projects;
 using Lardite.RefAssistant.ReflectionServices;
 
@@ -17,7 +19,8 @@ namespace Lardite.RefAssistant.Model.Processing.ProjectAgents
         {
             get 
             {
-                yield break;
+                yield return new AlgorithmLauncher<TypeInheritanceAlgorithm, IEnumerable<ITypeDefinition>>(
+                    new TypeDefinitionsInputLoader());
             }
         }   
     }

@@ -12,6 +12,7 @@ namespace Lardite.RefAssistant.Model.Processing.Data
     {
         private readonly Lazy<AssemblyInfo> _assemblyInfo;
         private readonly Lazy<IList<IAssembly>> _manifestAssemblies;
+        private readonly Lazy<IList<ITypeDefinition>> _typeDefinitions;
         private AssemblyId _assemblyId;
 
         internal Assembly(
@@ -56,6 +57,7 @@ namespace Lardite.RefAssistant.Model.Processing.Data
             _assemblyId = assemblyId;
             _assemblyInfo = new Lazy<AssemblyInfo>(assemblyInfoFactory);
             _manifestAssemblies = new Lazy<IList<IAssembly>>(LoadManifestAssemblies);
+            _typeDefinitions = new Lazy<IList<ITypeDefinition>>(LoadTypeDefinitions);
         }
 
         public string Name
@@ -81,6 +83,16 @@ namespace Lardite.RefAssistant.Model.Processing.Data
         public IEnumerable<IAssembly> References
         {
             get { return _manifestAssemblies.Value; }
+        }
+
+        public IEnumerable<ITypeDefinition> TypeDefinitions
+        {
+            get { return _typeDefinitions.Value; }
+        }
+
+        public IEnumerable<ITypeReference> TypeReferences
+        {
+            get { throw new NotImplementedException(); }
         }
 
         protected override IEnumerable<CustomAttributeInfo> GetCustomAttributes()
@@ -136,6 +148,15 @@ namespace Lardite.RefAssistant.Model.Processing.Data
                 .GetManifestAssemblies(this.AssemblyId)
                 .Select(id => new Assembly(this.AssemblyService, this.TypeService, this.CustomAttributeService, id))
                 .Cast<IAssembly>()
+                .ToList();
+        }
+
+        private IList<ITypeDefinition> LoadTypeDefinitions()
+        {
+            return this.AssemblyService
+                .GetDefinedTypes(this.AssemblyId)
+                .Select(id => new TypeDefinition(this.AssemblyService, this.TypeService, this.CustomAttributeService, id))
+                .Cast<ITypeDefinition>()
                 .ToList();
         }
 
