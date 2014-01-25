@@ -8,5 +8,11 @@ namespace Lardite.RefAssistant.Collections
         {
             return new ReadOnlyHashSet<T>(source);
         }
+
+        public static ISet<T> UnionWithFluent<T>(this ISet<T> source, IEnumerable<T> other)
+        {
+            source.UnionWith(other);
+            return source;
+        }
     }
 }

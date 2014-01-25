@@ -15,7 +15,8 @@ namespace Lardite.RefAssistant.Algorithms.Contracts
 
         IEnumerable<IAssembly> References { get; }
 
-#warning TODO: possible useless
-        //IEnumerable<ITypeInfo> Types { get; }
+        IEnumerable<ITypeDefinition> TypeDefinitions { get; }
+
+        IEnumerable<ITypeReference> TypeReferences { get; }
     }
 }
