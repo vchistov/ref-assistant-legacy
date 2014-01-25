@@ -3,7 +3,6 @@ using System.Linq;
 using Lardite.RefAssistant.Algorithms.Cache;
 using Lardite.RefAssistant.Algorithms.Contracts;
 using Lardite.RefAssistant.Algorithms.Strategies;
-using Moq;
 using NUnit.Framework;
 
 namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
@@ -35,7 +34,10 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_InputClassIsCached_EmptyResult()
         {
-            ITypeImport inputClassObj = CreateTypeMock("Class_A", CreateAssemblyMock("Assembly_I").Object).Object;
+            ITypeImport inputClassObj = MockUtils.CreateTypeMock(
+                "Class_A",
+                null,
+                MockUtils.CreateAssemblyMock("Assembly_I").Object).Object;
 
             var cache = new UsedTypesCache();
             cache.AddType(inputClassObj);
@@ -51,8 +53,8 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_InputClassIsNotCached_ReturnsImportedFromAssembly()
         {
-            IAssembly importedFromObj = CreateAssemblyMock("Assembly_I").Object;
-            ITypeImport inputClassObj = CreateTypeMock("Class_A", importedFromObj).Object;
+            IAssembly importedFromObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeImport inputClassObj = MockUtils.CreateTypeMock("Class_A", null, importedFromObj).Object;
 
             var result = new ImportedTypeStrategy(new UsedTypesCache())
                 .DoAnalysis(inputClassObj)
@@ -67,37 +69,11 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [ExpectedException(ExpectedExceptionName = "System.Diagnostics.Contracts.__ContractsRuntime+ContractException", ExpectedMessage = "Assertion failed.")]
         public void DoAnalysis_NoImportedFrom_ContractException()
         {
-            ITypeImport inputClassObj = CreateTypeMock("Class_A", null).Object;
+            ITypeImport inputClassObj = MockUtils.CreateTypeMock("Class_A", null, (IAssembly)null).Object;
 
             new ImportedTypeStrategy(new UsedTypesCache())
                 .DoAnalysis(inputClassObj)
                 .ToList();
         }
-
-        #region Helpers
-
-        private static Mock<ITypeImport> CreateTypeMock(string fullName, IAssembly importedFrom)
-        {
-            var type = new Mock<ITypeImport>();
-
-            type.SetupGet<TypeName>(p => p.Name).Returns(new TypeName(It.IsAny<ITypeDefinition>()) { FullName = fullName });
-            type.Setup(m => m.Equals(It.IsAny<ITypeDefinition>())).Returns<ITypeDefinition>((other) => string.Equals(other.Name.FullName, fullName));
-            type.SetupGet<IAssembly>(p => p.ImportedFrom).Returns(importedFrom);
-
-            return type;
-        }
-
-        private static Mock<IAssembly> CreateAssemblyMock(string name)
-        {
-            var assembly = new Mock<IAssembly>();
-
-            assembly.SetupGet<string>(p => p.Name).Returns(name);
-            assembly.Setup(m => m.Equals(It.IsAny<IAssembly>())).Returns<IAssembly>((other) => string.Equals(other.Name, name));
-
-            return assembly;
-        }
-
-        #endregion
-
     }
 }

@@ -93,6 +93,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyManifestAlgorithmFixture.cs" />
     <Compile Include="MockUtils.cs" />
     <Compile Include="Strategies\ClassHierarchyStrategyFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

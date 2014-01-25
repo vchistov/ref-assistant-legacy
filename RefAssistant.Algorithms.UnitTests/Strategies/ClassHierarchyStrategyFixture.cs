@@ -35,8 +35,8 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_NoBaseClass_ReturnsAssemblyOfInputClass()
         {
-            IAssembly inputAssemblyObj = CreateAssemblyMock("Assembly_I").Object;
-            ITypeDefinition inputClassObj = CreateTypeMock("Class_A", inputAssemblyObj).Object;
+            IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj).Object;
 
             var result = new ClassHierarchyStrategy(new UsedTypesCache())
                 .DoAnalysis(inputClassObj)
@@ -50,7 +50,7 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_InputClassIsCached_EmptyResult()
         {
-            ITypeDefinition inputClassObj = CreateTypeMock("Class_A", CreateAssemblyMock("Assembly_I").Object).Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", MockUtils.CreateAssemblyMock("Assembly_I").Object).Object;
 
             var cache = new UsedTypesCache();
             cache.AddType(inputClassObj);
@@ -66,10 +66,10 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_BaseClassIsCached_ReturnsAssemblyOfInputClass()
         {
-            ITypeDefinition baseClassObj = CreateTypeMock("Class_B", CreateAssemblyMock("Assemply_II").Object).Object;
+            ITypeDefinition baseClassObj = MockUtils.CreateTypeMock("Class_B", MockUtils.CreateAssemblyMock("Assemply_II").Object).Object;
             
-            var inputAssemblyObj = CreateAssemblyMock("Assembly_I").Object;
-            ITypeDefinition inputClassObj = CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
+            var inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
 
             var cache = new UsedTypesCache();
             cache.AddType(baseClassObj);
@@ -86,9 +86,9 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_HierarchyIsCached_EmptyResult()
         {
-            ITypeDefinition rootClassObj = CreateTypeMock("Class_C", CreateAssemblyMock("Assembly_C").Object).Object;
-            ITypeDefinition baseClassObj = CreateTypeMock("Class_B", CreateAssemblyMock("Assembly_B").Object, rootClassObj).Object;
-            ITypeDefinition inputClassObj = CreateTypeMock("Class_A", CreateAssemblyMock("Assembly_A").Object, baseClassObj).Object;
+            ITypeDefinition rootClassObj = MockUtils.CreateTypeMock("Class_C", MockUtils.CreateAssemblyMock("Assembly_C").Object).Object;
+            ITypeDefinition baseClassObj = MockUtils.CreateTypeMock("Class_B", MockUtils.CreateAssemblyMock("Assembly_B").Object, rootClassObj).Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", MockUtils.CreateAssemblyMock("Assembly_A").Object, baseClassObj).Object;
 
             var cache = new UsedTypesCache();
             cache.AddType(rootClassObj);
@@ -106,13 +106,13 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_HierarchyIsNotCached_NoDuplicatedAssembliesInResult()
         {
-            IAssembly parentAssemblyObj = CreateAssemblyMock("Assembly_II").Object;
+            IAssembly parentAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
 
-            ITypeDefinition rootClassObj = CreateTypeMock("Class_C", parentAssemblyObj).Object;
-            ITypeDefinition baseClassObj = CreateTypeMock("Class_B", parentAssemblyObj, rootClassObj).Object;
+            ITypeDefinition rootClassObj = MockUtils.CreateTypeMock("Class_C", parentAssemblyObj).Object;
+            ITypeDefinition baseClassObj = MockUtils.CreateTypeMock("Class_B", parentAssemblyObj, rootClassObj).Object;
 
-            IAssembly inputAssemblyObj = CreateAssemblyMock("Assembly_I").Object;
-            ITypeDefinition inputClassObj = CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
+            IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
             
             var result = new ClassHierarchyStrategy(new UsedTypesCache())
                 .DoAnalysis(inputClassObj)
@@ -126,15 +126,15 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_BaseClassIsForwarded_TwoAssemblyForBaseClassInResult()
         {
-            IAssembly forwardedAssemblyObj = CreateAssemblyMock("Assembly_III").Object;
-            IAssembly parentAssemblyObj = CreateAssemblyMock("Assembly_II").Object;
+            IAssembly forwardedAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_III").Object;
+            IAssembly parentAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
 
-            Mock<ITypeDefinition> baseClass = CreateTypeMock("Class_B", parentAssemblyObj);
+            Mock<ITypeDefinition> baseClass = MockUtils.CreateTypeMock("Class_B", parentAssemblyObj);
             baseClass.SetupGet<IAssembly>(p => p.ForwardedFrom).Returns(forwardedAssemblyObj);
             ITypeDefinition baseClassObj = baseClass.Object;
 
-            IAssembly inputAssemblyObj = CreateAssemblyMock("Assembly_I").Object;
-            ITypeDefinition inputClassObj = CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
+            IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
 
             var result = new ClassHierarchyStrategy(new UsedTypesCache())
                 .DoAnalysis(inputClassObj)
@@ -148,15 +148,15 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         [Test]
         public void DoAnalysis_BaseClassIsForwardedAndCached_ReturnsAssemblyOfInputClass()
         {
-            IAssembly forwardedAssemblyObj = CreateAssemblyMock("Assembly_III").Object;
-            IAssembly parentAssemblyObj = CreateAssemblyMock("Assembly_II").Object;
+            IAssembly forwardedAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_III").Object;
+            IAssembly parentAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
 
-            Mock<ITypeDefinition> baseClass = CreateTypeMock("Class_B", parentAssemblyObj);
+            Mock<ITypeDefinition> baseClass = MockUtils.CreateTypeMock("Class_B", parentAssemblyObj);
             baseClass.SetupGet<IAssembly>(p => p.ForwardedFrom).Returns(forwardedAssemblyObj);
             ITypeDefinition baseClassObj = baseClass.Object;
 
-            IAssembly inputAssemblyObj = CreateAssemblyMock("Assembly_I").Object;
-            ITypeDefinition inputClassObj = CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
+            IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
 
             var cache = new UsedTypesCache();
             cache.AddType(baseClassObj);
@@ -169,31 +169,5 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
             Assert.AreEqual(1, result.Count());
             Assert.That(result, Is.EquivalentTo(new[] { inputAssemblyObj }));
         }
-
-        #region Helpers
-        
-        private static Mock<ITypeDefinition> CreateTypeMock(string fullName, IAssembly assembly, ITypeDefinition baseClass = null)
-        {
-            var type = new Mock<ITypeDefinition>();
-
-            type.SetupGet<TypeName>(p => p.Name).Returns(new TypeName(It.IsAny<ITypeDefinition>()) { FullName = fullName });
-            type.Setup(m => m.Equals(It.IsAny<ITypeDefinition>())).Returns<ITypeDefinition>((other) => string.Equals(other.Name.FullName, fullName));
-            type.SetupGet<IAssembly>(p => p.Assembly).Returns(assembly);
-            type.SetupGet<ITypeDefinition>(p => p.BaseType).Returns(baseClass);
-
-            return type;
-        }
-
-        private static Mock<IAssembly> CreateAssemblyMock(string name)
-        {
-            var assembly = new Mock<IAssembly>();
-
-            assembly.SetupGet<string>(p => p.Name).Returns(name);
-            assembly.Setup(m => m.Equals(It.IsAny<IAssembly>())).Returns<IAssembly>((other) => string.Equals(other.Name, name));
-
-            return assembly;
-        }
-
-        #endregion
     }
 }
