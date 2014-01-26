@@ -41,9 +41,9 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
                 inputAssemblyObj,
                 interfaces: new []
                     {
-                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj).Object,
-                        MockUtils.CreateTypeMock("Interface_B", interfaceAssemblyObj).Object,
-                        MockUtils.CreateTypeMock("Interface_C", interfaceAssemblyObj).Object
+                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj, isInterface: true).Object,
+                        MockUtils.CreateTypeMock("Interface_B", interfaceAssemblyObj, isInterface: true).Object,
+                        MockUtils.CreateTypeMock("Interface_C", interfaceAssemblyObj, isInterface: true).Object
                     }).Object;
 
             var result = new TypeInterfacesStrategy(new UsedTypesCache())
@@ -66,8 +66,8 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
                 inputAssemblyObj,
                 interfaces: new[]
                     {
-                        MockUtils.CreateTypeMock("Interface_A", firstAssemblyObj).Object,
-                        MockUtils.CreateTypeMock("Interface_B", secondAssemblyObj).Object
+                        MockUtils.CreateTypeMock("Interface_A", firstAssemblyObj, isInterface: true).Object,
+                        MockUtils.CreateTypeMock("Interface_B", secondAssemblyObj, isInterface: true).Object
                     }).Object;
 
             var result = new TypeInterfacesStrategy(new UsedTypesCache())
@@ -90,8 +90,8 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
                 inputAssemblyObj,
                 interfaces: new[]
                     {
-                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj).Object,
-                        MockUtils.CreateTypeMock("Interface_B", interfaceAssemblyObj, interfaceForwardedAssemblyObj).Object
+                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj, isInterface: true).Object,
+                        MockUtils.CreateTypeMock("Interface_B", interfaceAssemblyObj, interfaceForwardedAssemblyObj, isInterface: true).Object
                     }).Object;
 
             var result = new TypeInterfacesStrategy(new UsedTypesCache())
@@ -115,7 +115,7 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
                 forwardedFrom: inputForwardedAssemblyObj,
                 interfaces: new[]
                     {
-                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj).Object
+                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj, isInterface: true).Object
                     }).Object;
 
             var result = new TypeInterfacesStrategy(new UsedTypesCache())
@@ -131,7 +131,7 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         public void DoAnalysis_InterfaceIsCached_ReturnsAssemblyOfInputType()
         {
             IAssembly interfaceAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
-            ITypeDefinition interfaceObj = MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj).Object;
+            ITypeDefinition interfaceObj = MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj, isInterface: true).Object;
 
             IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
             ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A",
@@ -157,7 +157,7 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         public void DoAnalysis_InputIsCached_ReturnsAssemblyOfInputType()
         {
             IAssembly interfaceAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
-            ITypeDefinition interfaceObj = MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj).Object;
+            ITypeDefinition interfaceObj = MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj, isInterface: true).Object;
 
             IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
             ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A",
@@ -192,8 +192,8 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
                 inputAssemblyObj,
                 interfaces: new[] 
                     {
-                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj).Object,
-                        MockUtils.CreateTypeMock("Interface_B", interfaceDefinitionImportedAssemblyObj, interfaceImportedAssemblyObj).Object
+                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj, isInterface: true).Object,
+                        MockUtils.CreateTypeMock("Interface_B", interfaceDefinitionImportedAssemblyObj, interfaceImportedAssemblyObj, isInterface: true).Object
                     }).Object;
 
             var result = new TypeInterfacesStrategy(new UsedTypesCache())
@@ -216,8 +216,8 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
                 inputAssemblyObj,
                 interfaces: new[] 
                     {
-                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj).Object,
-                        MockUtils.CreateTypeMock("Interface_B", interfaceDefinitionImportedAssemblyObj, (IAssembly)null).Object
+                        MockUtils.CreateTypeMock("Interface_A", interfaceAssemblyObj, isInterface: true).Object,
+                        MockUtils.CreateTypeMock("Interface_B", interfaceDefinitionImportedAssemblyObj, (IAssembly)null, isInterface: true).Object
                     }).Object;
 
             var result = new TypeInterfacesStrategy(new UsedTypesCache())

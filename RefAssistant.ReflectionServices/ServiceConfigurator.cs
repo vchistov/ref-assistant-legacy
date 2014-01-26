@@ -59,7 +59,8 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         private ITypeService InitTypeService()
         {
-            return new TypeService(this.AssemblyContainer);
+            var importTypeResolver = new ImportTypeResolver(this.AssemblyContainer, _options.ProjectReferenceFiles);
+            return new TypeService(this.AssemblyContainer, importTypeResolver);
         }
 
         private ICustomAttributeService InitCustomAttributeService()

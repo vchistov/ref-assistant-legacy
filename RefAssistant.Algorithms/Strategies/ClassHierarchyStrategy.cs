@@ -25,15 +25,15 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
                 return Enumerable.Empty<IAssembly>();
             }
 
-            var assemblies = EnumerateHierarchy(inputType)
+            var assemblies = TakeImportedFrom(inputType)                
+                .Union(EnumerateHierarchy(inputType)
                 .TakeWhile(type => !_typesCache.IsCached(type))
                 .Reverse()
                 .SelectMany(t =>
                     {
                         _typesCache.AddType(t);
                         return TakeTypeAssemblies(t);
-                    })
-                .Distinct();
+                    }));
 
             return assemblies;
         }
@@ -43,13 +43,9 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
         /// </summary>
         private IEnumerable<ITypeDefinition> EnumerateHierarchy(ITypeDefinition inputType)
         {
-            ITypeDefinition baseType = null;
-            if (inputType != null)
-            {
-                baseType = inputType.BaseType;
-                yield return inputType;
-            }
+            yield return inputType;
 
+            var baseType = inputType.BaseType;
             while (baseType != null)
             {
                 yield return baseType;
@@ -68,6 +64,23 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
             if (inputType.ForwardedFrom != null)
             {
                 yield return inputType.ForwardedFrom;
+            }
+        }
+
+        /// <summary>
+        /// Takes the assembly from which the type is imported.
+        /// </summary>
+        private IEnumerable<IAssembly> TakeImportedFrom(ITypeDefinition inputType)
+        {
+            // Don't join the conditions, to avoid extra request of ImportedFrom property.
+            if (_typesCache.IsCached(inputType))
+            {
+                yield break;
+            }
+
+            if (inputType.ImportedFrom != null)
+            {
+                yield return inputType.ImportedFrom;
             }
         }
     }

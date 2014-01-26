@@ -97,14 +97,12 @@
     <Compile Include="Contracts\IProject.cs" />
     <Compile Include="Contracts\IProjectReference.cs" />
     <Compile Include="Contracts\ITypeDefinition.cs" />
-    <Compile Include="Contracts\ITypeImport.cs" />
     <Compile Include="Contracts\ITypeReference.cs" />
     <Compile Include="Contracts\TypeName.cs" />
     <Compile Include="IAlgorithm.cs" />
     <Compile Include="AlgorithmResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategies\ClassHierarchyStrategy.cs" />
-    <Compile Include="Strategies\ImportedTypeStrategy.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\TypeInterfacesStrategy.cs" />
     <Compile Include="TypeInheritanceAlgorithm.cs" />

@@ -11,13 +11,11 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
     internal class TypeInterfacesStrategy : IStrategy<ITypeDefinition>
     {
         private readonly IUsedTypesCache _typesCache;
-        private readonly IStrategy<ITypeImport> _importedTypeStrategy;
 
         public TypeInterfacesStrategy(IUsedTypesCache typesCache)
         {
             Contract.Requires<ArgumentNullException>(typesCache != null);
             _typesCache = typesCache;
-            _importedTypeStrategy = new ImportedTypeStrategy(_typesCache);
         }
 
         public IEnumerable<IAssembly> DoAnalysis(ITypeDefinition inputType)
@@ -32,6 +30,8 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
             var assemblies = TakeTypeAssemblies(inputType)
                 .Union(interfaces.SelectMany(@interface => 
                     {
+                        Contract.Assert(@interface.IsInterface);
+
                         var interfaceAssemblies = TakeTypeAssemblies(@interface)
                             .Union(TakeImportedFrom(@interface))
                             .ToList();
@@ -56,18 +56,15 @@ namespace Lardite.RefAssistant.Algorithms.Strategies
             }
         }
 
+        /// <summary>
+        /// Takes the assembly from which the type is imported.
+        /// </summary>
         private IEnumerable<IAssembly> TakeImportedFrom(ITypeDefinition inputType)
         {
-            var typeImport = inputType as ITypeImport;
-            if (typeImport == null || typeImport.ImportedFrom == null)
+            if (inputType.ImportedFrom != null)
             {
-                yield break;
-            }
-
-            foreach (var @assembly in _importedTypeStrategy.DoAnalysis(typeImport))
-            {
-                yield return @assembly;
-            }
+                yield return inputType.ImportedFrom;
+            }            
         }
     }
 }

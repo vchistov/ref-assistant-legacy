@@ -22,7 +22,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Containers
 
         AssemblyDefinition IAssemblyContainer.Get(AssemblyId assemblyId)
         {
-            return _cache.Get(assemblyId, (id) => LoadAssembly(id));
+            return _cache.GetOrAdd(assemblyId, (id) => LoadAssembly(id));
         }
 
         private AssemblyDefinition LoadAssembly(AssemblyId assemblyId)

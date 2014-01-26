@@ -98,7 +98,6 @@
     <Compile Include="Strategies\ClassHierarchyStrategyFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategies\TypeInterfacesStrategyFixture.cs" />
-    <Compile Include="Strategies\ImportedTypeStrategyFixture.cs" />
     <Compile Include="TypeInheritanceAlgorithmFixture.cs" />
   </ItemGroup>
   <ItemGroup>

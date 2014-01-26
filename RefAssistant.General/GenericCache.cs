@@ -8,7 +8,7 @@ namespace Lardite.RefAssistant
     {
         private readonly IDictionary<TKey, TValue> _cache = new Dictionary<TKey, TValue>();
 
-        public TValue Get(TKey key, Func<TKey, TValue> valueResolver)
+        public TValue GetOrAdd(TKey key, Func<TKey, TValue> valueResolver)
         {
             TValue value = default(TValue);
             if (!_cache.TryGetValue(key, out value))
@@ -17,6 +17,11 @@ namespace Lardite.RefAssistant
                 _cache.Add(key, value);
             }
             return value;
+        }
+
+        public bool Contains(TKey key)
+        {
+            return _cache.ContainsKey(key);
         }
     }
 }
