@@ -14,12 +14,15 @@ namespace Lardite.RefAssistant.ReflectionServices
     {
         private readonly IAssemblyContainer _container;
         private readonly ITypeLookup _typeLookup;
+        private readonly IImportTypeResolver _importTypeResolver;
 
-        internal TypeService(IAssemblyContainer container)
+        internal TypeService(IAssemblyContainer container, IImportTypeResolver importTypeResolver)
         {
             Contract.Requires(container != null);
+            Contract.Requires(importTypeResolver != null);
 
             _container = container;
+            _importTypeResolver = importTypeResolver;
             _typeLookup = new TypeLookup(container);
         }
 
@@ -38,6 +41,18 @@ namespace Lardite.RefAssistant.ReflectionServices
             var reader = CreateReader(typeDef);
 
             return reader.GetInterfaces().Select(GetTypeInfo);
+        }
+
+        AssemblyId ITypeService.GetImportedFrom(TypeId typeId)
+        {
+            ThrowUtils.ArgumentNull(() => typeId);
+            if (_importTypeResolver.IsImport(typeId))
+            {
+                var typeDef = _importTypeResolver.Resolve(typeId);
+                return TypeIdProvider.Instance.GetId(typeDef).AssemblyId;
+            }
+
+            return null;
         }
 
         #region Helpers

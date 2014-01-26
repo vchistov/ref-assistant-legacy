@@ -48,6 +48,22 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
         }
 
         [Test]
+        public void DoAnalysis_NoBaseClassAndInputIsImported_TwoAssembliesForInputClassInResult()
+        {
+            IAssembly inputImpAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
+            IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj, inputImpAssemblyObj).Object;
+
+            var result = new ClassHierarchyStrategy(new UsedTypesCache())
+                .DoAnalysis(inputClassObj)
+                .ToList();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count());
+            Assert.That(result, Is.EquivalentTo(new[] { inputAssemblyObj, inputImpAssemblyObj }));
+        }
+
+        [Test]
         public void DoAnalysis_InputClassIsCached_EmptyResult()
         {
             ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", MockUtils.CreateAssemblyMock("Assembly_I").Object).Object;
@@ -59,6 +75,25 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
                 .DoAnalysis(inputClassObj)
                 .ToList();
             
+            Assert.IsNotNull(result);
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void DoAnalysis_InputClassIsImportedAndCached_EmptyResult()
+        {
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock(
+                "Class_A", 
+                MockUtils.CreateAssemblyMock("Assembly_I").Object,
+                MockUtils.CreateAssemblyMock("Assembly_II").Object).Object;
+
+            var cache = new UsedTypesCache();
+            cache.AddType(inputClassObj);
+
+            var result = new ClassHierarchyStrategy(cache)
+                .DoAnalysis(inputClassObj)
+                .ToList();
+
             Assert.IsNotNull(result);
             Assert.That(result, Is.Empty);
         }
@@ -168,6 +203,45 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests.Strategies
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count());
             Assert.That(result, Is.EquivalentTo(new[] { inputAssemblyObj }));
+        }
+
+        [Test]
+        public void DoAnalysis_InputAndBaseFromSameAssemblyAndImported_NoDuplicatedAssembliesInResult()
+        {
+            IAssembly importAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
+
+            ITypeDefinition baseClassObj = MockUtils.CreateTypeMock("Class_B", importAssemblyObj).Object;
+
+            IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj, importAssemblyObj, baseClassObj).Object;
+
+            var result = new ClassHierarchyStrategy(new UsedTypesCache())
+                .DoAnalysis(inputClassObj)
+                .ToList();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count());
+            Assert.That(result, Is.EquivalentTo(new[] { importAssemblyObj, inputAssemblyObj }));
+        }
+
+        [Test]
+        public void DoAnalysis_AtypicalSituationBaseIsImported_NoImportedFromOfBaseInResult()
+        {
+            IAssembly importBaseAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_III").Object;
+            IAssembly baseAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
+
+            ITypeDefinition baseClassObj = MockUtils.CreateTypeMock("Class_B", baseAssemblyObj, importBaseAssemblyObj).Object;
+
+            IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock("Class_A", inputAssemblyObj, baseClassObj).Object;
+
+            var result = new ClassHierarchyStrategy(new UsedTypesCache())
+                .DoAnalysis(inputClassObj)
+                .ToList();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count());
+            Assert.That(result, Is.EquivalentTo(new[] { baseAssemblyObj, inputAssemblyObj }));
         }
     }
 }

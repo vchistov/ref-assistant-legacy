@@ -30,21 +30,14 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests
                 .Setup(m => m.DoAnalysis(inputClassObj))
                 .Returns(Enumerable.Repeat<IAssembly>(inputAssemblyObj, 1));
 
-            var importedStrategyMock = new Mock<IStrategy<ITypeImport>>();
-            importedStrategyMock
-                .Setup(m => m.DoAnalysis(null))
-                .Returns(Enumerable.Repeat<IAssembly>(inputAssemblyObj, 1));
-
             var algorithm = new TypeInheritanceAlgorithm(
                 classStrategyMock.Object,
-                interfaceStrategyMock.Object,
-                importedStrategyMock.Object);
+                interfaceStrategyMock.Object);
 
             var result = algorithm.Process(Enumerable.Repeat<ITypeDefinition>(inputClassObj, 1));
 
             classStrategyMock.Verify(m => m.DoAnalysis(inputClassObj), Times.Once);
             interfaceStrategyMock.Verify(m => m.DoAnalysis(inputClassObj), Times.Once);
-            importedStrategyMock.Verify(m => m.DoAnalysis(null), Times.Once);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.RequiredFor.Count);
@@ -56,7 +49,7 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests
         {
             IAssembly inputAssemblyObj = MockUtils.CreateAssemblyMock("Assembly_I").Object;
             IAssembly inputImportedFromObj = MockUtils.CreateAssemblyMock("Assembly_II").Object;
-            ITypeImport inputClassObj = MockUtils.CreateTypeMock(
+            ITypeDefinition inputClassObj = MockUtils.CreateTypeMock(
                 "Class_A",
                 inputAssemblyObj,
                 importedFrom: inputImportedFromObj).Object;
@@ -64,28 +57,21 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests
             var classStrategyMock = new Mock<IStrategy<ITypeDefinition>>();
             classStrategyMock
                 .Setup(m => m.DoAnalysis(inputClassObj))
-                .Returns(Enumerable.Repeat<IAssembly>(inputAssemblyObj, 1));
+                .Returns(new [] { inputAssemblyObj, inputImportedFromObj });
 
             var interfaceStrategyMock = new Mock<IStrategy<ITypeDefinition>>();
             interfaceStrategyMock
                 .Setup(m => m.DoAnalysis(inputClassObj))
                 .Returns(Enumerable.Repeat<IAssembly>(inputAssemblyObj, 1));
 
-            var importedStrategyMock = new Mock<IStrategy<ITypeImport>>();
-            importedStrategyMock
-                .Setup(m => m.DoAnalysis(inputClassObj))
-                .Returns(new[] { inputAssemblyObj, inputImportedFromObj });
-
             var algorithm = new TypeInheritanceAlgorithm(
                 classStrategyMock.Object,
-                interfaceStrategyMock.Object,
-                importedStrategyMock.Object);
+                interfaceStrategyMock.Object);
 
             var result = algorithm.Process(Enumerable.Repeat<ITypeDefinition>(inputClassObj, 1));
 
             classStrategyMock.Verify(m => m.DoAnalysis(inputClassObj), Times.Once);
             interfaceStrategyMock.Verify(m => m.DoAnalysis(inputClassObj), Times.Once);
-            importedStrategyMock.Verify(m => m.DoAnalysis(inputClassObj), Times.Once);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.RequiredFor.Count);
@@ -204,8 +190,7 @@ package "Assembly_I" {
 
             var algorithm = new TypeInheritanceAlgorithm(
                 new ClassHierarchyStrategy(cache),
-                new TypeInterfacesStrategy(cache),
-                new ImportedTypeStrategy(cache));
+                new TypeInterfacesStrategy(cache));
 
             var result = algorithm.Process(new[] 
                 { 
@@ -344,8 +329,7 @@ package "Assembly_I" {
 
             var algorithm = new TypeInheritanceAlgorithm(
                 new ClassHierarchyStrategy(cache),
-                new TypeInterfacesStrategy(cache),
-                new ImportedTypeStrategy(cache));
+                new TypeInterfacesStrategy(cache));
 
             var result = algorithm.Process(new[] 
                 { 

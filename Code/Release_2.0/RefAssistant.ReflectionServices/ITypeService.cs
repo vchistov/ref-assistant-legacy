@@ -11,5 +11,7 @@ namespace Lardite.RefAssistant.ReflectionServices
         TypeInfo GetType(TypeId typeId);        
 
         IEnumerable<TypeInfo> GetInterfaces(TypeId typeId);
+
+        AssemblyId GetImportedFrom(TypeId typeId);
     }
 }

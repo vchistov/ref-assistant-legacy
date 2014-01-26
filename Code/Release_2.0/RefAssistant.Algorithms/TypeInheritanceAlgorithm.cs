@@ -11,28 +11,23 @@ namespace Lardite.RefAssistant.Algorithms
     {
         private readonly IStrategy<ITypeDefinition> _classHierarchyStrategy;
         private readonly IStrategy<ITypeDefinition> _typeInterfacesStrategy;
-        private readonly IStrategy<ITypeImport> _importedTypeStrategy;
 
         public TypeInheritanceAlgorithm()
             : this(
                 new ClassHierarchyStrategy(UsedTypesCache.Instance),
-                new TypeInterfacesStrategy(UsedTypesCache.Instance),
-                new ImportedTypeStrategy(UsedTypesCache.Instance))
+                new TypeInterfacesStrategy(UsedTypesCache.Instance))
         {
         }
 
         internal TypeInheritanceAlgorithm(
             IStrategy<ITypeDefinition> classHierarchyStrategy,
-            IStrategy<ITypeDefinition> typeInterfacesStrategy,
-            IStrategy<ITypeImport> importedTypeStrategy)
+            IStrategy<ITypeDefinition> typeInterfacesStrategy)
         {
             Contract.Requires(classHierarchyStrategy != null);
             Contract.Requires(typeInterfacesStrategy != null);
-            Contract.Requires(importedTypeStrategy != null);
 
             _classHierarchyStrategy = classHierarchyStrategy;
             _typeInterfacesStrategy = typeInterfacesStrategy;
-            _importedTypeStrategy = importedTypeStrategy;
         }
 
         public AlgorithmResult Process(IEnumerable<ITypeDefinition> input)
@@ -43,8 +38,7 @@ namespace Lardite.RefAssistant.Algorithms
             {
                 requiredAssemblies
                     .UnionWithFluent(_classHierarchyStrategy.DoAnalysis(type))
-                    .UnionWithFluent(_typeInterfacesStrategy.DoAnalysis(type))
-                    .UnionWithFluent(_importedTypeStrategy.DoAnalysis(type as ITypeImport));
+                    .UnionWithFluent(_typeInterfacesStrategy.DoAnalysis(type));
             }
 
             return new AlgorithmResult(requiredAssemblies, this.GetType().FullName);

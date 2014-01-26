@@ -28,10 +28,10 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests
             bool isInterface = false,
             IEnumerable<ITypeDefinition> interfaces = null)
         {
-            return CreateTypeMock<ITypeDefinition>(fullName, baseType, assembly, forwardedFrom, isInterface, interfaces);
+            return CreateTypeMock(fullName, baseType, assembly, forwardedFrom, isInterface, interfaces);
         }
 
-        public static Mock<ITypeImport> CreateTypeMock(
+        public static Mock<ITypeDefinition> CreateTypeMock(
             string fullName,
             IAssembly assembly,
             IAssembly importedFrom,
@@ -40,22 +40,21 @@ namespace Lardite.RefAssistant.Algorithms.UnitTests
             bool isInterface = false,
             IEnumerable<ITypeDefinition> interfaces = null)
         {
-            var type = CreateTypeMock<ITypeImport>(fullName, baseType, assembly, forwardedFrom, isInterface, interfaces);
+            var type = CreateTypeMock(fullName, baseType, assembly, forwardedFrom, isInterface, interfaces);
             type.SetupGet(m => m.ImportedFrom).Returns(importedFrom);
 
             return type;
         }
 
-        private static Mock<T> CreateTypeMock<T>(
+        private static Mock<ITypeDefinition> CreateTypeMock(
             string fullName,
             ITypeDefinition baseType,
             IAssembly assembly,            
             IAssembly forwardedFrom,
             bool isInterface,
             IEnumerable<ITypeDefinition> interfaces)
-            where T : class, ITypeDefinition
         {
-            var type = new Mock<T>();
+            var type = new Mock<ITypeDefinition>();
 
             type.SetupGet<TypeName>(p => p.Name).Returns(new TypeName(It.IsAny<ITypeDefinition>()) { FullName = fullName });
             type.Setup(m => m.Equals(It.IsAny<ITypeDefinition>())).Returns<ITypeDefinition>((other) => string.Equals(other.Name.FullName, fullName));

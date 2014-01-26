@@ -15,6 +15,8 @@ namespace Lardite.RefAssistant.Algorithms.Contracts
 
         IAssembly ForwardedFrom { get; }
 
+        IAssembly ImportedFrom { get; }
+
         bool IsInterface { get; }
 
         IEnumerable<IMethod> Methods { get; }

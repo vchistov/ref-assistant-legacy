@@ -100,12 +100,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyService.cs" />
+    <Compile Include="CecilExtensions\CustomAttributeExtensions.cs" />
     <Compile Include="CecilExtensions\MetadataScopeExtensions.cs" />
     <Compile Include="CecilExtensions\ModuleExtensions.cs" />
     <Compile Include="CecilExtensions\TypeExtensions.cs" />
     <Compile Include="CustomAttributeService.cs" />
     <Compile Include="DataAccess\Containers\AssemblyContainer.cs" />
     <Compile Include="DataAccess\Containers\IAssemblyContainer.cs" />
+    <Compile Include="DataAccess\IImportTypeResolver.cs" />
+    <Compile Include="DataAccess\ImportTypeResolver.cs" />
     <Compile Include="DataAccess\ITypeIdProvider.cs" />
     <Compile Include="DataAccess\Lookups\ITypeLookup.cs" />
     <Compile Include="DataAccess\Lookups\TypeLookup.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceConfigurator.cs" />
     <Compile Include="ServiceConfiguratorOptions.cs" />
+    <Compile Include="TypeImportNotFoundException.cs" />
     <Compile Include="TypeService.cs" />
   </ItemGroup>
   <ItemGroup>

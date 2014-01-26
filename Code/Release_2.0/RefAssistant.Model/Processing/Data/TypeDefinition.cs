@@ -15,6 +15,7 @@ namespace Lardite.RefAssistant.Model.Processing.Data
         private readonly Lazy<TypeName> _typeName;
         private readonly Lazy<IAssembly> _assembly;
         private readonly Lazy<IAssembly> _forwardedFrom;
+        private readonly Lazy<IAssembly> _importedFrom;
         private readonly Lazy<ITypeDefinition> _baseType;
         private readonly Lazy<IList<ITypeDefinition>> _interfaces;
 
@@ -62,6 +63,8 @@ namespace Lardite.RefAssistant.Model.Processing.Data
 
             _forwardedFrom = new Lazy<IAssembly>(() => CreateAssembly(this.TypeInfo.ForwardedFrom));
 
+            _importedFrom = new Lazy<IAssembly>(() => CreateAssembly(this.TypeService.GetImportedFrom(_typeId)));
+
             _baseType = new Lazy<ITypeDefinition>(() => CreateTypeDefinition(this.TypeInfo.BaseType));
 
             _interfaces = new Lazy<IList<ITypeDefinition>>(LoadInterfaces);
@@ -92,6 +95,11 @@ namespace Lardite.RefAssistant.Model.Processing.Data
         public IAssembly ForwardedFrom
         {
             get { return _forwardedFrom.Value; }
+        }
+
+        public IAssembly ImportedFrom
+        {
+            get { return _importedFrom.Value; }
         }
 
         public bool IsInterface
