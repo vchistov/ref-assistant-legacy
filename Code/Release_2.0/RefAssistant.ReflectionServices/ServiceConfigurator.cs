@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Lardite.RefAssistant.ReflectionServices.DataAccess;
+using Lardite.RefAssistant.ReflectionServices.DataAccess.CodeFiles;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Containers;
 
 namespace Lardite.RefAssistant.ReflectionServices
@@ -54,7 +55,11 @@ namespace Lardite.RefAssistant.ReflectionServices
 
         private IAssemblyService InitAssemblyService()
         {
-            return new AssemblyService(this.AssemblyContainer);
+            var codeFilesGrubber = new EmbeddedCodeFilesGrubber(
+                this.AssemblyContainer, 
+                _options.ProjectReferenceFiles);
+
+            return new AssemblyService(this.AssemblyContainer, codeFilesGrubber);
         }
 
         private ITypeService InitTypeService()

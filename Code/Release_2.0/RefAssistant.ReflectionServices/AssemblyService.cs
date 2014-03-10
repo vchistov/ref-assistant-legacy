@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 
 using Lardite.RefAssistant.ReflectionServices.Data;
 using Lardite.RefAssistant.ReflectionServices.DataAccess;
+using Lardite.RefAssistant.ReflectionServices.DataAccess.CodeFiles;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Containers;
 using Lardite.RefAssistant.ReflectionServices.DataAccess.Readers;
 
@@ -13,12 +14,15 @@ namespace Lardite.RefAssistant.ReflectionServices
     internal sealed class AssemblyService : IAssemblyService
     {
         private readonly IAssemblyContainer _container;
+        private readonly IEmbeddedCodeFilesGrubber _codeFilesGrubber;
 
-        internal AssemblyService(IAssemblyContainer container)
+        internal AssemblyService(IAssemblyContainer container, IEmbeddedCodeFilesGrubber codeFilesGrubber)
         {
             Contract.Requires(container != null);
+            Contract.Requires(codeFilesGrubber != null);
 
             _container = container;
+            _codeFilesGrubber = codeFilesGrubber;
         }
 
         AssemblyInfo IAssemblyService.GetAssembly(string fileName)
