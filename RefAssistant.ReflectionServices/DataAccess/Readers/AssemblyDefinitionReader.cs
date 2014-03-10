@@ -74,9 +74,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
         {
             Contract.Ensures(Contract.Result<IEnumerable<TypeId>>() != null);
 
-            return _assemblyDef
-                .Modules
-                .GetTypeDefinitions()
+            return _assemblyDef.GetTypeDefinitions()
                 .Select(typeDef => _typeIdProvider.GetId(typeDef));
         }
 
@@ -84,9 +82,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Readers
         {
             Contract.Ensures(Contract.Result<IEnumerable<TypeId>>() != null);
 
-            return _assemblyDef
-                .Modules
-                .GetTypeReferences()
+            return _assemblyDef.GetTypeReferences()
                 .Select(typeDef => _typeIdProvider.GetId(typeDef));
         }
     }

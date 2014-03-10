@@ -27,9 +27,7 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess.Lookups
 
             Contract.Assert(assembly != null);
 
-            return assembly.Modules
-                .GetTypeDefinitions()
-                .Single(t => string.Equals(t.FullName, typeId.FullName, StringComparison.Ordinal));
+            return assembly.GetType(typeId.FullName);
         }        
     }
 }
