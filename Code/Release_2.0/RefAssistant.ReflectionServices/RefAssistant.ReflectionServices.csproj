@@ -116,7 +116,6 @@
     <Compile Include="DataAccess\CodeFiles\Xaml\XmlnsDefinitionInfo.cs" />
     <Compile Include="FrameworkExtensions\Mono.Cecil\CustomAttributeExtensions.cs" />
     <Compile Include="FrameworkExtensions\Mono.Cecil\MetadataScopeExtensions.cs" />
-    <Compile Include="FrameworkExtensions\Mono.Cecil\ModuleExtensions.cs" />
     <Compile Include="FrameworkExtensions\Mono.Cecil\TypeExtensions.cs" />
     <Compile Include="CustomAttributeService.cs" />
     <Compile Include="DataAccess\Containers\AssemblyContainer.cs" />

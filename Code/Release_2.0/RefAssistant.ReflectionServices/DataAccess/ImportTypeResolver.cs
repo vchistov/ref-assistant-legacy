@@ -109,15 +109,9 @@ namespace Lardite.RefAssistant.ReflectionServices.DataAccess
 
         private TypeDefinition SearchTypeDefinition(AssemblyDefinition assemblyDef, string typeFullName, Guid? typeGuid, bool isImport)
         {
-            return assemblyDef.Modules.GetTypeDefinitions()
-                    .FirstOrDefault(t => AreNamesEqualFilter(t, typeFullName)
-                        && AreGuidsEqualFilter(t, typeGuid)
-                        && t.IsImport == isImport);
-        }
-
-        private bool AreNamesEqualFilter(TypeDefinition current, string filterFullName)
-        {
-            return string.Equals(current.FullName, filterFullName, StringComparison.OrdinalIgnoreCase);
+            return assemblyDef.Modules
+                .Select(m => m.GetType(typeFullName))
+                .FirstOrDefault(t => AreGuidsEqualFilter(t, typeGuid) && t.IsImport == isImport);
         }
 
         private bool AreGuidsEqualFilter(TypeDefinition current, Guid? filterGuid)
