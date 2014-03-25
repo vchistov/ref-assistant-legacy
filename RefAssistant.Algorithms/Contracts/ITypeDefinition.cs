@@ -21,10 +21,10 @@ namespace Lardite.RefAssistant.Algorithms.Contracts
 
         IEnumerable<IMethod> Methods { get; }
 
-        IEnumerable<IMember> Fields { get; }
+        IEnumerable<IField> Fields { get; }
 
-        IEnumerable<IMember> Properties { get; }
+        IEnumerable<IProperty> Properties { get; }
 
-        IEnumerable<IMember> Events { get; }
+        IEnumerable<IEvent> Events { get; }
     }
 }

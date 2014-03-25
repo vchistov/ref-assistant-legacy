@@ -2,10 +2,10 @@
 
 namespace Lardite.RefAssistant.Algorithms.Contracts
 {
-    public interface IMethod : IMember
+    public interface IProperty : IMember
     {
-        IMemberType ReturnType { get; }
-        
+        IMemberType PropertyType { get; }
+
         IEnumerable<IMemberParameter> Parameters { get; }
     }
 }
