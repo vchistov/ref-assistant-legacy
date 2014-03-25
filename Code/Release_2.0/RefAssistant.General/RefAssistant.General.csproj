@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\HashSetExtensions.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GenericCache.cs" />
     <Compile Include="Collections\IReadOnlyHashSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -112,17 +112,17 @@ namespace Lardite.RefAssistant.Model.Processing.Data
             get { throw new NotImplementedException(); }
         }
 
-        public IEnumerable<IMember> Fields
+        public IEnumerable<IField> Fields
         {
             get { throw new NotImplementedException(); }
         }
 
-        public IEnumerable<IMember> Properties
+        public IEnumerable<IProperty> Properties
         {
             get { throw new NotImplementedException(); }
         }
 
-        public IEnumerable<IMember> Events
+        public IEnumerable<IEvent> Events
         {
             get { throw new NotImplementedException(); }
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Lardite.RefAssistant.Algorithms.Contracts
 {
@@ -7,6 +6,12 @@ namespace Lardite.RefAssistant.Algorithms.Contracts
     {
         ITypeDefinition TypeDefinition { get; }
 
-        IEnumerable<IMember> MemberReferences { get; }
+        IEnumerable<IField> FieldReferences { get; }
+
+        IEnumerable<IEvent> EventReferences { get; }
+
+        IEnumerable<IProperty> PropertyReferences { get; }        
+
+        IEnumerable<IMethod> MethodReferences { get; }
     }
 }
