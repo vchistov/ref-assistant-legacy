@@ -1,6 +1,6 @@
 # Reference Assistant (student project)
 ## WARNING
->This project was developed at 2012/13 and originally hosted by [codeplex](https://refassistant.codeplex.com). I'm not working on the project anymore.
+>This project was developed at 2011 and originally hosted by [codeplex](https://refassistant.codeplex.com). I'm not working on the project anymore.
 
 ## Project Description
 Reference Assistant is free, open source tool to remove unused references from C#, F#, VB.NET or VC++/CLI projects in the Visual Studio 2010/11. It's developed in C#.
